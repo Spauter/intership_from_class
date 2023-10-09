@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>商品列表</title>
+		<link href="css/style.css" rel="stylesheet">
+		<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h3>最新商品</h3>
+			<ul id="list">
+				<li><a href="#"><img src="products/1/cs10001.jpg" width="170" height="170"> <span
+							class="name">韩版连帽加厚毛衣女外套</span>
+						<div class="price"><span>￥228/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10002.jpg" width="170" height="170"> <span
+							class="name">女装立领长袖拼接PU皮毛呢外套</span>
+						<div class="price"><span>￥172/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10003.jpg" width="170" height="170"> <span
+							class="name">韩版女装翻领羔绒夹棉格子毛呢外套</span>
+						<div class="price"><span>￥119/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10004.jpg" width="170" height="170"> <span
+							class="name">韩版女装翻领羔绒夹棉格子毛呢外套</span>
+						<div class="price"><span>￥119/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10005.jpg" width="170" height="170"> <span
+							class="name">韩版女装翻领羔绒夹棉格子毛呢外套</span>
+						<div class="price"><span>￥119/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10006.jpg" width="170" height="170"> <span
+							class="name">冬装韩版女装翻领羔绒夹棉格子毛呢外套</span>
+						<div class="price"><span>￥119/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10007.jpg" width="170" height="170"> <span
+							class="name">新款优雅奢华毛领白鸭绒轻薄羽绒服</span>
+						<div class="price"><span>￥590/份</span>
+							<button onclick="location.href='购物车.html'">添加购物车</button>
+						</div>
+					</a></li>
+				<li><a href="#"><img src="products/1/cs10008.jpg" width="170" height="170"> <span
+							class="name">秋冬季毛呢外套女中长款圆领小香风呢子大衣</span>
+						<div class="price"><span>￥336/份</span>
+							<button >添加购物车</button>
+						</div>
+					</a></li>
+			</ul>
+		</div>
+		<script>
+			$(function() {
+				$("button").click(function(){
+					let priceStr = this.previousElementSibling.innerText;
+					priceStr = priceStr.match(/\d{3}/).toString();
+					let name = this.parentElement.previousElementSibling.innerText;
+					let img =this.parentElement.parentElement.querySelector("img").src;
+					let obj = {
+						name: name,
+						price: priceStr,
+						img: img
+					}
+					localStorage.setItem("data", JSON.stringify(obj));
+				})
+			})
+		</script>
+	</body>
+</html>

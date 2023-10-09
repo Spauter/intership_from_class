@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9" />
+  <meta name="referrer" content="no-referrer">
+
+  <title>影厅_网上购票_排片表_最新上映电影-源辰影院</title>
+  <meta name="referrer" content="no-referrer">
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  <link href="css/cinema.css" rel="stylesheet"/>
+  <script src="https://static.ydpcdn.cn/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+  <script src='https://static.ydpcdn.cn/scripts/jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+
+  <script src="https://static.ydpcdn.cn/scripts/cdn_ydp.js?201404291501"></script>
+
+
+</head>
+<body>
+<div id="showFastDiv" style="display: none;">
+</div>
+<div class="wrapper">
+  <!--顶部开始-->
+  <div class="top" id="loginSection">
+    <!--顶部开始-->
+    <div class="top_box">
+      <div class="top_one">
+        看电影，来源辰影院！
+      </div>
+      <div id="app7">
+        <template>
+          <div>
+            <div  v-if="!isLoggedIn" class="top_two">
+              <a href="login.html" class="cRmain">登录</a><span class="cRddd"> 丨 </span><a
+                    href="signup.html" class="cRmain">注册</a><span class="cRddd"> 丨 </span>
+            </div>
+
+            <div  v-else class="top_two">
+              <p>
+                <span class="cRmain">{{ uname }}</span>欢迎来到源辰影院！
+                <a href="login.html" class="cRmain">[退出]</a> |
+                <a href="myorder.html" class="cRmain">[订单]</a><span class="cRddd">  </span>
+              </p>
+            </div>
+          </div>
+        </template>
+
+        <script>
+
+          var v = new Vue({
+            el:"#app7",
+            data() {
+              return {
+                isLoggedIn: false,
+                uname: '',
+              };
+            },
+            created() {
+              let p = new URLSearchParams();
+              axios.post("login?op=userinfo",p).then(res=>{
+                if (res.data.code == 200) {
+                  this.isLoggedIn = true;
+                  this.uname = res.data.uname;
+                }
+              })
+            },
+          });
+        </script>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!--快速登录-->
+  <!--顶部 End-->
+<!--头部开始-->
+<div class="header">
+  <h1>源辰影院</h1>
+  <div class="regionbox" style="z-index: 1;" id="regionSection">
+    <script type="text/javascript">
+      var engName = "hengyang";
+      var chinaName = $("#divCityList").find("ul li").find("a[href='/" + engName + "']").html();
+      $("#spanCityName").html(chinaName);
+      $("#divPCity").mouseover(function (e) {
+        ShowCityList();
+      })
+      $("#divCityList").hide();
+      $("#regionSection").hover(
+              function () {
+                $("#divCityList").show();
+                $("#divPCity").addClass("hover");
+              },
+              function () {
+                $("#divCityList").hide();
+                $("#divPCity").removeClass("hover");
+              }
+      );
+    </script>
+
+  </div>
+  <form action="/search" id="searchform" method="get">
+    <div style="width: 361px; float: right; margin-top: 5px">
+      <!--搜索开始-->
+      <a href="search.html">搜索</a>
+      <!--搜索 End-->
+    </div>
+  </form>
+</div>
+    <!--快速登录-->
+    <!--顶部 End-->
+  <!--导航开始-->
+  <div class="nav_box">
+    <div class="nav">
+      <ul id="defaultUL">
+        <li><a href="index.html" title="首页">首页</a></li>
+        <li><a href="movie.html" title="热映电影">热映电影</a></li>
+        <li><a href="cinema.html" title="影厅">影厅</a></li>
+      </ul>
+    </div>
+  </div>
+  <!--导航 End-->
+  <div id="body">
+    <section class="content-wrapper main-content clear-fix">
+
+      <!--内容框架-->
+      <div class="center">
+        <!--地区选择-->
+        <div class="m_left">
+            <div class="a2">
+            </div>
+          <!--地区选择 End-->
+          <div id="app">
+            <template>
+              <div>
+                <div v-for="cinema in cinemas" :key="cinema.id" class="border mt10">
+                  <span class="span_32"></span>
+                  <dl class="t_bd">
+                    <dt>
+                      <img src="https://pic.ydpcdn.cn/pictures/theater/2018-09/869244e1-6882-4e08-9d8b-d49247749b5a.png!200"
+                           width="200px" height="170px">
+                    </dt>
+                    <dd>
+                      <h2 class="font_family">
+                        <a href="movie1.html" target="_blank" :title="cinema.name">{{ cinema.hname }}</a>
+                      </h2>
+                      <ul>
+                        <li>
+                          <span>热映电影：</span>
+                          <a v-for="movie in movies" :key="movie.id" href="movie1.html" :title="movie.title">{{ movie.title }} </a>
+                        </li>
+                      </ul>
+                      <div class="mt10 pb_m after"></div>
+                      <div class="mt10">
+                        <a href="movie1.html" class="a_link">选座购票</a>
+                      </div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <script>
+            var v = new Vue({
+              el:"#app",
+              data() {
+                return {
+                  cinemas: [
+                  ],
+                  movies: [
+                    { id: 1, link: "movie1.html", title: "消失的她" },
+                    { id: 2, link: "movie1.html", title: "绝地追击" },
+                    { id: 3, link: "movie1.html", title: "八角笼中" },
+                    { id: 4, link: "movie1.html", title: "长安三万里" },
+                    { id: 5, link: "movie1.html", title: "封神第一部：朝歌风云" },
+                    { id: 6, link: "movie1.html", title: "百变马丁：怪兽大作战" },
+                    { id: 7, link: "movie1.html", title: "热烈" },
+                    { id: 8, link: "movie1.html", title: "巨齿鲨2" },
+                  ],
+                };
+              },
+              created() {
+                // 从数据库中获取数据
+                this.fetchMovies();
+              },
+              methods: {
+                fetchMovies() {
+                  axios.post("movie?op=hall").then(res => {
+                    this.cinemas = res.data;
+                  })
+                }
+              }
+            });
+          </script>
+        </div>
+        <!--正在热映-->
+        <div class="right">
+
+          <!--正在热映-->
+          <div class="border">
+            <div class="m_title">
+              <h3 class="font_family">
+                <b>正在热映</b></h3>
+              <div class="more" style="position: absolute;">
+                <a href="movie1.html">更多影片</a>
+              </div>
+            </div>
+            <div id="app1">
+              <template>
+                <div>
+                  <div v-for="movie in movies" :key="movie.id" class="film_tl_box mt10">
+                    <dd>
+                      <a href="movie1.html" target="_blank">
+                        <img :src="movie.image" :width="120" :height="160" :alt="movie.title" :title="movie.title">
+                      </a>
+                    </dd>
+                    <dt>
+                      <h2 class="lh24">
+                        <a href="movie1.html">{{ movie.mname }}</a>
+                      </h2>
+                      <div class="m_st mtb5" :title="movie.rating">
+                        <div class="m_yellow" :style="{ width: `${movie.rating * 10}px` }"></div>
+                      </div>
+                      <p>
+                        导演：{{ movie.director }}
+                      </p>
+                      <p :title="movie.actors" class="lh21">
+                        主演：{{ movie.actors }}
+                      </p>
+                      <p>
+                        <a href="movie1.html" class="h_link">选座购票</a>
+                      </p>
+                    </dt>
+                  </div>
+                </div>
+              </template>
+            </div>
+
+            <script>
+              var v = new Vue({
+                el: "#app1",
+                data() {
+                  return {
+                    movies: []
+                  };
+                },
+                created() {
+                  // 从数据库中获取数据
+                  this.fetchMovies();
+                },
+                methods: {
+                  fetchMovies() {
+                    axios.post("movie?op=search&&votes=650000").then(res => {
+                      this.movies = res.data;
+                    })
+                  }
+                }
+              });
+            </script>
+
+            <div class="hg50">
+            </div>
+          </div>
+          <!--正在热映 End-->
+        </div>
+      </div>
+
+      <!--正在热映 End-->
+      <script language="javascript" type="text/javascript">PageIngCinemaArea(26,5)</script>
+      <script language="javascript" type="text/javascript">
+        $(function () {
+          ChangeDefaultUL(2);
+          $(".t_car,.t_child").tooltip();
+
+        });
+      </script>
+
+    </section>
+  </div>
+  <!--帮助 版权-->
+  <div class="explain">
+    <div class="explain_er">
+      <dl>
+        <dd>
+          <p class="a1">
+          </p>
+          新手上路</dd>
+        <ul>
+          <li><a href="/help/register" title="会员注册">会员注册</a></li>
+          <li><a href="/help/login" title="如何登录">如何登录</a></li>
+          <li><a href="/help/process" title="快速购票">快速购票</a></li>
+          <li><a href="/help/password" title="找回密码">找回密码</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a2">
+          </p>
+          购票指南</dd>
+        <ul>
+          <li><a href="/help/process" title="购票流程">购票流程</a></li>
+          <li><a href="/help/method" title="取票方法">取票方法</a></li>
+          <li><a href="/help" title="支付方式">支付方式</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a3">
+          </p>
+          常见问题</dd>
+        <ul>
+          <li><a href="/help" title="购票常见问题">购票常见问题</a></li>
+          <li><a href="/help/recharge" title="会员充值问题">会员充值问题</a></li>
+          <li><a href="/help/price" title="影片票价问题">影片票价问题</a></li>
+          <li><a href="/help/coupon" title="优惠劵">优惠劵</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a4">
+          </p>
+          关于我们</dd>
+        <ul>
+          <li><a href="/about">公司介绍</a></li>
+          <li><a href="/sitemap">网站地图</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a5">
+          </p>
+          客户服务</dd>
+        <ul>
+          <li><a href="#" class="bz">电话：400-677-8292</a></li>
+          <li><a href="#" class="bz">邮箱：service@yidepiao.com</a></li>
+        </ul>
+      </dl>
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35906595-1']);
+  _gaq.push(['_addOrganic', 'm.baidu.com', 'word', true]);
+  _gaq.push(['_addOrganic', 'image.baidu.com', 'word', true]);
+  _gaq.push(['_addOrganic', 'baidu', 'word']);
+  _gaq.push(['_addOrganic', 'soso', 'w']);
+  _gaq.push(['_addOrganic', '3721', 'name']);
+  _gaq.push(['_addOrganic', 'youdao', 'q']);
+  _gaq.push(['_addOrganic', 'www.so.com', 'q']);
+  _gaq.push(['_addOrganic', 'so.360.cn', 'q']);
+  _gaq.push(['_addOrganic', 'vnet', 'kw']);
+  _gaq.push(['_addOrganic', 'sogou', 'query']);
+  _gaq.push(['_addOrganic', 'bing', 'q']);
+  _gaq.push(['_trackPageview']);
+
+  (function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

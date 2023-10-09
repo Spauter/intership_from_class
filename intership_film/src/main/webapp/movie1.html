@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <link rel="dns-prefetch" href="//static.ydpcdn.cn">
+  <link rel="dns-prefetch" href="//pic.ydpcdn.cn">
+  <link rel="dns-prefetch" href="//js.t.sinajs.cn">
+
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9"/>
+
+  <title>源辰影院-电影票网上购买预订_在线选座,轻松购票</title>
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  <link href="css/movie1.css" rel="stylesheet"/>
+
+  <script src="https://static.ydpcdn.cn/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+  <script src='https://static.ydpcdn.cn/scripts/jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+
+  <script src="https://static.ydpcdn.cn/scripts/cdn_ydp.js?201404291501"></script>
+
+
+</head>
+<body>
+<div id="showFastDiv" style="display: none;">
+</div>
+<div class="wrapper">
+  <!--顶部开始-->
+  <div class="top" id="loginSection">
+    <!--顶部开始-->
+    <div class="top" id="loginSection">
+      <!--顶部开始-->
+      <div class="top_box">
+        <div class="top_one">
+          看电影，来源辰影院！
+        </div>
+        <div id="app7">
+          <template>
+            <div>
+              <div  v-if="!isLoggedIn" class="top_two">
+                <a href="login.html" class="cRmain">登录</a><span class="cRddd"> 丨 </span><a
+                      href="signup.html" class="cRmain">注册</a><span class="cRddd"> 丨 </span>
+              </div>
+
+              <div  v-else class="top_two">
+                <p>
+                  <span class="cRmain">{{ uname }}</span>欢迎来到源辰影院！
+                  <a href="login.html" class="cRmain">[退出]</a> |
+                  <a href="myorder.html" class="cRmain">[订单]</a><span class="cRddd">  </span>
+                </p>
+              </div>
+            </div>
+          </template>
+
+          <script>
+
+            var v = new Vue({
+              el:"#app7",
+              data() {
+                return {
+                  isLoggedIn: false,
+                  uname: '',
+                };
+              },
+              created() {
+                let p = new URLSearchParams();
+                axios.post("login?op=userinfo",p).then(res=>{
+                  if (res.data.code == 200) {
+                    this.isLoggedIn = true;
+                    this.uname = res.data.uname;
+                  }
+                })
+              },
+            });
+          </script>
+        </div>
+        </div>
+      </div>
+    </div>
+    <!--快速登录-->
+    <!--顶部 End-->
+</div>
+<!--顶部 End-->
+<!--头部开始-->
+<div class="header">
+  <h1>源辰影院</h1>
+  <div class="regionbox" style="z-index: 1;" id="regionSection">
+  </div>
+  <form action="/search" id="searchform" method="get">
+    <div style="width: 361px; float: right; margin-top: 5px">
+      <!--搜索开始-->
+      <a href="search.html">搜索</a>
+      <!--搜索 End-->
+    </div>
+  </form>
+</div>
+<!--头部 End-->
+<!--导航开始-->
+<div class="nav_box">
+  <div class="nav">
+    <ul id="defaultUL">
+      <li><a href="index.html" title="首页">首页</a></li>
+      <li><a href="movie.html" title="热映电影">热映电影</a></li>
+      <li><a href="cinema.html" title="影厅">影厅</a></li>
+    </ul>
+  </div>
+</div>
+  <!--导航 End-->
+  <div id="body">
+    <section class="content-wrapper main-content clear-fix">
+
+      <link rel="stylesheet" href="https://static.ydpcdn.cn/css/jquery.fancybox.css" media="screen" />
+      <script src="https://static.ydpcdn.cn/scripts/jquery.fancybox.pack.js" type="text/javascript"></script>
+      <script src="https://static.ydpcdn.cn/scripts/jquery.lazyload.min.js" type="text/javascript"></script>
+
+      <!--内容框架-->
+      <div class="center border">
+        <div class="m_bd">
+          <div class="bread">
+            您现在的位置：<a href="/" class="ut">首页</a>
+            > <a href="/movie" class="ut">热映电影 </a>> 星际穿越
+          </div>
+          <div id="app">
+            <template>
+              <div>
+                <div v-for="movie in movies" :key="movie.id" class="MainMovie">
+                  <dl>
+                    <dt>
+                      <a class="fancybox" :href="movie.image" :title="movie.title + ' - 海报'">
+                        <img :src="movie.image" :width="210" :height="295" :alt="movie.title">
+                      </a>
+                    </dt>
+                    <dd>
+                      <div class="title">
+                        <h2>{{ movie.mname }}</h2>
+                      </div>
+                      <ul style="width: 480px">
+                        <li><span class="cRgray">上映时间：</span>{{ movie.pubdate }}</li>
+                        <li><span class="cRgray">类型：</span>{{ movie.genre }}</li>
+                        <li><span class="cRgray">导演：</span>{{ movie.director }}</li>
+                        <li><span class="cRgray">主演：</span>{{ movie.actors }}</li>
+                      </ul>
+                      <div class="m_w">
+                        <div class="m_w_bd">
+                          <div class="m_st">
+                            <div class="m_yellow" :style="{ width: `${movie.rating * 10}px` }"></div>
+                          </div>
+                          <div class="m_w_x">
+                            9.6
+                          </div>
+                          <ul>
+                            <li>片长：<span class="cRmain">{{ movie.runtime }}</span></li>
+                            <li class="pre"></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="live"></div>
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <script>
+            var v = new Vue({
+              el:"#app",
+              data() {
+                return {
+                  movies: [
+                  ],
+                };
+              },
+              created() {
+                // 从数据库中获取数据
+                this.fetchMovies();
+              },
+              methods: {
+                fetchMovies() {
+                  axios.post("movie?op=movie").then(res => {
+                    this.movies = res.data;
+                  })
+                  // 使用适当的方法从数据库中获取电影数据，并将其赋值给movies数组
+                  // 示例代码：
+                  // 假设您已经从数据库中获取到了电影数据
+                  // 可以根据从数据库中获取到的数据在这里添加更多电影对象
+                },
+              }
+            });
+          </script>
+        </div>
+      </div>
+      <div class="center mt10">
+        <div class="m_left border">
+          <!--TAB-->
+          <div class="movie_tab">
+            <ul>
+              <li id="liIt" class="on" title="影片排期" onclick='Showdiv(this,"it","on");'><b>影片排期</b></li>
+              <li id="liIntroduction" title="剧情介绍" onclick='Showdiv(this,"Introduction","on");'>剧情介绍</li>
+              <li id="liTrailer" title="精彩预告" onclick='Showdiv(this,"Trailer","on");'>精彩预告</li>
+            </ul>
+          </div>
+          <!--TAB End-->
+          <!--排期选项-->
+          <div id="containerdiv">
+            <div id="it">
+              <!--排期选项 End-->
+              <!--电影排期详情-->
+              <div id="pq">
+                <!--排期选项 End-->
+                <!--电影排期详情-->
+                <div class="pq">
+                  <div id="backmg" class="backmg" style="min-height: 150px">
+                    <span><span id="9" class="57"></span></span>
+                    <!--影院地址-->
+                    <div class="ctrtitle">
+                      <b>珠晖区 | </b>源辰影院
+                    </div>
+                    <!--影院地址 End-->
+                    <!--基本说明-->
+                    <table width="663px" border="0" cellspacing="0" cellpadding="0" class="table_1">
+                      <tr>
+                        <td width="99">放映日期
+                        </td>
+                        <td width="99">放映时间
+                        </td>
+                        <td width="119">放映厅
+                        </td>
+                        <td width="99">现价（元）
+                        </td>
+                        <td width="129"></td>
+                      </tr>
+                    </table>
+                    <!--排期列表 循环-->
+                    <div id="app1" class="divOverflow">
+                      <template>
+                        <div>
+                          <table width="663px" border="0" cellspacing="0" cellpadding="0" class="table_2">
+                            <tr v-for="data in database" :key="data.id">
+                              <td width="100">
+                                <b>{{ data.date }}</b>
+                              </td>
+                              <td width="100">
+                                <b>{{ data.starttime }}</b>
+                              </td>
+                              <td width="120">
+                                <p class="sche_l" :data-id="data.id" title="座位图"></p>
+                                {{ data.hname }}<em style="color: #999;">（<span>{{ data.capatity }}</span>座）</em>
+                              </td>
+                              <td width="100" class="ft">
+                                <span class="cRmain">{{ data.prize }}</span>
+                              </td>
+                              <td width="130">
+                                <a href="pay.html" class="f_link">选座购票</a>
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                      </template>
+                    </div>
+
+                    <script>
+                      var v = new Vue({
+                        el: "#app1",
+                        data() {
+                          return {
+                            database: [],
+                          };
+                        },created() {
+                          // 从数据库中获取数据
+                          this.fetchMovies();
+                        },
+                        methods: {
+                          fetchMovies() {
+                            axios.post("movie?op=plan").then(res => {
+                              this.database = res.data;
+                            })
+                            // 使用适当的方法从数据库中获取电影数据，并将其赋值给movies数组
+                            // 示例代码：
+                            // 假设您已经从数据库中获取到了电影数据
+                            // 可以根据从数据库中获取到的数据在这里添加更多电影对象
+                          },
+                        }
+                      });
+                    </script>
+                    <table width="663px" border="0" cellspacing="0" cellpadding="0" class="table_3">
+                      <tr>
+                        <td>* 现价已包含服务费 ，该影院放映前30分钟关闭网络售票 。
+                        </td>
+                      </tr>
+                    </table>
+                    <div class="hg50">
+                    </div>
+                  </div>
+                </div>
+                <script type="text/javascript">
+                  $(function () {
+                    if ($("#txtReleaseshow").val() == 1) {
+                      $("#errorDiv").html("该电影还未上映，上映时间：" + $("#txtReleaseDate").val());
+                    }
+
+                    $(".stpe4_b, .stpe4_c,.sche_p,.sche_v ,.sche_c,.sche_s").tooltip();
+                    $(".sche_l").tooltip({
+                      content: "加载ING...",
+                      open: function (event, ui) {
+                        var _elem = ui.tooltip;
+                        var id = $(this).data("id");
+                        $.get("/seating/_cacheseatingchart", {
+                          id: id
+                        }, function (data) {
+                          _elem.find(".ui-tooltip-content").html(data);
+                        });
+
+                      }
+                    });
+
+                    $(".divOverflow").each(function () {
+                      if ($(this).height() > 300) {
+                        $(this).css("overflow-y", "auto");
+                        $(this).css("height", "300px");
+                        $(this).css("overflow-x", "hidden");
+                        $(this).css("width", "663px");
+
+                      }
+
+                    });
+                  });
+                </script>
+
+              </div>
+              <!--电影排期 End-->
+            </div>
+            <input type="hidden" value="0" id="txtReleaseDate" />
+            <div id="Introduction" class="backmg backmg_hide fs14 lh24 mt10">
+              <pre>电影取材自上万起真实诈骗案例，境外网络诈骗全产业链骇人内幕将在大银幕上首度被揭秘。程序员潘生（张艺兴 饰）、模特安娜（金晨 饰）被海外高薪招聘吸引，出国淘金，却意外落入境外诈骗工厂的陷阱。为了离开，两人准备向赌徒阿天（王大陆 饰）和其女友小雨（周也 饰）下手，从他们身上套现、完成业绩……潘生与安娜能否逃过诈骗集团头目陆经理（王传君 饰）和阿才（孙阳 饰）的残暴折磨？面对警察（咏梅 饰）的跨国调查和追捕，他们又会何去何从？</pre>
+            </div>
+            <div id="Trailer" class="backmg backmg_hide v_bd">
+              <div class="f_sm cRblue">
+                对不起，该影片暂无预告片。
+              </div>
+            </div>
+            <div id="Stills" class="backmg backmg_hide">
+            </div>
+            <div id="Comment" class="backmg backmg_hide">
+            </div>
+          </div>
+        </div>
+        <!--相关资讯开始-->
+        <div class="right">
+          <!--最新活动-->
+          <!--热门活动-->
+
+          <!--正在热映-->
+
+
+          <!--正在热映-->
+          <div class="border">
+            <div class="m_title">
+              <h3 class="font_family">
+                <b>正在热映</b></h3>
+            </div>
+            <div id="app2">
+              <template>
+                <div>
+                  <div v-for="movie in movies" :key="movie.id" class="film_tl_box mt10">
+                    <dd>
+                      <a href="movie1.html" target="_blank">
+                        <img :src="movie.image" :width="120" :height="160" :alt="movie.title" :title="movie.title">
+                      </a>
+                    </dd>
+                    <dt>
+                      <h2 class="lh24">
+                        <a href="movie1.html">{{ movie.mname }}</a>
+                      </h2>
+                      <div class="m_st mtb5" :title="movie.rating">
+                        <div class="m_yellow" :style="{ width: `${movie.rating * 10}px` }"></div>
+                      </div>
+                      <p>
+                        导演：{{ movie.director }}
+                      </p>
+                      <p :title="movie.actors" class="lh21">
+                        主演：{{ movie.actors }}
+                      </p>
+                      <p>
+                        <a href="movie1.html" class="h_link">选座购票</a>
+                      </p>
+                    </dt>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <script>
+              var v = new Vue({
+                el: "#app2",
+                data() {
+                  return {
+                    movies: []
+                  };
+                },
+                created() {
+                  // 从数据库中获取数据
+                  this.fetchMovies();
+                },
+                methods: {
+                  fetchMovies() {
+                    // 使用适当的方法从数据库中获取电影数据，并将其赋值给movies数组
+                    // 示例代码：
+                    // 假设您已经从数据库中获取到了电影数据
+                    axios.post("movie?op=search&&votes=650000").then(res => {
+                      this.movies = res.data;
+                    })
+                  }
+                }
+              });
+            </script>
+            <div class="hg50">
+            </div>
+          </div>
+          <!--正在热映 End-->
+
+        </div>
+      </div>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          $('.fancybox').fancybox();
+          $(".various").fancybox({
+            maxWidth	: 800,
+            maxHeight	: 600,
+            fitToView	: false,
+            width		: '70%',
+            height		: '70%',
+            autoSize	: false,
+            closeClick	: false,
+            openEffect	: 'none',
+            closeEffect	: 'none'
+          });
+
+          $("#liStills").click(function () {
+            LoadStills(4242,"");
+            Showdiv(this,"Stills","on");
+          });
+
+          $("#liComment").click(function () {
+            Showdiv(this,"Comment","on");
+            LoadComment(4242,1);
+          });
+        });
+      </script>
+      <script type="text/javascript">
+        $(function () {
+          var showDay = 0;
+          var moiveid = "4242";
+          var obj = $("#ulMovieDate").find("li:eq(0)");
+          if(showDay > 0){
+            if(showDay>2){
+              $("#ulMovieDate li").show();
+              $("#date_more").hide();
+            }
+            obj = $("#ulMovieDate").find("li[data-showday=0]");
+            LoadMovieScheduleFromDate(obj, moiveid,showDay, "om");
+          }
+
+          $("#date_more").click(function(){
+            $("#ulMovieDate li").show();
+            $(this).hide();
+          });
+
+          var type="0";
+          if(type== 0)
+          {
+            Showdiv($("#liIt"),"it","on");
+          }
+          if(type== 1)
+          {
+            Showdiv($("#liIntroduction"),"Introduction","on");
+          }
+          if(type== 2)
+          {
+            Showdiv($("#liTrailer"),"Trailer","on");
+          }
+          if(type== 3)
+          {
+            Showdiv($("#liStills"),"Stills","on");
+            LoadStills(4242,"");
+
+          }
+          if(type== 4)
+          {
+            Showdiv($("#liComment"),"Comment","on");
+            LoadComment(4242,1);
+          }
+        });
+      </script>
+      <script type="text/javascript">
+        $(function () {
+          ChangeDefaultUL(1); //首页导航
+
+        });
+      </script>
+
+    </section>
+  </div>
+  <!--帮助 版权-->
+  <div class="explain">
+    <div class="explain_er">
+      <dl>
+        <dd>
+          <p class="a1">
+          </p>
+          新手上路</dd>
+        <ul>
+          <li><a href="/help/register" title="会员注册">会员注册</a></li>
+          <li><a href="/help/login" title="如何登录">如何登录</a></li>
+          <li><a href="/help/process" title="快速购票">快速购票</a></li>
+          <li><a href="/help/password" title="找回密码">找回密码</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a2">
+          </p>
+          购票指南</dd>
+        <ul>
+          <li><a href="/help/process" title="购票流程">购票流程</a></li>
+          <li><a href="/help/method" title="取票方法">取票方法</a></li>
+          <li><a href="/help" title="支付方式">支付方式</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a3">
+          </p>
+          常见问题</dd>
+        <ul>
+          <li><a href="/help" title="购票常见问题">购票常见问题</a></li>
+          <li><a href="/help/recharge" title="会员充值问题">会员充值问题</a></li>
+          <li><a href="/help/price" title="影片票价问题">影片票价问题</a></li>
+          <li><a href="/help/coupon" title="优惠劵">优惠劵</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a4">
+          </p>
+          关于我们</dd>
+        <ul>
+          <li><a href="/about">公司介绍</a></li>
+          <li><a href="/sitemap">网站地图</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a5">
+          </p>
+          客户服务</dd>
+        <ul>
+          <li><a href="#" class="bz">电话：400-677-8292</a></li>
+          <li><a href="#" class="bz">邮箱：service@yidepiao.com</a></li>
+        </ul>
+      </dl>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+</html>

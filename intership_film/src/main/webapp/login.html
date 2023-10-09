@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>源辰影院</title>
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="backstretch" style="background-image: url(images/wg_blurred_backgrounds_11.jpg)">
+<div id="app" class="block-absolute-center login-form">
+  <div class="text-center m-b-10">
+    <h2 class="text-white font-w-100">源辰影院</h2>
+  </div>
+    <template>
+      <form role="form" @submit.prevent="login">
+        <div class="form-group">
+          <input type="user" class="form-control input-glass"
+                 data-val="true" data-val-required="请输入邮箱"
+                 v-model="email" placeholder="Email">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control input-glass"
+                 data-val="true" data-val-length="请填写6-20位的密码"
+                 data-val-length-max="20" data-val-length-min="6"
+                 data-val-required="请输入密码。"
+                 v-model="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg" onclick="location.href='index.html'">登录</button>
+      </form>
+    </template>
+  <a href="signup.html" class="text-white hover-opacity-change hover-white-opacity-text m-t-10 d-block">没有账号?</a>
+</div>
+
+<script>
+  var v = new Vue({
+    el:"#app",
+    data: {
+      email: '',
+      password: '',
+      isLogin:null,
+      isLoggedIn: false,
+    },
+    methods: {
+      login() {
+        let p = new URLSearchParams();
+        p.append("email", this.email);
+        p.append("password", this.password);
+        axios.post("login?op=login", p).then(res => {
+          this.isLogin = res.data;
+        })
+      },
+      created() {
+        this.login(isLogin);
+      }
+    },
+  });
+
+
+
+</script>
+</body>
+</html>

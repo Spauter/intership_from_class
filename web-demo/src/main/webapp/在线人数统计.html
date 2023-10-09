@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<!-- saved from url=(0174)http://47.106.66.89:8080/teach/javaee/WEB%E6%A1%88%E4%BE%8B/%E8%AE%BF%E9%97%AE%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86/%E5%9C%A8%E7%BA%BF%E4%BA%BA%E6%95%B0%E7%BB%9F%E8%AE%A1.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>在线人数统计</title>
+</head>
+<body>
+<fieldset>
+    <legend>在线人数统计</legend>
+    <dl>
+        <dt>共有 5 人在线</dt>
+        <dd>
+            <ol>
+                <li><label>曹盖</label><small>在线3小时06分钟</small></li>
+                <li><label>鲁智深</label><small>在线4小时13分钟</small></li>
+                <li><label>扈三娘</label><small>在线5小时33分钟</small></li>
+                <li><label>燕青</label><small>在线2小时24分钟</small></li>
+                <li><label>花荣</label><small>在线1小时25分钟</small></li>
+            </ol>
+        </dd>
+    </dl>
+</fieldset>
+<script>
+    function loaded(){
+        axios.get("online,s", null, res=>{
+            var ol = document.querySelector("ol");
+            html = "";
+            let count = 0;
+            for (let name in res){
+                html += `<li><label>${name}</label><small>在线${castTime(res[name])}</small></li>`
+                count ++;
+            }
+            ol.innerHTML = html;
+            document.querySelector("dt").innerText = `共有 ${count} 人在线`;
+        });
+    }
+
+    function castTime(times){
+        let t = new Date().getTime() - times;
+        let d = new Date(t);
+        let h = d.getHours();
+        let m = d.getMinutes();
+        let s = d.getSeconds();
+        return`${h}时${m}分${s}秒`;
+    }
+</script>
+
+
+
+
+<style>
+    * {
+        vertical-align: middle;
+        text-decoration: none;
+    }
+
+    fieldset {
+        width: 50%;
+        margin: 40px auto;
+    }
+
+    div {
+        line-height: 50px;
+    }
+
+    span {
+        display: inline-block;
+        width: 200px;
+        line-height: 30px;
+        vertical-align: middle;
+        color: red
+    }
+
+    input<small>span<small>select {
+        min-width: 200px;
+        height: 30px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    label {
+        min-width: 70px;
+        display: inline-block;
+        padding: 0px 5px;
+        box-sizing: border-box;
+    }
+
+    small{
+        color: #999999;
+        margin-left: 20px;
+    }
+
+    legend{
+        background-color: #ddd;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        color: #555;
+    }
+
+</style></body></html>

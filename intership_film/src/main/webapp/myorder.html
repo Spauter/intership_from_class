@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9" />
+
+  <title>源辰影院-会员中心-我的订单</title>
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  <link href="css/index.css" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="css/index.css" media="screen" />
+  <script src="https://static.ydpcdn.cn/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <script src='https://static.ydpcdn.cn/scripts/jquery.unobtrusive-ajax.min.js' type='text/javascript'></script>
+
+  <script src='https://static.ydpcdn.cn/scripts/jquery.validate.min.js' type='text/javascript'></script>
+  <script src='https://static.ydpcdn.cn/scripts/jquery.validate.unobtrusive.min.js' type='text/javascript'></script>
+  <script src='https://static.ydpcdn.cn/scripts/jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+
+  <script src="https://static.ydpcdn.cn/scripts/cdn_ydp.js?201404291501"></script>
+
+
+
+</head>
+<body>
+<div id="showFastDiv" style="display: none;">
+</div>
+<div class="wrapper">
+  <!--顶部开始-->
+  <div class="top" id="loginSection">
+    <!--顶部开始-->
+    <div class="top_box">
+      <div class="top_one">
+        看电影，来源辰影院！
+      </div>
+      <div id="app7">
+        <template>
+          <div>
+            <div  v-if="!isLoggedIn" class="top_two">
+              <a href="login.html" class="cRmain">登录</a><span class="cRddd"> 丨 </span><a
+                    href="signup.html" class="cRmain">注册</a><span class="cRddd"> 丨 </span>
+            </div>
+
+            <div  v-else class="top_two">
+              <p>
+                <span class="cRmain">{{ uname }}</span>欢迎来到源辰影院！
+                <a href="login.html" class="cRmain">[退出]</a> |
+                <a href="myorder.html" class="cRmain">[订单]</a><span class="cRddd">  </span>
+              </p>
+            </div>
+          </div>
+        </template>
+
+        <script>
+
+          var v = new Vue({
+            el:"#app7",
+            data() {
+              return {
+                isLoggedIn: false,
+                uname: '',
+              };
+            },
+            created() {
+              let p = new URLSearchParams();
+              axios.post("login?op=userinfo",p).then(res=>{
+                if (res.data.code == 200) {
+                  this.isLoggedIn = true;
+                  this.uname = res.data.uname;
+                }
+              })
+            },
+          });
+        </script>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!--快速登录-->
+  <!--顶部 End-->
+<!--头部开始-->
+<div class="header">
+  <h1>源辰影院</h1>
+  <div class="regionbox" style="z-index: 1;" id="regionSection">
+    <script type="text/javascript">
+      var engName = "hengyang";
+      var chinaName = $("#divCityList").find("ul li").find("a[href='/" + engName + "']").html();
+      $("#spanCityName").html(chinaName);
+      $("#divPCity").mouseover(function (e) {
+        ShowCityList();
+      })
+      $("#divCityList").hide();
+      $("#regionSection").hover(
+              function () {
+                $("#divCityList").show();
+                $("#divPCity").addClass("hover");
+              },
+              function () {
+                $("#divCityList").hide();
+                $("#divPCity").removeClass("hover");
+              }
+      );
+    </script>
+
+  </div>
+  <form action="/search" id="searchform" method="get">
+    <div style="width: 361px; float: right; margin-top: 5px">
+      <!--搜索开始-->
+      <a href="search.html">搜索</a>
+      <!--搜索 End-->
+    </div>
+  </form>
+</div>
+<!--头部 End-->
+<!--导航开始-->
+<div class="nav_box">
+  <div class="nav">
+    <ul id="defaultUL">
+      <li><a href="index.html" title="首页">首页</a></li>
+      <li><a href="movie.html" title="热映电影">热映电影</a></li>
+      <li><a href="cinema.html" title="影厅">影厅</a></li>
+    </ul>
+  </div>
+</div>
+  <!--导航 End-->
+  <div id="body">
+    <section class="content-wrapper main-content clear-fix">
+
+
+      <!--内容框架-->
+      <div class="center">
+        <div class="bread mtb5 cRlgray pb_m bmno">
+          您现在的位置：<a href="/" class="ut">首页</a> > <a href="/home" class="ut">会员中心</a> >
+          <span>我的订单</span></div>
+        <!--左边菜单-->
+        <link rel="stylesheet" href="https://static.ydpcdn.cn/user/css/user.css" media="screen" />
+        <link rel="stylesheet" href="https://static.ydpcdn.cn/user/css/ie6_user.css" media="screen" />
+        <div class="uleft border" style="height: 600px">
+          <ul id="ulHomeMenu">
+            <li>
+              <div class=" uicobox uico_3">
+              </div>
+              <a href="myorder.html">我的订单</a></li>
+          </ul>
+        </div>
+        <script language="javascript" type="text/javascript">
+
+          function ChangeHomeMenuCss(index) {
+
+            for (var i = 1; i < 8; i++) {
+              if (i == index) {
+                $("#ulHomeMenu").find("li:eq(" + (i - 1) + ")").attr("class", "on");
+                $("#ulHomeMenu").find("li:eq(" + (i - 1) + ")").find("div").attr("class", "uicobox uico_" + i + "_" + i);
+              }
+              else {
+                $("#ulHomeMenu").find("li:eq(" + (i - 1) + ")").attr("class", " ");
+                $("#ulHomeMenu").find("li:eq(" + (i - 1) + ")").find("div").attr("class", "uicobox uico_" + i);
+              }
+            }
+          }
+          $(function () {
+            ChangeDefaultUL(0);
+          });
+        </script>
+
+        <!--右边-->
+        <div id="app">
+          <template>
+            <div class="uright border" style="min-height: 600px">
+              <div class="ubd">
+                <div class="ntitle font_family">
+                  我的订单
+                </div>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="mt10">
+                  <tr>
+                    <td width="65">
+                      编号
+                    </td>
+                    <td width="100">
+                      影片
+                    </td>
+                    <td width="137">
+                      电影院
+                    </td>
+                    <td width="111">
+                      金额（元）
+                    </td>
+                    <td width="200">
+                      放映时间
+                    </td>
+                    <td width="100">
+                      操作
+                    </td>
+                  </tr>
+                  <tr v-for="order in orders" :key="order.id">
+                    <td>{{ order.tid }}</td>
+                    <td>{{ order.mname }}</td>
+                    <td>{{ order.hname }}</td>
+                    <td>{{ order.prize }}</td>
+                    <td>{{ order.date }} {{order.starttime}}</td>
+                    <td>
+                      <button @click.prevent="cancelOrder(order.tid)">取消订单</button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <script>
+          var v = new Vue({
+            el: "#app",
+            data() {
+              return {
+                orders: [],
+              };
+            },
+            created() {
+              // 从数据库中获取数据
+              this.fetchOrders();
+            },
+            methods: {
+              fetchOrders() {
+                //TODO  使用登录状态的用户作为参数
+                axios.post("order?op=search&&uname").then(res => {
+                  this.orders = res.data;
+                })
+              },
+              cancelOrder(tid) {
+                let p = new URLSearchParams();
+                p.append("tid", tid);
+                axios.post("order?op=drop", p);
+                this.fetchOrders();
+                // 获取表格元素
+                var table = document.querySelector('.t2');
+
+                // 获取表格的所有行（除了表头）
+                var rows = table.querySelectorAll('tr:not(:first-child)');
+
+                // 遍历所有行，并移除它们
+                rows.forEach(function(row) {
+                  row.remove();
+                });
+                this.orders=[]
+                this.orders=this.fetchOrders()
+                this.orders.forEach(function(order) {
+                  var row = document.createElement('tr');
+                  var tidCell = document.createElement('td');
+                  tidCell.textContent = order.tid;
+                  row.appendChild(tidCell);
+                  var mnameCell = document.createElement('td');
+                  mnameCell.textContent = order.mname;
+                  row.appendChild(mnameCell);
+                  var hnameCell = document.createElement('td');
+                  hnameCell.textContent = order.hname;
+                  row.appendChild(hnameCell);
+                  var prizeCell = document.createElement('td');
+                  prizeCell.textContent = order.prize;
+                  row.appendChild(prizeCell);
+                  var statusCell = document.createElement('td');
+                  statusCell.textContent = order.date;
+                  row.appendChild(statusCell);
+                  var statusCell = document.createElement('td');
+                  statusCell.textContent = order.starttime;
+                  row.appendChild(statusCell);
+                  var actionCell = document.createElement('td');
+                  var cancelButton = document.createElement('button');
+                  cancelButton.textContent = '取消订单';
+                  cancelButton.addEventListener('click', function() {
+                    cancelOrder(order.tid);
+                  });
+                  actionCell.appendChild(cancelButton);
+                  row.appendChild(actionCell);
+                  table.appendChild(row);
+                });
+              }
+            }
+          });
+
+        </script>
+
+    </section>
+  </div>
+  <!--帮助 版权-->
+  <div class="explain">
+    <div class="explain_er">
+      <dl>
+        <dd>
+          <p class="a1">
+          </p>
+          新手上路</dd>
+        <ul>
+          <li><a href="/help/register" title="会员注册">会员注册</a></li>
+          <li><a href="/help/login" title="如何登录">如何登录</a></li>
+          <li><a href="/help/process" title="快速购票">快速购票</a></li>
+          <li><a href="/help/password" title="找回密码">找回密码</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a2">
+          </p>
+          购票指南</dd>
+        <ul>
+          <li><a href="/help/process" title="购票流程">购票流程</a></li>
+          <li><a href="/help/method" title="取票方法">取票方法</a></li>
+          <li><a href="/help" title="支付方式">支付方式</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a3">
+          </p>
+          常见问题</dd>
+        <ul>
+          <li><a href="/help" title="购票常见问题">购票常见问题</a></li>
+          <li><a href="/help/recharge" title="会员充值问题">会员充值问题</a></li>
+          <li><a href="/help/price" title="影片票价问题">影片票价问题</a></li>
+          <li><a href="/help/coupon" title="优惠劵">优惠劵</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a4">
+          </p>
+          关于我们</dd>
+        <ul>
+          <li><a href="/about">公司介绍</a></li>
+          <li><a href="/sitemap">网站地图</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a5">
+          </p>
+          客户服务</dd>
+        <ul>
+          <li><a href="#" class="bz">电话：400-677-8292</a></li>
+          <li><a href="#" class="bz">邮箱：service@yidepiao.com</a></li>
+        </ul>
+      </dl>
+    </div>
+  </div>
+</div>
+</div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35906595-1']);
+  _gaq.push(['_addOrganic', 'm.baidu.com', 'word', true]);
+  _gaq.push(['_addOrganic', 'image.baidu.com', 'word', true]);
+  _gaq.push(['_addOrganic', 'baidu', 'word']);
+  _gaq.push(['_addOrganic', 'soso', 'w']);
+  _gaq.push(['_addOrganic', '3721', 'name']);
+  _gaq.push(['_addOrganic', 'youdao', 'q']);
+  _gaq.push(['_addOrganic', 'www.so.com', 'q']);
+  _gaq.push(['_addOrganic', 'so.360.cn', 'q']);
+  _gaq.push(['_addOrganic', 'vnet', 'kw']);
+  _gaq.push(['_addOrganic', 'sogou', 'query']);
+  _gaq.push(['_addOrganic', 'bing', 'q']);
+  _gaq.push(['_trackPageview']);
+
+  (function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

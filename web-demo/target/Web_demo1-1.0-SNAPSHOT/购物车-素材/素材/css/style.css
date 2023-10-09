@@ -1,0 +1,118 @@
+* {
+    color: #555;
+}
+
+body, ul, li {
+    padding: 0px;
+    margin: 0px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#app {
+    width: calc(230px * 4 + 20px);
+    margin: 10px auto;
+    border: 1px #999 solid;
+    padding: 20px;
+}
+
+h3{
+    padding-left: 20px;
+}
+
+/*           index.html            */
+#list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: stretch;
+}
+
+#list li {
+    list-style: none;
+    display: inline-block;
+    width: 170px;
+    margin: 10px 5px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#list li:hover {
+    background-color: #bce8f1;
+}
+
+.price {
+    line-height: 30px;
+    color: #c4161c;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price > button {
+    height: 22px;
+    padding: 0px 5px;
+    cursor: pointer;
+}
+
+.name {
+    color: green;
+    font-size: 0.8em;
+}
+
+/*           购物车.html            */
+
+.clist {
+    margin: 30px auto;
+    width: 910px;
+}
+
+.clist > table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.clist th {
+    border: 1px #AAA solid;
+    color: #666;
+    font-weight: lighter;
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+.clist td > img {
+    height: 100px;
+}
+
+.clist td {
+    padding: 10px 5px;
+    border-bottom: 1px #aaa solid;
+}
+
+.clist td:nth-child(4), .clist td:nth-child(6) {
+    text-align: center;
+}
+
+.clist td:nth-child(4) > button {
+    width: 25px;
+    height: 25px;
+}
+
+.clist td:nth-child(4) > span {
+    width: 30px;
+    display: inline-block;
+}
+
+#tdSum > * {
+    margin: 0px 15px;
+}
+
+#tdSum span {
+    color: red;
+    font-weight: bolder;
+    font-size: 1.1em;
+}

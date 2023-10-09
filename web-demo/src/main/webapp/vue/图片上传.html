@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <image-upload></image-upload>
+</div>
+<script>
+    Vue.component("imageUpload",{
+        template:`
+            <span style="width: 200px;height: 300px;display: inline-flex;
+            justify-content: center;align-items: center;font-size: 3em;
+            border: 1px blue solid ;cursor: pointer" @click="$refs.file.click()">
+                <slot v-if="imagePath" name="uploaded" >
+                  <img :src="imagePath" style="width: 100%;height: 100%;object-fit: cover">
+                </slot>
+                <slot v-else name="empty">+</slot>
+                <input type="file" ref="file" style="display: none"
+                accept="image/*" @change="upload">
+            </span>
+        `,
+        data(){
+            return{
+                imagePath:null
+            }
+        },
+        props:["url"],
+        methods:{
+            upload() {
+                let fd=new FormData();
+                //files表示选中的文件数组
+                fd.append(this.name,this.$refs.file.files[0]),
+                    axios.isPrototypeOf(this.url,fd).then(res=>{
+                        if(res.data.code==1){
+                            this.imagePath=res.data.data;
+                        }else {
+                            alert(res.data.data.msg);
+                        }
+                    })
+
+            }
+        }
+    })
+
+    var v=new Vue({
+        el:"#app",
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost_1521_ORCL
+ Source Server Type    : Oracle
+ Source Server Version : 110200
+ Source Host           : localhost:1521
+ Source Schema         : SCOTT
+
+ Target Server Type    : Oracle
+ Target Server Version : 110200
+ File Encoding         : 65001
+
+ Date: 28/08/2023 22:54:53
+*/
+
+
+-- ----------------------------
+-- Table structure for TB_ADMIN
+-- ----------------------------
+DROP TABLE "SCOTT"."TB_ADMIN";
+CREATE TABLE "SCOTT"."TB_ADMIN" (
+  "AID" NUMBER NOT NULL,
+  "ANAME" VARCHAR2(50 BYTE),
+  "PWD" VARCHAR2(100 BYTE) DEFAULT '12345678' --密码
+)
+LOGGING
+NOCOMPRESS
+PCTFREE 10
+INITRANS 1
+STORAGE (
+  BUFFER_POOL DEFAULT
+)
+PARALLEL 1
+NOCACHE
+DISABLE ROW MOVEMENT
+;
+
+-- ----------------------------
+-- Records of TB_ADMIN
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for TB_GRADES
+-- ----------------------------
+DROP TABLE "SCOTT"."TB_GRADES";
+CREATE TABLE "SCOTT"."TB_GRADES" (
+  "S_ID" NUMBER,
+  "C_NAME" VARCHAR2(50 BYTE),
+  "S_NAME" VARCHAR2(50 BYTE),
+  "GRADE" NUMBER
+)
+LOGGING
+NOCOMPRESS
+PCTFREE 10
+INITRANS 1
+STORAGE (
+  INITIAL 65536 
+  NEXT 1048576 
+  MINEXTENTS 1
+  MAXEXTENTS 2147483645
+  BUFFER_POOL DEFAULT
+)
+PARALLEL 1
+NOCACHE
+DISABLE ROW MOVEMENT
+;
+
+-- ----------------------------
+-- Records of TB_GRADES
+-- ----------------------------
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '21');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '32');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '54');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '54');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '54');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '54');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '54');
+INSERT INTO "SCOTT"."TB_GRADES" VALUES ('21020140201', '大学英语', '牛一', '12');
+
+-- ----------------------------
+-- Table structure for TB_STUDENT
+-- ----------------------------
+DROP TABLE "SCOTT"."TB_STUDENT";
+CREATE TABLE "SCOTT"."TB_STUDENT" (
+  "S_ID" NUMBER NOT NULL,
+  "S_NAME" VARCHAR2(20 BYTE),
+  "S_CLASS" VARCHAR2(30 BYTE),
+  "S_IS_MEMBER" VARCHAR2(10 BYTE),
+  "S_CLASS_POSITION" VARCHAR2(50 BYTE),
+  "S_IMAGE" BLOB,
+  "S_PHONE_NUMBER" VARCHAR2(20 BYTE),
+  "S_PASSWORD" VARCHAR2(50 BYTE),
+  "S_DATE" NUMBER,
+  "S_SEX" VARCHAR2(6 BYTE)
+)
+LOGGING
+NOCOMPRESS
+PCTFREE 10
+INITRANS 1
+STORAGE (
+  INITIAL 65536 
+  NEXT 1048576 
+  MINEXTENTS 1
+  MAXEXTENTS 2147483645
+  BUFFER_POOL DEFAULT
+)
+PARALLEL 1
+NOCACHE
+DISABLE ROW MOVEMENT
+;
+
+-- ----------------------------
+-- Records of TB_STUDENT
+-- ----------------------------
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140201', '王安生', '计科2011', '否', '无', NULL, '1534528284', '528284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140202', '李风雨', '物联2014', '否', '无', NULL, '1554382864', '382864', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140203', '安天空', '软件1912', '否', '无', NULL, '1123228284', '228284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140204', '李晨阳', '财经1912', '否', '无', NULL, '1239228484', '228484', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140205', '刘广军', '计科2011', '否', '无', NULL, '1539228284', '228284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140206', '刘建安', '计科2012', '否', '无', NULL, '1587658284', '658284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140207', '罗彪', '计科2013', '否', '无', NULL, '1539228284', '228284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140208', '蔡莹', '计科2014', '否', '无', NULL, '1535431284', '431284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140209', '秦家保', '物联2013', '否', '无', NULL, '1423568284', '568284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140211', '马保国', '物联2014', '否', '无', NULL, '1539228284', '228284', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140212', '马流辟', '软件2012', '否', '无', NULL, '1539228285', '228285', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140213', '黄腾', '软件2011', '否', '无', NULL, '1315228285', '228285', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140214', '黄志强', '外语2011', '否', '无', NULL, '1319228285', '228285', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140215', '王俊英', '外语2112', '否', '无', NULL, '1312228285', '228285', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140216', '林俊杰', '外语1911', '否', '无', NULL, '1436228285', '228285', '20210', '男');
+INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140217', '李俊杰', '物联1911', '否', '无', NULL, '1332442856', '442856', '20210', '男');
+
+-- ----------------------------
+-- Table structure for TB_STUDENT_COURSES
+-- ----------------------------
+DROP TABLE "SCOTT"."TB_STUDENT_COURSES";
+CREATE TABLE "SCOTT"."TB_STUDENT_COURSES" (
+  "S_ID" NUMBER,
+  "C_ID" NUMBER NOT NULL,
+  "T_NAME" VARCHAR2(10 BYTE)
+)
+LOGGING
+NOCOMPRESS
+PCTFREE 10
+INITRANS 1
+STORAGE (
+  INITIAL 65536 
+  NEXT 1048576 
+  MINEXTENTS 1
+  MAXEXTENTS 2147483645
+  BUFFER_POOL DEFAULT
+)
+PARALLEL 1
+NOCACHE
+DISABLE ROW MOVEMENT
+;
+
+-- ----------------------------
+-- Records of TB_STUDENT_COURSES
+-- ----------------------------
+INSERT INTO "SCOTT"."TB_STUDENT_COURSES" VALUES ('21020140201', '1145140', '牛一');
+INSERT INTO "SCOTT"."TB_STUDENT_COURSES" VALUES ('1', '1', '1');
+INSERT INTO "SCOTT"."TB_STUDENT_COURSES" VALUES ('21020140201', '1145240', '李峰');
+
+-- ----------------------------
+-- Table structure for TB_TEACHER
+-- ----------------------------
+DROP TABLE "SCOTT"."TB_TEACHER";
+CREATE TABLE "SCOTT"."TB_TEACHER" (
+  "T_ID" NUMBER NOT NULL,
+  "T_NAME" VARCHAR2(20 BYTE),
+  "T_CNAME" VARCHAR2(50 BYTE),
+  "POSITION" VARCHAR2(100 BYTE),
+  "HIRE_DATE" VARCHAR2(30 BYTE),
+  "T_PHONE_NUMBER" NUMBER,
+  "T_PWD" NUMBER,
+  "PERSONAL_INTRO" VARCHAR2(500 BYTE)
+)
+LOGGING
+NOCOMPRESS
+PCTFREE 10
+INITRANS 1
+STORAGE (
+  INITIAL 65536 
+  NEXT 1048576 
+  MINEXTENTS 1
+  MAXEXTENTS 2147483645
+  BUFFER_POOL DEFAULT
+)
+PARALLEL 1
+NOCACHE
+DISABLE ROW MOVEMENT
+;
+
+-- ----------------------------
+-- Records of TB_TEACHER
+-- ----------------------------
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9527', '李逍遥', '大学英语', '教师', '01-2-2022', '1312228555', '228555', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9528', '牛一', '大学英语', '3454', '09-5-2003', '3423', '271925', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9529', '李峰', '习近平思想', '班主任', '08-4-2005', '1312112255', '112255', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9530', '张成', '电子商务技术', '教师', '04-3-2008', '1315522285', '522285', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9531', '鲁智深', NULL, '教师', '06-1-2004', '1313322285', '322285', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9532', '卢艳', '思想道德修养', '教师', '30-1-2004', '1318897895', '897895', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9533', '展达鹏', NULL, '教师', '21-9-2005', '1317365485', '365485', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9534', '江浩', NULL, '班主任', '30-4-2003', '1995522285', '522285', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9535', '吴迪', NULL, '班主任', '01-1-2001', '1819522286', '522286', '男');
+INSERT INTO "SCOTT"."TB_TEACHER" VALUES ('9536', '丁葱华', NULL, '教师', '27-4-2003', '1349522286', '522286', '男');
+
+-- ----------------------------
+-- Primary Key structure for table TB_ADMIN
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_ADMIN" ADD CONSTRAINT "SYS_C0010832" PRIMARY KEY ("AID");
+
+-- ----------------------------
+-- Uniques structure for table TB_ADMIN
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_ADMIN" ADD CONSTRAINT "SYS_C0010833" UNIQUE ("ANAME") NOT DEFERRABLE INITIALLY IMMEDIATE NORELY VALIDATE;
+
+-- ----------------------------
+-- Checks structure for table TB_GRADES
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_GRADES" ADD CONSTRAINT "CK_GRADE_RANGE" CHECK (grade >= 0 and grade <= 100) NOT DEFERRABLE INITIALLY IMMEDIATE NORELY VALIDATE;
+
+-- ----------------------------
+-- Primary Key structure for table TB_STUDENT
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_STUDENT" ADD CONSTRAINT "SYS_C0010838" PRIMARY KEY ("S_ID");
+
+-- ----------------------------
+-- Checks structure for table TB_STUDENT
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_STUDENT" ADD CONSTRAINT "SYS_C0010837" CHECK (s_is_member in ('是', '否')) NOT DEFERRABLE INITIALLY IMMEDIATE NORELY VALIDATE;
+
+-- ----------------------------
+-- Primary Key structure for table TB_STUDENT_COURSES
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_STUDENT_COURSES" ADD CONSTRAINT "SYS_C0010830" PRIMARY KEY ("C_ID");
+
+-- ----------------------------
+-- Primary Key structure for table TB_TEACHER
+-- ----------------------------
+ALTER TABLE "SCOTT"."TB_TEACHER" ADD CONSTRAINT "SYS_C0010836" PRIMARY KEY ("T_ID");

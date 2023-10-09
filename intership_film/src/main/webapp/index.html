@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+    <link rel="dns-prefetch" href="//static.ydpcdn.cn">
+    <link rel="dns-prefetch" href="//pic.ydpcdn.cn">
+    <link rel="dns-prefetch" href="//js.t.sinajs.cn">
+
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9"/>
+    <meta name="referrer" content="no-referrer">
+
+    <title>源辰影院-电影票网上购买预订_在线选座,轻松购票</title>
+
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <link href="css/index.css" rel="stylesheet"/>
+
+    <script src="https://static.ydpcdn.cn/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+    <script src='https://static.ydpcdn.cn/scripts/jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+
+    <script src="https://static.ydpcdn.cn/scripts/cdn_ydp.js?201404291501"></script>
+
+
+</head>
+<body>
+<div id="showFastDiv" style="display: none;">
+</div>
+<div class="wrapper">
+    <!--顶部开始-->
+    <div class="top">
+        <!--顶部开始-->
+        <div class="top_box">
+            <div class="top_one">
+                看电影，来源辰影院！
+            </div>
+            <div id="app7">
+                <template>
+                    <div>
+                        <div  v-if="!isLoggedIn" class="top_two">
+                            <a href="login.html" class="cRmain">登录</a><span class="cRddd"> 丨 </span><a
+                                href="signup.html" class="cRmain">注册</a><span class="cRddd"> 丨 </span>
+                        </div>
+
+                        <div  v-else class="top_two">
+                            <p>
+                                <span class="cRmain">{{ uname }}</span>欢迎来到源辰影院！
+                                <a href="login.html" class="cRmain">[退出]</a> |
+                                <a href="myorder.html" class="cRmain">[订单]</a><span class="cRddd">  </span>
+                            </p>
+                        </div>
+                    </div>
+                </template>
+
+                <script>
+
+                    var v = new Vue({
+                        el:"#app7",
+                        data() {
+                            return {
+                                isLoggedIn: false,
+                                uname: '',
+                            };
+                        },
+                        created() {
+                            let p = new URLSearchParams();
+                            axios.post("login?op=userinfo",p).then(res=>{
+                                if (res.data.code == 200) {
+                                    var uname= '';
+                                    this.isLoggedIn = true;
+                                    this.uname = res.data.uname;
+                                    console.info(uname+123);
+                                }
+                            })
+                        },
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+    <!--快速登录-->
+    <!--顶部 End-->
+    <!--头部开始-->
+    <div class="header">
+        <h1>源辰影院</h1>
+        <div class="regionbox" style="z-index: 1;" id="regionSection">
+            <script type="text/javascript">
+                var engName = "hengyang";
+                var chinaName = $("#divCityList").find("ul li").find("a[href='/" + engName + "']").html();
+                $("#spanCityName").html(chinaName);
+                $("#divPCity").mouseover(function (e) {
+                    ShowCityList();
+                })
+                $("#divCityList").hide();
+                $("#regionSection").hover(
+                    function () {
+                        $("#divCityList").show();
+                        $("#divPCity").addClass("hover");
+                    },
+                    function () {
+                        $("#divCityList").hide();
+                        $("#divPCity").removeClass("hover");
+                    }
+                );
+            </script>
+
+        </div>
+        <form action="/search" id="searchform" method="get">
+            <div style="width: 361px; float: right; margin-top: 5px">
+                <!--搜索开始-->
+                <div style="width: 361px; float: right; margin-top: 5px">
+                    <!--搜索开始-->
+                    <a href="search.html">搜索</a>
+                    <!--搜索 End-->
+                </div>
+                <!--搜索 End-->
+            </div>
+        </form>
+    </div>
+    <!--头部 End-->
+    <!--导航开始-->
+    <div class="nav_box">
+        <div class="nav">
+            <ul id="defaultUL">
+                <li><a href="index.html" title="首页">首页</a></li>
+                <li><a href="movie.html" title="热映电影">热映电影</a></li>
+                <li><a href="cinema.html" title="影厅">影厅</a></li>
+            </ul>
+        </div>
+    </div>
+    <!--导航 End-->
+    <div id="body">
+        <section class="content-wrapper main-content clear-fix">
+
+            <script src='https://static.ydpcdn.cn/scripts/jquery.lazyload.min.js' type='text/javascript'></script>
+           <link rel="stylesheet" href="https://static.ydpcdn.cn/css/jquery.slideBox.css" media="screen"/>
+            <script src='https://static.ydpcdn.cn/scripts/jquery.slideBox.min.js' type='text/javascript'></script>
+
+            <script src="https://tjs.sjs.sinajs.cn/open/api/js/wb.js" type="text/javascript" charset="utf-8"></script>
+            <!--幻灯模块开始-->
+            <script type="text/javascript">
+                jQuery(function ($) {
+                    $('#slideBanner').slideBox({
+                        duration: 0.3, //滚动持续时间，单位：秒
+                        easing: 'linear', //swing,linear//滚动特效
+                        delay: 5, //滚动延迟时间，单位：秒
+                        hideClickBar: false, //不自动隐藏点选按键
+                        clickBarRadius: 10,
+                        startIndex: 0,
+                        height: 300,
+                        width: 690
+                    });
+                    $(".items img").lazyload({
+                        container: $("#slideBanner"),
+                        event: "update"
+                    });
+                    $("#section0 img").lazyload({
+                        effect: "fadeIn"
+                    });
+                    $(".i_mo img").lazyload({
+                        effect: "fadeIn"
+                    });
+                    $(".i_activity img").lazyload({
+                        effect: "fadeIn"
+                    });
+                    $("#section1 img").lazyload({
+                        container: $("#section1"),
+                        event: "update"
+                    });
+                });
+
+            </script>
+            <div class="videobox">
+                <!--左右阴影-->
+                <div class="a1">
+                </div>
+                <div class="a2">
+                </div>
+                <!-- End-->
+                <div id="slideBanner" class="slideBox">
+                    <!--幻灯-->
+
+                    <ul class="items">
+                        <li><a href="movie1.html" target="_blank"
+                               onload="javascript:ChangeBannerTitle(this);">
+                            <img id="firstimg" title="长安三万里" alt="长安三万里"
+                                 data-original="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/96005bd8-c96f-43f8-834c-6429ac92411c.png"
+                                 src="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/96005bd8-c96f-43f8-834c-6429ac92411c.png!150"
+                                 width="690" height="300">
+                            <input class="BannerTitle" type="hidden" value="长安三万里"/>
+                            <input class="BannerContent" type="hidden"
+                                   value="安史之乱爆发后数年，吐蕃大军攻打西南。大唐节度使高适交战不利，长安岌岌可危。困守孤城的高适向监军太监回忆起自己与李白的一生往事。"/>
+                        </a></li>
+                        <li><a href="movie1.html" target="_blank"
+                               onload="javascript:ChangeBannerTitle(this);">
+                            <img title="孤注一掷" alt="孤注一掷"
+                                 data-original="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/dc96025b-757c-48c4-9074-aadbc03c5eed.png"
+                                 src="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/dc96025b-757c-48c4-9074-aadbc03c5eed.png!150"
+                                 width="690" height="300">
+                            <input class="BannerTitle" type="hidden" value="孤注一掷"/>
+                            <input class="BannerContent" type="hidden"
+                                   value="电影取材自上万起真实诈骗案例，境外网络诈骗全产业链骇人内幕将在大银幕上首度被揭秘。程序员潘生（张艺兴 饰）、模特安娜（金晨 饰）被海外高薪招聘吸引，出国淘金，却意外落入境外诈骗工厂的陷阱。为了离开，两人准备向赌徒阿天（王大陆 饰）和其女友小雨（周也 饰）下手，从他们身上套现、完成业绩……潘生与安娜能否逃过诈骗集团头目陆经理（王传君 饰）和阿才（孙阳 饰）的残暴折磨？面对警察（咏梅 饰）的跨国调查和追捕，他们又会何去何从？"/>
+                        </a></li>
+                        <li><a href="movie1.html" target="_blank"
+                               onload="javascript:ChangeBannerTitle(this);">
+                            <img title="巨齿鲨2" alt="巨齿鲨2"
+                                 data-original="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/53ebaea9-7fd1-4c48-b918-aba2700bc0c4.png"
+                                 src="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/53ebaea9-7fd1-4c48-b918-aba2700bc0c4.png!150"
+                                 width="690" height="300">
+                            <input class="BannerTitle" type="hidden" value="巨齿鲨2"/>
+                            <input class="BannerContent" type="hidden"
+                                   value="海洋霸主巨齿鲨，今夏再掀狂澜！乔纳斯&#183;泰勒（杰森&#183;斯坦森 饰）与科学家张九溟（吴京 饰）双雄联手，进入海底7000米深渊执行探索任务。他们意外遭遇史前巨兽海洋霸主巨齿鲨群的攻击，还将对战凶猛危险的远古怪兽群。惊心动魄的深渊冒险，巨燃巨爽的深海大战一触即发…"/>
+                        </a></li>
+                        <li><a href="movie1.html" target="_blank"
+                               onload="javascript:ChangeBannerTitle(this);">
+                            <img title="封神第一部：朝歌风云" alt="封神第一部：朝歌风云"
+                                 data-original="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/e740b1c2-adf4-4612-9b4d-794955ab14ed.png"
+                                 src="https://pic.ydpcdn.cn/pictures/homeparameter/2023-07/e740b1c2-adf4-4612-9b4d-794955ab14ed.png!150"
+                                 width="690" height="300">
+                            <input class="BannerTitle" type="hidden" value="封神第一部：朝…"/>
+                            <input class="BannerContent" type="hidden" value="&lt;h2&gt;
+	&lt;span style=&quot;font-size:12px;&quot;&gt;商王殷寿（费翔 饰）勾结狐妖妲己（娜然 饰），暴虐无道，引发天谴。昆仑仙人姜子牙（黄渤 饰）携“封神榜”下山，寻找天下共主，以救苍生。西伯侯之子姬发（于适 饰）逐渐发现殷寿的本来面目，反出朝歌。各方势力暗流涌动，风云变幻端倪初显……&lt;/span&gt;
+&lt;/h2&gt;"/>
+                        </a></li>
+                        <li><a href="movie1.html" target="_blank"
+                               onload="javascript:ChangeBannerTitle(this);">
+                            <img title="八角笼中" alt="八角笼中"
+                                 data-original="https://pic.ydpcdn.cn/pictures/homeparameter/2023-06/f88d70e3-c166-42bd-ad62-da783d8fa0c4.png"
+                                 src="https://pic.ydpcdn.cn/pictures/homeparameter/2023-06/f88d70e3-c166-42bd-ad62-da783d8fa0c4.png!150"
+                                 width="690" height="300">
+                            <input class="BannerTitle" type="hidden" value="八角笼中"/>
+                            <input class="BannerContent" type="hidden"
+                                   value="电影讲述了向腾辉（王宝强 饰）倾注心血想把当地无人照料的孩子培养成才，这让生活本没有出路的孩子们看到了一丝通向未来的曙光。然而，随着往日的表演视频被爆出，这些“残忍、血腥”的画面刺激了不明真相的人们的神经。一夜之间，舆论开始发酵。向腾辉的生活、孩子们的前途都陷入到人们以善良为名编织的大网中，让 他们难以挣脱，重回泥沼，关于未来，他们的“出路”又将在哪……"/>
+                        </a></li>
+                    </ul>
+                </div>
+                <!--简介开始-->
+                <div class="video_exp">
+                    <div class="video_bd">
+                        <div class="video_top font-family">
+                            <h2 id="ddBannerTitle"></h2>
+                        </div>
+                        <span id="spanBannerContent"></span>
+                    </div>
+                </div>
+                <!--简介 End-->
+            </div>
+            <div class="video_bm">
+            </div>
+            <!--幻灯模块 End-->
+            <!--内容框架-->
+            <div class="center">
+                <!--最新电影-->
+
+                    <div class="left border">
+                        <div class="film_tab">
+                            <ul>
+                                <li class="on font_family fs16 cRmain" id="tag0" title="今日热映"
+                                    onclick="SwitchToDefaultSec(0);">正在热映
+                                </li>
+                                <li class="om font_family fs16" id="tag1" title="即将上映" onclick="SwitchToDefaultSec(1);">即将上映
+                                </li>
+                            </ul>
+                            <div class="more" style="position: absolute; right: 18px; top: 15px">
+                                <a href="movie.html" id="morefilm">更多影片</a>
+                            </div>
+                        </div>
+                        <!--列表开始-->
+                        <div id="app1">
+                            <div class="f_bd" id="section0" style="min-height: 593px;">
+                                <ul>
+                                    <template>
+                                        <div>
+                                            <el-pagination id="pages" @current-change="query" background layout="prev,pager,next" :total="page.total"></el-pagination>
+                                        </div>
+                                        <div>
+                                            <ul>
+                                                <li v-for="movie in page.rows" :key="movie.id">
+                                                    <div class="ibox">
+                                                        <a :href="getMovieUrl(movie)" :title="movie.mname" target="_blank">
+                                                            <img :data-original="movie.image" :src="movie.image" :alt="movie.mname" width="145px" height="203px">
+                                                        </a>
+                                                    </div>
+                                                    <div class="title">
+                                                        <h2 class="font_family">
+                                                            <a :href="getMovieUrl(movie)" target="_blank">{{ movie.mname }}</a>
+                                                        </h2>
+                                                    </div>
+                                                    <div class="f_bd_bm">
+                                                        <div class="f_l">
+                                                            <b>39</b> 起
+                                                        </div>
+                                                        <div class="f_r">
+                                                            <a :href="getMovieUrl(movie)" target="_blank">选座购票</a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </template>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <script>
+                            var v = new Vue({
+                                el: "#app1",
+                                data() {
+                                    return {
+                                        page: {
+                                            rows: [],
+                                            total: 0
+                                        },
+                                        where: {
+                                            begin: new Date(),
+                                            end: new Date(),
+                                            page: 1,
+                                            size: 8
+                                        },
+                                        movies: []
+                                    };
+                                },
+                                created() {
+                                    this.query();
+
+                                },
+                                methods: {
+                                    query(page) {
+                                        if (page) {
+                                            this.where.page = page;
+                                        }
+                                        let p = new URLSearchParams();
+                                        p.append("page", this.where.page);
+                                        p.append("size", this.where.size);
+                                        axios.post("movie?op=query1", p).then(res =>
+                                            this.page = res.data);
+                                    },
+                                    getMovieUrl(movie) {
+                                        return `movie1.html?id=${movie.id}`;
+                                    }
+                                }
+                            });
+                        </script>
+
+                        <style>
+                            #pages {
+                                margin: 5px auto;
+                            }
+                            #pages>ul{
+                                width: 300px;
+                                margin: 2px;
+                                padding: 2px 5px;
+                                border-radius: 2px;
+                                min-width: 15px;
+                                display: inline-block;
+                                text-align: center;
+                                cursor: pointer;
+                            }
+                            #pages>ul>li{
+                                width: 20px;
+                            }
+                        </style>
+
+
+                        <!--列表 End-->
+                        <!--列表开始-->
+                        <div id="app2">
+                            <div class="f_bd" id="section1" style="min-height: 593px;">
+                                <ul>
+                                    <li v-for="movie in movies" :key="movie.id">
+                                        <div class="ibox">
+                                            <a href="movie1.html" :title="movie.mname" target="_blank">
+                                                <img :data-original="movie.image" :src="movie.image" :alt="movie.title"
+                                                     :width="143" :height="200">
+                                            </a>
+                                        </div>
+                                        <div class="title">
+                                            <h2 class="font_family">
+                                                <a href="movie1.html" target="_blank">{{ movie.mname }}</a>
+                                            </h2>
+                                        </div>
+                                        <div class="f_bd_bm">
+                                            <div class="f_l">
+                                                <b>即将上映</b>
+                                            </div>
+                                            <div class="f_r">
+                                                <a href="movie1.html" target="_blank">查看详情</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            </template>
+                            </ul>
+                                <!--列表 End-->
+                            </div>
+                        </div>
+                        <script>
+                            var v = new Vue({
+                                el: "#app2",
+                                data() {
+                                    return {
+                                        movies: []
+                                    };
+                                },
+                                created() {
+                                    // 从数据库中获取数据
+                                    this.fetchMovies();
+                                },
+                                methods: {
+                                    fetchMovies() {
+                                        // 使用适当的方法从数据库中获取电影数据，并将其赋值给movies数组
+                                        // 示例代码：
+                                        // 假设您已经从数据库中获取到了电影数据
+                                        axios.post("movie?op=search&&votes=500000").then(res => {
+                                            this.movies = res.data;
+                                        })
+                                    }
+                                }
+                            });
+                        </script>
+                <!--最新电影 End-->
+                    <!--右边排行榜-->
+                    <div class="border mt10" style="height: 285px; overflow: hidden">
+                        <div class="h_tab">
+                            <ul>
+                                <li id="ranktag0" class="on">热映排行榜</li>
+
+                            </ul>
+                        </div>
+                        <div id="rankSec0">
+                            <div class="h_list font_family">
+                                <ul>
+                                    <li v-for="(t,i) in tops"><a href="movie1.html" title="t" target="_blank">
+                                        {{i + 1}}.{{t.mname}}</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+
+                        <script>
+                            var v = new Vue({
+                                el: "#rankSec0",
+                                data: {tops: []},
+                                created() {
+                                    // 从数据库中获取数据
+                                    this.fetchMovies();
+                                },
+                                methods: {
+                                    fetchMovies() {
+                                        axios.post("movie?op=top6").then(res => {
+                                            this.tops = res.data;
+                                        })
+                                        // 使用适当的方法从数据库中获取电影数据，并将其赋值给movies数组
+                                        // 示例代码：
+                                        // 假设您已经从数据库中获取到了电影数据
+                                        // 可以根据从数据库中获取到的数据在这里添加更多电影对象
+                                    },
+                                }
+                            });
+
+                        </script>
+
+                        <!--右边排行榜 End-->
+                        <script type="text/javascript">
+                            $(function () {
+                                $("#ranktag0").hoverDelay({
+                                    hoverEvent: function () {
+                                        SwithRankSec(0);
+                                    }
+                                });
+                                $("#ranktag1").hoverDelay({
+                                    hoverEvent: function () {
+                                        SwithRankSec(1);
+                                    }
+                                });
+                                $("#rankSec1").hide();
+
+                            });
+                        </script>
+
+                    </div>
+                    <!--排行榜 End-->
+                </div>
+            <!--内容 End-->
+
+            <!--第二部分-->
+            <div class="center">
+                <!--热门活动-->
+                <div class="border pb_b">
+                    <div class="bd" style="height: 300px">
+                        <div class="h_title">
+                        </div>
+                        <dl class="i_activity">
+
+                            <dd>
+                                <img width="305" height="164">广告</dd>
+                            <dd>
+                                <img  width="305" height="164">广告</dd>
+                            <dd>
+                                <img  width="305" height="164">广告</dd>
+                        </dl>
+                    </div>
+                </div>
+                <!--热门 End-->
+
+            </div>
+        </section></div>
+    <!--帮助 版权-->
+    <div class="explain">
+        <div class="explain_er">
+            <dl>
+                <dd>
+                    <p class="a1">
+                    </p>
+                    新手上路
+                </dd>
+                <ul>
+                    <li><a href="/help/register" title="会员注册">会员注册</a></li>
+                    <li><a href="/help/login" title="如何登录">如何登录</a></li>
+                    <li><a href="/help/process" title="快速购票">快速购票</a></li>
+                    <li><a href="/help/password" title="找回密码">找回密码</a></li>
+                </ul>
+            </dl>
+            <dl>
+                <dd>
+                    <p class="a2">
+                    </p>
+                    购票指南
+                </dd>
+                <ul>
+                    <li><a href="/help/process" title="购票流程">购票流程</a></li>
+                    <li><a href="/help/method" title="取票方法">取票方法</a></li>
+                    <li><a href="/help" title="支付方式">支付方式</a></li>
+                </ul>
+            </dl>
+            <dl>
+                <dd>
+                    <p class="a3">
+                    </p>
+                    常见问题
+                </dd>
+                <ul>
+                    <li><a href="/help" title="购票常见问题">购票常见问题</a></li>
+                    <li><a href="/help/recharge" title="会员充值问题">会员充值问题</a></li>
+                    <li><a href="/help/price" title="影片票价问题">影片票价问题</a></li>
+                    <li><a href="/help/coupon" title="优惠劵">优惠劵</a></li>
+                </ul>
+            </dl>
+            <dl>
+                <dd>
+                    <p class="a4">
+                    </p>
+                    关于我们
+                </dd>
+                <ul>
+                    <li><a href="/about">公司介绍</a></li>
+                    <li><a href="/sitemap">网站地图</a></li>
+                </ul>
+            </dl>
+            <dl>
+                <dd>
+                    <p class="a5">
+                    </p>
+                    客户服务
+                </dd>
+                <ul>
+                    <li><a href="#" class="bz">电话：400-677-8292</a></li>
+                    <li><a href="#" class="bz">邮箱：service@yidepiao.com</a></li>
+                </ul>
+            </dl>
+        </div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35906595-1']);
+    _gaq.push(['_addOrganic', 'm.baidu.com', 'word', true]);
+    _gaq.push(['_addOrganic', 'image.baidu.com', 'word', true]);
+    _gaq.push(['_addOrganic', 'baidu', 'word']);
+    _gaq.push(['_addOrganic', 'soso', 'w']);
+    _gaq.push(['_addOrganic', '3721', 'name']);
+    _gaq.push(['_addOrganic', 'youdao', 'q']);
+    _gaq.push(['_addOrganic', 'www.so.com', 'q']);
+    _gaq.push(['_addOrganic', 'so.360.cn', 'q']);
+    _gaq.push(['_addOrganic', 'vnet', 'kw']);
+    _gaq.push(['_addOrganic', 'sogou', 'query']);
+    _gaq.push(['_addOrganic', 'bing', 'q']);
+    _gaq.push(['_trackPageview']);
+
+    (function () {
+        var ga = document.createElement('script');
+        ga.type = 'text/javascript';
+        ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+</body>
+</html>

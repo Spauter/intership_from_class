@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/ajax.js"></script>
+</head>
+<body>
+hello 中国
+<form action="login.s" method="post">
+    账号:<input name="username"><br>
+    密码:<input name="password" type="password"><br>
+    <button>登录</button>
+</form>
+
+<hr>
+<form action="add.s" method="get">
+    账号:<input name="a" id="a" type="number"><br>
+    密码:<input name="b" id="b" type="number"><br>
+    结果:<span name="c" id="c"></span><br>
+    <button>表单方式(同步方式)提交</button>
+    <button type="button" onclick="add()">AJAX方式(异步方式)提交</button>
+    <button type="button" onclick="add1()">AJAX方式(封装方式)提交</button>
+</form>
+<script>
+    var ajax;
+    if (window.XMLHttpRequest){
+        ajax = new XMLHttpRequest();
+    }else{
+        ajax = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    function add(){
+        ajax.onreadystatechange = function (){
+            console.info(ajax.readyState, ajax.status);
+            if (ajax.readyState == 4 && ajax.status == 200){
+                c.innerText = ajax.responseText;
+            }
+        }
+
+        let url = "add.s?";
+        if (a.value){
+            url += "a=" + a.value;
+        }
+        if (b.value){
+            url += "&b=" +b.value;
+        }
+
+        ajax.open("get",url);
+        ajax.send(null);
+    }
+
+    function add1(){
+        axios.get("add.s", {
+            params:{
+                a: a.value,
+                b: b.value
+            }
+        }, function (responseText){
+            c.innerText = responseText;
+        });
+    }
+</script>
+
+<hr>
+<h3>用户信息</h3>
+<button onclick="queryUser()">查询用户数据</button>
+<div id="users">
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><td>账号</td><td>密码</td><td>电话</td></tr>
+    </table>
+</div>
+<script>
+    function queryUser(){
+        axios.get("findUser.s",null,res=>{
+            var list = JSON.parse(res);
+            var html = "";
+            list.forEach(user=>{
+                var tr = `<tr><td>${user.name || ''}</td>
+                             <td>${user.pwd || ''}</td>
+                             <td>${user.phone || ''}</td></tr>`;
+                html += tr;
+            })
+
+            var th = users.children[0].children[0].outerHTML;
+            users.children[0].innerHTML = th;
+            users.children[0].innerHTML += html;
+        })
+    }
+</script>
+
+<hr>
+<h3>添加用户</h3>
+<div style="display: grid;grid-template-columns: 100px 150px; grid-gap: 10px">
+    账号:<input  id="username">
+    密码:<input  id="password" type="password">
+    电话:<input  id="phone" type="number">
+    <span></span><button onclick="adduser()">添加用户</button>
+</div>
+<script>
+    function adduser(){
+        axios.get("addUser.s",{
+            params:{
+                username: username.value,
+                password: password.value,
+                phone: phone.value,
+            }
+        }, res=>{
+            alert(res.msg)
+            if (res.code == 1){
+                queryUser();
+            }
+        })
+    }
+</script>
+</body>
+</html>

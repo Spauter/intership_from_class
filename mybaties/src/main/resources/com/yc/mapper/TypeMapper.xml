@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yc.mapper.TypeMapper">
+    <select id="findByTid" resultType="com.yc.entity.FilmType">
+        select tid,tname from tb_filmType where tid=#{tid}
+    </select>
+
+    <select id="findAll" resultType="com.yc.entity.FilmType">
+        select tid,tname from tb_filmType
+    </select>
+
+
+    <!--    collection:定义关联的集合类型的属性的封装规则-->
+    <resultMap id="myType" type="com.yc.entity.FilmType">
+        <id column="tid" property="tid"/>
+        <result column="tname" property="tname"/>
+<!--        collection:定义关联的集合类型的属性的封装规则
+            ofType:指定集合中元素的类型-->
+        <collection property="filmList" ofType="com.yc.entity.Film">
+            <id property="fid" column="fid"/>
+            <result property="fname" column="fname"/>
+            <result property="actor" column="actor"/>
+            <result property="price" column="price"/>
+            <result property="tid" column="tid"/>
+            <result property="director" column="director"/>
+            <result property="fpic" column="fpic"/>
+        </collection>
+    </resultMap>
+    <select id="findByTidPlus" resultMap="myType">
+        select fid,fname,f.tid,actor,director,price,fpic,tname from tb_film f inner
+        join tb_filmtype t on f.tid =t.tid where t.tid=#{tid}
+    </select>
+
+    <!--分步查询结果集的封装规则-->
+    <resultMap id="myType02" type="com.yc.entity.FilmType">
+        <id column="tid" property="tid"/>
+        <result column="tname" property="tname"/>
+        <collection property="filmList" column="{tid=tid}"
+                    select="com.yc.mapper.TypeMapper.findByTid" fetchType="eager">
+        </collection>
+    </resultMap>
+
+    <!-- FilmType findByTidStep( Integer tid) ; -->
+    <select id="findByTidStep" resultMap="myType02">
+        select tid , tname from tb_filmType where tid=#{tid}
+    </select>
+</mapper>

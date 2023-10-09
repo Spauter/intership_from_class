@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ly-common-sources">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/src/main/webapp/lib/ly-common-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+  <link rel="dns-prefetch" href="//static.ydpcdn.cn">
+  <link rel="dns-prefetch" href="//pic.ydpcdn.cn">
+  <link rel="dns-prefetch" href="//js.t.sinajs.cn">
+
+
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7, IE=9"/>
+
+  <title>源辰影院-电影票网上购买预订_在线选座,轻松购票</title>
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="js/qs.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  <link href="https://static.ydpcdn.cn/css/cdn_ydpstyle.css?201404291501" rel="stylesheet"/>
+
+  <script src="https://static.ydpcdn.cn/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+  <script src='https://static.ydpcdn.cn/scripts/jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+
+  <script src="https://static.ydpcdn.cn/scripts/cdn_ydp.js?201404291501"></script>
+
+
+</head>
+<body>
+<div id="showFastDiv" style="display: none;">
+</div>
+<div class="wrapper">
+  <!--顶部开始-->
+  <div class="top" id="loginSection">
+    <!--顶部开始-->
+    <div class="top_box">
+      <div class="top_one">
+        看电影，来源辰影院！
+      </div>
+      <div id="app7">
+        <template>
+          <div>
+            <div  v-if="!isLoggedIn" class="top_three">
+              <a href="login.html" class="cRmain">登录</a><span class="cRddd"> 丨 </span><a
+                    href="signup.html" class="cRmain">注册</a><span class="cRddd"> 丨 </span>
+            </div>
+
+            <div  v-else class="top_three">
+              <p>
+                <span class="cRmain">{{ uname }}</span>欢迎来到源辰影院！
+                <a href="login.html" class="cRmain">[退出]</a> |
+                <a href="myorder.html" class="cRmain">[订单]</a><span class="cRddd">  </span>
+              </p>
+            </div>
+          </div>
+        </template>
+
+        <script>
+
+          var v = new Vue({
+            el:"#app7",
+            data() {
+              return {
+                isLoggedIn: false,
+                uname: '',
+              };
+            },
+            created() {
+              let p = new URLSearchParams();
+              axios.post("login?op=userinfo",p).then(res=>{
+                if (res.data.code == 200) {
+                  this.isLoggedIn = true;
+                  this.uname = res.data.uname;
+                }
+              })
+            },
+          });
+        </script>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!--快速登录-->
+  <!--顶部 End-->
+</div>
+<!--顶部 End-->
+<!--头部开始-->
+<div class="header">
+  <h1>源辰影院</h1>
+  <div class="regionbox" style="z-index: 1;" id="regionSection">
+    <script type="text/javascript">
+      var engName = "hengyang";
+      var chinaName = $("#divCityList").find("ul li").find("a[href='/" + engName + "']").html();
+      $("#spanCityName").html(chinaName);
+      $("#divPCity").mouseover(function (e) {
+        ShowCityList();
+      })
+      $("#divCityList").hide();
+      $("#regionSection").hover(
+              function () {
+                $("#divCityList").show();
+                $("#divPCity").addClass("hover");
+              },
+              function () {
+                $("#divCityList").hide();
+                $("#divPCity").removeClass("hover");
+              }
+      );
+    </script>
+
+  </div>
+  <form action="/search" id="searchform" method="get">
+    <a href="search.html">搜索</a>
+  </form>
+</div>
+
+<!--导航开始-->
+  <div class="nav_box">
+    <div class="nav">
+      <ul id="defaultUL">
+        <li><a href="index.html" title="首页">首页</a></li>
+        <li><a href="movie.html" title="热映电影">热映电影</a></li>
+        <li><a href="cinema.html" title="影厅">影厅</a></li>
+      </ul>
+    </div>
+  </div>
+  <!--导航 End-->
+  <div id="body">
+    <div id="app">
+    <section class="content-wrapper main-content clear-fix">
+
+
+      <link rel="stylesheet" href="https://static.ydpcdn.cn/scripts/chosen/chosen.css" media="screen" />
+
+      <style type="text/css">
+        .ui-dialog {
+          overflow: visible;
+        }
+      </style>
+      <!--选座购票步骤图-->
+      <div class="center">
+        <div class=" restop_1">
+          <ul>
+            <li>1.选择影片场次</li>
+            <li>2.填写手机号码</li>
+            <li class="cRwhite">3.确认订单并支付</li>
+            <li>4.终端机取票</li>
+          </ul>
+        </div>
+      </div>
+      <!--内容框架-->
+      <!--第一部分-->
+      <div class="center border">
+        <div class="p_bd" style="height: 250px">
+          <div class="p_title fs16 font_family">
+            支付信息
+          </div>
+          <!--订购信息-->
+            <template>
+              <div>
+                <div v-for="order in orders" :key="order.id" class="p_o_left lt">
+                  <dl class="mt10">
+                    <dd class="lt">
+                      <img src="https://img1.doubanio.com/view/photo/s_ratio_poster/public/p2614988097.webp"
+                           :width="150" :height="210" :alt="order.title">
+                    </dd>
+                    <dt class="lt ml15 posit_rel">
+                      <p>
+                        <span class="tape">{{ order.mname }}</span><span class="cRlgray fs12 pb_l"></span>
+                      </p>
+                      <p>
+                        <span class="cRlgray">影院：</span>源辰影院
+                      </p>
+                      <p>
+                        <span class="cRlgray">影厅：</span>{{ order.hname }}
+                      </p>
+                      <p>
+                        <span class="cRlgray">日期：</span><span class="cRmain"  >{{ order.date }}</span>
+                      </p>
+                      <p>
+                        <span class="cRlgray">时间：</span><span class="cRmain"  >{{ order.starttime }}</span>
+                      </p>
+                      <p>
+                        <span class="cRlgray">订单总金额：</span><b class="cRmain fs14">{{ order.prize }}元</b>
+                      </p>
+                    </dt>
+                  </dl>
+                </div>
+              </div>
+            </template>
+
+          <!--时间倒计时-->
+          <div class="p_o_right rt mt10 posit_rel">
+            <div class="countdown">
+              <div style="padding: 25px 0 0 30px;">
+                <span class="cRlgray">请在15分钟内完成付款，否则系统将自动取消订单。</span>
+                <p style="text-align: center; padding: 15px 0">
+                  <b class="fs16 font_family">支付剩余时间:</b><b class="cRmain fs16 font_family" id="time">0分0秒</b>
+                </p>
+              </div>
+            </div>
+            <div id="cpDiv">
+
+              <form action="/Orderpay/_ChangePhone" id="cpForm" method="post"><input name="__RequestVerificationToken" type="hidden" value="n_ZSq6Ap7al4WpdJbKVKWwQt-B65_9sl-H_PxW1VDdiZP3ItB1YqhJY98Us3Z42o5ryb-U-AgMnLNcaujKBmSoCd72ZC7-mZLne4MFVQEKlG29s2KO5uXbdtw0mB9jhtvZAgDdO731L1IOGstCaw_SESWmBBhUgwFX7sPobQ5fZYN5vaS1orxjPBA1NkVXA-0" />
+                <div class="ape_3">
+                  <span class="field-validation-valid" data-valmsg-for="OrderPhone" data-valmsg-replace="true"></span>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="hg10">
+        </div>
+      </div>
+    </section>
+
+
+      <!--第二部分-->
+
+      <form action="" id="sbfrm" method="post" target="_blank"><input name="__RequestVerificationToken" type="hidden" value="gC8PNuasauowYyf7uwAzgYhTAyfyFflSe1SfUejSlc8AFCH7jPGyTl9A8ygrsQZUgwvHQxWB39gfcqASiZMAz8DtjOfePxjk6qIXlU6sb7OlJZ1katWBzBT9f-Ink7d0n5HPFcT8ypumhBFulNAAgUd6iz_38_khs5n0ALRgqjU9W-W3xITt9BwsZ-TDZZNH0" /><input id="ordernumber" name="ordernumber" type="hidden" value="937060380079290420" /><input id="paymethod" name="paymethod" type="hidden" value="" /><input id="promotionid" name="promotionid" type="hidden" value="" />
+        <!--第三部分-->
+        <div class="center border mt10">
+          <div class="p_bd" style="position: relative">
+              <template>
+                <div>
+                  <div class="Banktxt">
+                    <a href="javascript:void(0)" class="fukuan" @click="showPaymentResult">
+                      <b class="fs14">立即付款</b>
+                    </a>
+                  </div>
+                  <div v-if="showPopup" class="popup">
+                    <div class="popup-content">
+                      <h3>{{ paymentResult }}</h3>
+                      <button @click="closePopup">关闭</button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+
+          </div>
+          <div style="background: #d83c88; height: 33px; top: 10px; position: relative">
+            <p style="font-size: 12px; color: #fff; line-height: 33px; float: right; margin-right: 22px;">请确认信息无误，出票成功后将无法退换！</p>
+          </div>
+        </div>
+        <div class="hg10"></div>
+      </form>
+    </div>
+    <script>
+      var v = new Vue({
+        el:"#app",
+        data: {
+          orders: {},
+          showPopup: false,
+          paymentResult: "",
+        },
+        created() {
+          // 从数据库中获取数据
+          this.fetchMovies();
+
+        },
+        methods: {
+          fetchMovies() {
+            axios.post("movie?op=plan").then(res => {
+              this.orders = res.data;
+            })
+            // 使用适当的方法从数据库中获取电影数据，并将其赋值给movies数组
+            // 示例代码：
+            // 假设您已经从数据库中获取到了电影数据
+            // 可以根据从数据库中获取到的数据在这里添加更多电影对象
+          },
+          showPaymentResult() {
+            axios.post("buy?op=add").then(res=>{
+              console.log(123);
+            })
+            const isSuccess = Math.random() < 0.5;
+            if (isSuccess) {
+              this.paymentResult = "支付成功";
+            } else {
+              this.paymentResult = "支付成功";
+            }
+            this.showPopup = true;
+          },
+          closePopup() {
+            this.showPopup = false;
+            this.paymentResult = "";
+          },
+        }
+      });
+    </script>
+    <style>
+      .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+      }
+
+      .popup-content h3 {
+        margin-bottom: 10px;
+      }
+
+      .popup-content button {
+        padding: 5px 10px;
+        background-color: #ccc;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    </style>
+
+  </div>
+      <script src="https://static.ydpcdn.cn/scripts/chosen/chosen.jquery.js"  type="text/javascript"></script>
+
+      <script type="text/javascript">
+        var errormsg = '';
+        if (errormsg != '') {
+          CustomAlertError(errormsg);
+        }
+        var InterValObj;
+        $(function () {
+          TotalSecond = parseInt(885);
+          InterValObj = window.setInterval(SetRemainTime, 1000);
+          var paymethod = $("#paymethod").val();
+          if (paymethod != "") {
+            $("#paymentSel li a").removeClass("om");
+            $("#" + paymethod).addClass("om");
+          }
+
+          $("#paymentSel li a").click(function () {
+            if ($(this).attr("id") != "MORE") {
+              $("#paymentSel li a").removeClass("om");
+              $(this).addClass("om");
+              $("#paymethod").val($(this).attr("id"));
+            };
+          })
+        })
+        function SetRemainTime() {
+          if (TotalSecond > 0) {
+            TotalSecond = TotalSecond - 1;
+            var second = Math.floor(TotalSecond % 60);
+            var minite = Math.floor((TotalSecond / 60) % 60);
+            $("#time").html(minite + "分" + second + "秒");
+          } else {
+            window.clearInterval(InterValObj);
+            alertWithForceRedirect("对不起，支付超时，订单已取消。", "", "/Seating/10253447", "重新购票");
+
+          }
+        }
+      </script>
+      <script type="text/javascript">
+        $(function () {
+          $("#sbfrm").validate();
+          try {
+            $("#PayPassword").rules("add", {
+              required: {
+                depends:
+                        function () {
+                          return $("#pa_checkbox").is(":checked");
+                        }
+              }, messages: { required: "请输入您的支付密码。" }
+            });
+          } catch (error) {
+          }
+
+          $("#pa_checkbox").bind("click", function () {
+            $("#payContainer").toggle();
+            calculate();
+          });
+          $("#coupon").bind("change", function () {
+            calculate();
+          });
+          $("#section0 div").bind("click", function () {
+            if ($(this).hasClass("otm")) {
+            } else {
+              $("#section0 div").removeClass("otm");
+            }
+            $(this).toggleClass("otm");
+            if ($(this).hasClass("otm")) {
+              $("#promotionid").val($(this).find("input[name='pro_id']").val());
+            } else {
+              $("#promotionid").val("");
+            }
+            calculate();
+
+          });
+          var selIndex = "-1";
+          if (selIndex != "-1") {
+            SwitchTo(selIndex);
+            if (selIndex == "1") {
+              $("#coupon").chosen({ no_results_text: "没有优惠券符合搜索条件", search_contains: true, max_selected_options: '1' });
+            }
+          }
+
+          $("#payContainer").hide();
+        })
+
+        function calculate() {
+          var reduce = $("#section0 .otm").find("input[name='reduce']").val();
+          var discount = $("#section0 .otm").find("input[name='discount']").val();
+          var discountValue = 1, reduceValue = 0;
+          if (reduce != null) {
+            reduceValue = parseFloat(reduce);
+          }
+          if (discount != null) {
+            discountValue = parseFloat(discount);
+          }
+          var couponvalue = 0.0;
+
+          $("#coupon option:selected").each(function () {
+            var couponText = $(this).val();
+            if ($("#" + couponText) != undefined) {
+              couponvalue += parseFloat($("#" + couponText).val());
+            }
+          });
+          var u_balance = 0.0;
+          try {
+            u_balance = parseFloat($("#u_amount").html());
+            var balance = parseFloat(39.0000) * discountValue - reduceValue - couponvalue;
+            if (balance > 0) {
+              $("#accountpaysec").show();
+              var restNeePay = balance - u_balance;
+              if (u_balance > balance) {
+                $("#pa_checkbox").val(balance);
+                $("#pa_text").html(balance.toFixed(2));
+              }
+              else {
+                $("#pa_checkbox").val(u_balance);
+                $("#pa_text").html(u_balance.toFixed(2));
+              }
+              var suffix = "。";
+              if (restNeePay > 0) {
+                suffix = "，剩余 <b class=\"cRmain\">" + restNeePay.toFixed(2) + "</b> 元可选择其他付款方式付款。";
+                $("#paypwdDiv").removeClass().addClass("srt_r_pass2");
+                $("#paypwdDiv").next("div").css("left", "660px");
+              }
+              $("#rest").html(suffix);
+            } else {
+              $("#accountpaysec").hide();
+              $("#pa_checkbox").attr("checked", false);
+              $("#pa_checkbox").val("0.0");
+            }
+          } catch (err) {
+
+          }
+
+
+          var balancevalue = 0.0;
+          if ($("#pa_checkbox").is(":checked")) {
+            balancevalue = parseFloat($("#pa_text").html());
+          }
+          var value = parseFloat(39.0000) * discountValue - reduceValue - couponvalue - balancevalue;
+          if (value < 0) value = 0;
+          $("#sum").html(value.toFixed(2));
+        }
+      </script>
+
+    </section>
+  </div>
+  <!--帮助 版权-->
+  <div class="explain">
+    <div class="explain_er">
+      <dl>
+        <dd>
+          <p class="a1">
+          </p>
+          新手上路</dd>
+        <ul>
+          <li><a href="/help/register" title="会员注册">会员注册</a></li>
+          <li><a href="/help/login" title="如何登录">如何登录</a></li>
+          <li><a href="/help/process" title="快速购票">快速购票</a></li>
+          <li><a href="/help/password" title="找回密码">找回密码</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a2">
+          </p>
+          购票指南</dd>
+        <ul>
+          <li><a href="/help/process" title="购票流程">购票流程</a></li>
+          <li><a href="/help/method" title="取票方法">取票方法</a></li>
+          <li><a href="/help" title="支付方式">支付方式</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a3">
+          </p>
+          常见问题</dd>
+        <ul>
+          <li><a href="/help" title="购票常见问题">购票常见问题</a></li>
+          <li><a href="/help/recharge" title="会员充值问题">会员充值问题</a></li>
+          <li><a href="/help/price" title="影片票价问题">影片票价问题</a></li>
+          <li><a href="/help/coupon" title="优惠劵">优惠劵</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a4">
+          </p>
+          关于我们</dd>
+        <ul>
+          <li><a href="/about">公司介绍</a></li>
+          <li><a href="/sitemap">网站地图</a></li>
+        </ul>
+      </dl>
+      <dl>
+        <dd>
+          <p class="a5">
+          </p>
+          客户服务</dd>
+        <ul>
+          <li><a href="#" class="bz">电话：400-677-8292</a></li>
+          <li><a href="#" class="bz">邮箱：service@yidepiao.com</a></li>
+        </ul>
+      </dl>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-35906595-1']);
+  _gaq.push(['_addOrganic', 'm.baidu.com', 'word', true]);
+  _gaq.push(['_addOrganic', 'image.baidu.com', 'word', true]);
+  _gaq.push(['_addOrganic', 'baidu', 'word']);
+  _gaq.push(['_addOrganic', 'soso', 'w']);
+  _gaq.push(['_addOrganic', '3721', 'name']);
+  _gaq.push(['_addOrganic', 'youdao', 'q']);
+  _gaq.push(['_addOrganic', 'www.so.com', 'q']);
+  _gaq.push(['_addOrganic', 'so.360.cn', 'q']);
+  _gaq.push(['_addOrganic', 'vnet', 'kw']);
+  _gaq.push(['_addOrganic', 'sogou', 'query']);
+  _gaq.push(['_addOrganic', 'bing', 'q']);
+  _gaq.push(['_trackPageview']);
+
+  (function () {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

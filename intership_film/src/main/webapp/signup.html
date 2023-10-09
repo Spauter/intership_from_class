@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>影院售票管理系统</title>
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="js/lib/modernizr.js"></script>
+</head>
+<body class="backstretch" style="background-image: url(images/wg_blurred_backgrounds_11.jpg)">
+<div id="app" class="container">
+  <div class="signup">
+    <div class="row">
+
+      <div class="visible-xs text-center">
+        <h1 class="text-white p-b-0">影院售票系统</h1>
+      </div>
+
+      <div class="col-sm-8 text-white hidden-xs">
+
+        <div class="p-30">
+          <h1>源辰影院</h1>
+          <ul class="unstyled checkmarked">
+            <li>界面简洁</li>
+            <li>功能强大</li>
+            <li>还有更多...</li>
+          </ul>
+
+          <!-- <a href="/" class="btn m-r-10 btn-default">查看仪表盘</a> -->
+          <!-- <a href="#" class="btn btn-primary">Purchase</a> -->
+        </div>
+
+      </div>
+
+      <div class="col-sm-4">
+        <div class="m-t-30">
+          <div class="p-t-30">
+            <template>
+              <form role="form" @submit.prevent="register">
+                <div class="form-group row">
+                </div>
+                <div class="form-group">
+                  <input type="email" class="form-control input-glass" data-val="true" data-val-regex="请输入有效的邮箱地址。"
+                         data-val-regex-pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
+                         data-val-required="请输入您的邮箱地址"
+                         v-model="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control input-glass"
+                         v-model="uname" placeholder="Username">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control input-glass"
+                         data-val="true" data-val-length="请填写6-20位的密码"
+                         data-val-length-max="20" data-val-length-min="6"
+                         data-val-required="请输入密码。"
+                         v-model="password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control input-glass"
+                         data-val="true" data-val-equalto="密码和确认密码不匹配。"
+                         data-val-equalto-other="*.RegPassword"
+                         v-model="repeatPassword" placeholder="Repeat Password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block btn-lg" onclick="location.href='login.html'">注册</button>
+              </form>
+            </template>
+          </div>
+          <a href="login.html"
+             class="text-white hover-opacity-change hover-white-opacity-text m-t-10 d-block">已经拥有账号?</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  var v = new Vue({
+    el: "#app",
+    data() {
+      return {
+        email: '',
+        uname: '',
+        password: '',
+        repeatPassword: '',
+      };
+    },
+    methods: {
+      register() {
+        // 将数据添加到数据库的逻辑
+        // 假设将数据添加到名为 "users" 的集合中
+        // 假设数据库操作返回一个Promise对象
+        addData:{
+          let p = new URLSearchParams();
+          if(this.password!=this.repeatPassword){
+            return;
+          }
+          p.append("email",this.email);
+          p.append("uname",this.uname);
+          p.append("pwd",this.repeatPassword);
+          p.append("status","普通会员");
+          axios.post("login?op=regin",p).then(res=>{
+            this.isRedined=res.data;
+          })
+        }
+      },
+    },
+  });
+
+
+</script>
+
+</body>
+</html>

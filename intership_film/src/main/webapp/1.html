@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+  <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 引入组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  <link href="css/index.css" rel="stylesheet"/>
+
+  <script src="https://static.ydpcdn.cn/scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+
+  <script src='https://static.ydpcdn.cn/scripts/jquery-ui-1.10.3.custom.min.js' type='text/javascript'></script>
+
+  <script src="https://static.ydpcdn.cn/scripts/cdn_ydp.js?201404291501"></script>
+</head>
+<body>
+<div id="app7">
+  <template>
+    <div>
+      <div  v-if="isLoggedIn" class="top_two">
+        <a href="login.html" class="cRmain">登录</a><span class="cRddd"> 丨 </span><a
+              href="signup.html" class="cRmain">注册</a><span class="cRddd"> 丨 </span>
+      </div>
+
+      <div  v-else class="top_two">
+        <p>
+          您好：<span class="cRmain">{{uname}}</span>，欢迎来到源辰影院！
+          <a href="login.html" class="cRmain">[退出]</a> |
+          <a href="myhome.html" class="cRmain">[订单]</a><span class="cRddd">  </span>
+        </p>
+      </div>
+    </div>
+  </template>
+</div>
+
+  <script>
+
+    var v = new Vue({
+      el:"#app7",
+      data() {
+        return {
+          isLoggedIn: false,
+          uname: '',
+        };
+      },
+      created() {
+        axios.post("login?op=userinfo",p).then(res=>{
+          if (res.data.code = 200) {
+            this.isLoggedIn = true;
+            this.uname = res.data.uname;
+          }
+        })
+      },
+    });
+  </script>
+</body>
+</html>
