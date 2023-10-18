@@ -1,0 +1,31 @@
+#配置文件启动级别：properties>yml>yaml
+server:
+  port: 81
+
+nanme: alida
+#对象
+person:
+  name: ${name}
+  age: 20
+#对象内部写法
+person2: {name:alida,age:20}
+#数组
+product:
+  pname: Apple
+  price: 20.0
+  is-used: false
+  man-date: 2020/01/02
+  address:
+    province: Hunan
+    city: HengYang
+  types:
+    - fruit
+    - vegetable
+  attributes: {color: Red,type: Best}
+#数组行内写法
+address2: [Beijing,Shanghai]
+
+
+
+msg1: 'hello \n world' #不识别转义字符
+msg2: "hello \n world" #识别转义字符
