@@ -13,43 +13,45 @@ import java.util.*;
 
 public class JdbcTemplate {
     @Autowired
-    private JdbcTemplateProperties properties;
-    static String url = "jdbc:oracle:thin:@localhost:1521:orcl";
-    static String uname = "scott";
-    static String pwd = "Spauter";
-    static String driver;
-    static {
+    private JdbcTemplateProperties jdbcTemplateProperties;
+//    jdbc3.0后引入了spi机制,可以加载数据库驱动
+//    static String url = "jdbc:oracle:thin:@localhost:1521:orcl";
+//    static String uname = "scott";
+//    static String pwd = "Spauter";
+//    static String driver;
+//    static {
+//        try {
+//
+//            ClassLoader cl = JdbcTemplate.class.getClassLoader();
+//            InputStream in = cl.getResourceAsStream("db.properties");
+//            if (in == null) {
+//                System.out.println("db.properties does not exists!");
+//
+//            } else {
+//                Properties prop = new Properties();
+//                prop.load(in);
+//                url = prop.getProperty("url");
+//                uname = prop.getProperty("username");
+//                pwd = prop.getProperty("password");
+//                driver =prop.getProperty("driver");
+//            }
+//            Class.forName(driver);
+//            Class.forName("oracle.jdbc.driver.OracleDriver");
+//        } catch (Exception e) {
+//            throw new RuntimeException("数据驱动加载失败", e);
+//        }
+//    }
+
+    public  Connection getConnection() {
         try {
-
-            ClassLoader cl = JdbcTemplate.class.getClassLoader();
-            InputStream in = cl.getResourceAsStream("db.properties");
-            if (in == null) {
-                System.out.println("db.properties does not exists!");
-
-            } else {
-                Properties prop = new Properties();
-                prop.load(in);
-                url = prop.getProperty("url");
-                uname = prop.getProperty("username");
-                pwd = prop.getProperty("password");
-                driver =prop.getProperty("driver");
-            }
-            Class.forName(driver);
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-        } catch (Exception e) {
-            throw new RuntimeException("数据驱动加载失败", e);
-        }
-    }
-
-    public static Connection getConnection() {
-        try {
-            return DriverManager.getConnection(url, uname, pwd);
+            return DriverManager.getConnection(this.jdbcTemplateProperties.getUrl(), this.jdbcTemplateProperties.getUsername(),
+                    this.jdbcTemplateProperties.getPwd());
         } catch (Exception e) {
             throw new RuntimeException("数据连接失败", e);
         }
     }
 
-    public static Object execute(SqlExcutor executor) {
+    public  Object execute(SqlExcutor executor) {
         Connection con = getConnection();
         try {
             con.setAutoCommit(false);
@@ -73,11 +75,11 @@ public class JdbcTemplate {
 
     }
 
-    public static interface SqlExcutor {
+    public  interface SqlExcutor {
         Object execute(Connection con) throws Exception;
     }
 
-    public static int update(String sql, Object... params) {
+    public  int update(String sql, Object... params) {
         return (int) execute(con -> {
             System.out.println("SQL:" + sql);
             System.out.println("参数" + Arrays.toString(params));
@@ -91,7 +93,7 @@ public class JdbcTemplate {
 
     }
 
-    public static PreparedStatement prepareStatement(Connection con, String sql, Object... params) throws SQLException {
+    public  PreparedStatement prepareStatement(Connection con, String sql, Object... params) throws SQLException {
         System.out.println("SQL:" + sql);
         System.out.println("参数" + Arrays.toString(params));
 
@@ -103,7 +105,7 @@ public class JdbcTemplate {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<Map<String, Object>> select(String sql, Object... params) {
+    public  List<Map<String, Object>> select(String sql, Object... params) {
         return (List<Map<String, Object>>) execute(con -> {
             List<Map<String, Object>> list = new ArrayList<>();
 
@@ -125,8 +127,4 @@ public class JdbcTemplate {
         });
     }
 
-    public static void main(String[] args) {
-        List<?> list1 = select( "select* from emp");
-        list1.forEach(System.out::println);
-    }
 }

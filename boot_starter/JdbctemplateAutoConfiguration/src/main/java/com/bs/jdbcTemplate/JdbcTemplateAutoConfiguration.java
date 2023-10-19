@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import java.sql.Driver;
 
 @Configuration
-@ConditionalOnClass({Driver.class, JdbcTemplate.class})
+@ConditionalOnClass({Driver.class,JdbcTemplate.class})
 @EnableConfigurationProperties({JdbcTemplateProperties.class})
 public class JdbcTemplateAutoConfiguration {
     @Bean

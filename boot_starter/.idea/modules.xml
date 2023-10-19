@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JdbctemplateAutoConfiguration/JdbctemplateAutoConfiguration.iml" filepath="$PROJECT_DIR$/JdbctemplateAutoConfiguration/JdbctemplateAutoConfiguration.iml" />
       <module fileurl="file://$PROJECT_DIR$/boot_starter.iml" filepath="$PROJECT_DIR$/boot_starter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/dateFormatAutoConfiguration.iml" filepath="$PROJECT_DIR$/dateFormatAutoConfiguration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dateFormatAutoConfiguration/dateFormatAutoConfiguration.iml" filepath="$PROJECT_DIR$/dateFormatAutoConfiguration/dateFormatAutoConfiguration.iml" />
     </modules>
   </component>
 </project>
