@@ -19,6 +19,7 @@ logging:
     root: debug
     org.springframework.web: error
     org.apache: error
+
   logback:
     rollingpolicy:
       max-file-size: 1MB
