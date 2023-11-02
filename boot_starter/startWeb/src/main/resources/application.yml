@@ -4,8 +4,9 @@ bs:
   jdbctemplate:
     url: jdbc:mysql://localhost:3306/db_mybatis
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    pwd: zn2021%117
+    username: #It is generally referred to root
+    pwd: #Your password
+  attrbuties:
 logging:
   level:
     root: debug

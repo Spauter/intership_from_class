@@ -9,7 +9,16 @@
         <option value="$PROJECT_DIR$/startWeb/pom.xml" />
         <option value="$PROJECT_DIR$/JdbctemplateAutoConfiguration/pom.xml" />
         <option value="$PROJECT_DIR$/JdbcTemplateStarter/pom.xml" />
+        <option value="$PROJECT_DIR$/AttributeAotoConfiruration/pom.xml" />
+        <option value="$PROJECT_DIR$/AttributeStarter/pom.xml" />
+        <option value="$PROJECT_DIR$/timer/pom.xml" />
+        <option value="$PROJECT_DIR$/emailTest/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/emailTest/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_20" project-jdk-name="11" project-jdk-type="JavaSDK">

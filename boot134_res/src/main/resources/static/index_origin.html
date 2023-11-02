@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>小萌神订餐网</title>
+    <!-- 图标 -->
+    <link rel="short icon" href="image/eat0.ico"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div id="app">
+
+    <div class="head">
+        小萌神订餐网
+        <div class="right">
+            <span class="showlogin" id="showlogin" @Click="loginflag=!loginflag">登录</span>
+            <span id="exitspan" style="display:none"></span>
+        </div>
+    </div>
+
+    <div class="content">
+        <ul class="allfoods" id="allfoods">
+            <li v-for="(item,index) in dataset">
+                <h3 @click="showFood(item.fid)">{{item.fname}}</h3>
+                <div class="fooddesc" v-show="item.status">
+                    <img :src= `image/${item.fphoto}` class="foodimg"/>
+                    <article class="foodprice">
+                        <p>{{item.detail}}</p>
+                        <p class="normalprice">{{item.mormprice}}</p>
+                        <p class="realprice">{{item.realprice}}</p>
+                        <p class="buybtn" @click="addCart(item.fid,1)">加入购物车</p>
+                    </article>
+                </div>
+            </li>
+            <a href="javascript:void" @click.prevent="clickPage(1)">第一页</a>
+            <a href="javascript:void" @click.prevent="clickPage(pagebean.pre)">上一页</a>
+            <a href="javascript:void" @click.prevent="clickPage(pagebean.next)">下一页</a>
+            <a href="javascript:void" @click.prevent="clickPage(pagebean.totalpages)">最后一页</a>
+            总共{{pagebean.total}}条记录，每页{{pagebean.pagesize}}条记录，当前第{{pagebean.pageno}}页，共{{pagebean.totalpages}}页
+        </ul>
+
+
+
+
+    </div>
+    <!--  <div class="look">浏览记录</div> -->
+    <div class="shoppingcar">
+        <div class="carbag" id="carbag">
+            <p>购物车<span id="del">[清空]</span></p>
+            <table id="bagcontent" cellpadding="0" cellspacing="0">
+
+            </table>
+        </div>
+        <div class="carprice">￥0</div>
+        <div class="carinfo">购物车是空的</div>
+    </div>
+    <div class="footer">
+        Copyright © 2016 Xiaomengsheng Incorporated Company. All rights reserved.
+        <br/>
+        订餐，就上小萌神订餐网!
+    </div>
+
+    <div class="login" id="login" v-if="loginflag">
+        <span id="unshow" >X</span>
+        <form name="myform">
+            <table>
+                <tr>
+                    <td class="labname"><label for="username">用户名：</label></td>
+                    <td><input type="text" name="username" placeholder="请输入用户名"
+                               id="username" v-model="user.username"/></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="pwd">密码：</label></td>
+                    <td><input type="password" name="pwd" placeholder="请输入密码"
+                               id="pwd" v-model="user.pwd"/></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="yzm">验证码：</label></td>
+                    <td><input type="text" name="yzm" placeholder="请输入验证码"
+                               id="yzm" v-model="yzm"/></td>
+                    <td><img :src='yzmUrl'
+                             id="yzm_img" @click="changeYZM"/></td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" value="login" class="btn" id="btn" @click="isLogin"/>
+    </div>
+
+    <!-- 订单信息 -->
+    <div class="login" id="myinfo" v-if="orderflag">
+        <span id="unshowinfo">X</span>
+        <form name="forminfo">
+            <table>
+                <tr>
+                    <td class="labname"><label for="address">送货地址:</label></td>
+                    <td><input name="address" type="text" placeholder="请输入送货地址" id="address"/></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="tel">联系电话:</label></td>
+                    <td><input type="text" id="tel" placeholder="请输入联系电话" name="tel"/></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="deliverytime">送货时间:</label></td>
+                    <td><input type="text" name="deliverytime" id="deliverytime"
+                               placeholder="请输入送货时间（默认马上发货）"/></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="ps">附言:</label></td>
+                    <td><input type="text" id="ps" placeholder="请输入附言" name="ps"/></td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" value="提交" class="btn" id="submit">
+    </div>
+
+</div>
+
+<!--  在网页里面引入javascript    jquery:DOM   大家注意顺序  -->
+<script src="js/jquery-1.9.1.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script type="text/javascript">
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            orderflag: false,     //送货地址div
+            loginflag: false,
+            pagebean: {
+                pageno: 1,
+                pagesize: 5,
+                pre: 1,
+                next: 2,
+                sortby: "fid",
+                sort: "desc",
+                totalpages:3
+            },
+            user:{
+              username:null,
+                pwd: null,
+            },
+            username: '',
+            pwd:'',
+            yzm:'',
+            yzmUrl:'http://127.0.0.1:8000/resfood/code.action',
+            dataset:[],
+            userSet:[]
+        }, computed: {
+            showPage: function (pageno) {
+                axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort).then(res=>{
+                    this.dataset=res.data;
+                })
+            }
+        },
+        mounted: function () {
+            axios.all([this.showPage(1), this.isLogin, this.addCart]).then(
+                axios.spread(function (d1, d2, d3) {
+                    let jsonModel = d1.data;
+                    let jsonModelForUser=d2.data;
+                    console.log(jsonModel.code)
+                    if (jsonModel.code === 200) {
+                        vm.displayPage(jsonModel)
+                    }
+                })
+            )
+        },
+        methods: {
+            showPage: function (pageno) {
+                return axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort)
+
+            },
+            displayPage: function (jsonModel) {
+                if (jsonModel.code === 200) {
+                    jsonModel.data.dataset.forEach((item,index)=>{
+                        item.status=false;
+                    });
+                    this.pagebean=jsonModel.data;
+                    this.dataset=jsonModel.data.dataset;
+                }
+            },
+            clickPage:function (pageno){
+                const promise = this.showPage(pageno);
+                promise.then(result=>{
+                    this.displayPage(result.data);
+                })
+            },
+            showFood:function (fid){
+                this.dataset.forEach((item,index)=>{
+                    item.status=(fid===item.fid);
+                });
+            },
+            addCart: function (fid,num) {
+                console.log(this.userSet);
+                console.log(this.userSet.user);
+                if(this.userSet==null||this.userSet
+                    ===''){
+                    alert("请先登录");
+                }
+            },
+            //TODO
+            isLogin: function () {
+                console.log(this.user.username)
+                let _this=this;
+                var params=new URLSearchParams()
+                params.append("username",_this.username);
+                params.append("pwd",_this.pwd);
+                params.append("yzm",_this.yzm);
+                axios.post("resuser/login",params).then(res=>{
+                    this.userSet=res.data;
+                });
+                if (this.userSet.code===404||this.userSet.code===500){
+                    alert("用户名或者密码错误")
+                }else {
+                    this.user=this.userSet.user;
+                }
+            },
+            changeYZM:function (){
+                var d = new Date();//获取系统当前时间
+                this.yzmUrl="http://127.0.0.1:8000/resfood/code.action?"+d.getUTCSeconds();
+            }
+
+        }
+
+
+
+    });
+</script>
+
+</body>
+</html>

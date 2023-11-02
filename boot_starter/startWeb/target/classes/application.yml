@@ -6,6 +6,7 @@ bs:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     pwd: zn2021%117
+  attrbuties:
 logging:
   level:
     root: debug

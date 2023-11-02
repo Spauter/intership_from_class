@@ -11,5 +11,8 @@
         <module name="dateFormatStarter" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="emailTest" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
