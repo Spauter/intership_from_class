@@ -2,8 +2,7 @@ package com.bs.biz;
 
 import com.bs.bean.ResOrder;
 import com.bs.bean.ResUser;
-import com.bs.web.mode.Cartltem;
-
+import com.bs.bean.CartItem;
 import java.util.Set;
 
 public interface ResOrderBiz {
@@ -14,7 +13,7 @@ public interface ResOrderBiz {
       * @param resUser
       * @return
       */
-     int Order(ResOrder resOrder, Set<Cartltem> cartltemSet, ResUser resUser);
+     int Order(ResOrder resOrder, Set<CartItem> cartltemSet, ResUser resUser);
 }
 
 

@@ -1,9 +1,9 @@
 package com.bs.controller;
 
+import com.bs.bean.CartItem;
 import com.bs.bean.ResFood;
 import com.bs.biz.ResFoodBiz;
 import com.bs.biz.ResOrderBiz;
-import com.bs.web.mode.Cartltem;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,29 +41,34 @@ public class ResOrderController {
     @ApiOperation("添加购物车")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "菜谱id", value = "fid", required = true),
-            @ApiImplicitParam(name = "购物车数量",value = "num",required = true)
+            @ApiImplicitParam(name = "购物车数量", value = "num", required = true)
     })
     public Map<String, Object> addCart(@RequestParam Integer fid, @RequestParam Integer num, HttpSession session) {
         Map<String, Object> map = new HashMap<>();
-        ResFood resFood=resFoodBiz.findById(fid);
-        if (resFood==null){
-            map.put("code",404);
-            map.put("msg","查无数据");
+        ResFood resFood = resFoodBiz.findById(fid);
+        if (resFood == null) {
+            map.put("code", 404);
+            map.put("msg", "查无数据");
         }
-        Map<Integer, Cartltem>cartltemMap=new HashMap<>();
-        if(session.getAttribute("cart")==null)
-        {
-            session.setAttribute("cart",cartltemMap);
-        }if(cartltemMap.containsKey(fid)){
-            Cartltem cartltem=cartltemMap.get(fid);
-            cartltem.setNum(cartltem.getNum()+num);
-            cartltemMap.put(fid,cartltem);
-        }else {
-            Cartltem cartltem=new Cartltem();
+        Map<Integer, CartItem> cartltemMap = new HashMap<>();
+        if (session.getAttribute("cart") == null) {
+            session.setAttribute("cart", cartltemMap);
+        }
+        CartItem cartltem;
+        if (cartltemMap.containsKey(fid)) {
+            cartltem = cartltemMap.get(fid);
+            cartltem.setNum(cartltem.getNum() + num);
+            cartltemMap.put(fid, cartltem);
+        } else {
+            cartltem = new CartItem();
             cartltem.setNum(num);
-            cartltemMap.put(fid,cartltem);
+            cartltemMap.put(fid, cartltem);
         }
-        //TODO 处理数量
-        return null;
+        if (cartltem.getNum()<=0){
+            cartltemMap.remove(fid);
+        }
+        map.put("code",1);
+        map.put("obj",cartltemMap);
+        return map;
     }
 }

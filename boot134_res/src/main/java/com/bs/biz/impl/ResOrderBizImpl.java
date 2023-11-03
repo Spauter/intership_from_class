@@ -6,7 +6,7 @@ import com.bs.bean.ResUser;
 import com.bs.mapper.ResOrderItemMapper;
 import com.bs.biz.ResOrderBiz;
 import com.bs.mapper.ResOrderMapper;
-import com.bs.web.mode.Cartltem;
+import com.bs.bean.CartItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,14 +31,14 @@ public class ResOrderBizImpl implements ResOrderBiz {
     private ResOrderItemMapper resOrderItemMapper;
 
     @Override
-    public int Order(ResOrder resOrder, Set<Cartltem> cartltemSet, ResUser resUser){
+    public int Order(ResOrder resOrder, Set<CartItem> cartltemSet, ResUser resUser){
         resOrder.setUserid(resUser.getUserid());
         this.resOrderMapper.insertOrder(resOrder);
-        for (Cartltem c:cartltemSet){
+        for (CartItem c:cartltemSet){
             ResOrderItem resOrderItem=new ResOrderItem();
             resOrderItem.setRoid(resOrder.getRoid());
-            resOrderItem.setFid(c.getFood().getFid());
-            resOrderItem.setDealprice(c.getFood().getRealprice());
+            resOrderItem.setFid(c.getResFood().getFid());
+            resOrderItem.setDealprice(c.getResFood().getRealprice());
             resOrderItem.setNum(c.getNum());
             this.resOrderItemMapper.insert(resOrderItem);
         }
