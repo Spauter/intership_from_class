@@ -14,11 +14,11 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.text.MessageFormat;
 
-@Service
+//@Service
 @Slf4j
 public class EmailImpl {
     //    使用@Autowired注解将JavaMailSender注入到EmailService中
-    @Autowired
+//    @Autowired
     private JavaMailSender mailSender;
     //发送普通邮件
     public void sendEmail(String from,String to,String subject,String text){
