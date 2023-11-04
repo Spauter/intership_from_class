@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="css/index.css"/>
     <script src="https://unpkg.com/vue@2.7.14/dist/vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        .isShow{
+            bottom:0;
+        }
+
+    </style>
 </head>
 <body>
 
@@ -47,23 +53,24 @@
 
     </div>
     <!--  <div class="look">浏览记录</div> -->
-    <div class="shoppingcar" v-if="isShown">
-        <div class="carbag" id="carbag" >
+    <div class="shoppingcar">
+        <div class="carbag" id="carbag" :class="{ isShow:isHiden==true,isHide:isHiden==false }">
             <p>购物车<span id="del" @click="clearAll">[清空]</span></p>
-            <!--            购物车的条目-->
-            <table id="bagcontent" cellpadding="0" cellspacing="0">
+            <table id="bagcontent">
                 <tr v-for="cartItem in cartItemsArray">
-                    <td class="bagfname">{{cartItem.food.fid}}</td>
+                    <td class="bagfname">{{cartItem.resFood.fname}}</td>
                     <td class="bagnum">
-                        <button @click="addCart(cartItem.food.fid,1)">+</button>
-                        <button @click="addCart(cartItem.food.fid,-1)">-</button>
+                        <button type="button" @click="addCart(cartItem.resFood.fid, 1)">+</button>
+                            <span>{{cartItem.num}}</span>
+                        <button type="button" @click="addCart(cartItem.resFood.fid, -1)">-</button>
                     </td>
-                    <td>{{cartItem.smallAccount}}</td>
+                    <td>{{cartItem.smallCount}}</td>
                 </tr>
             </table>
         </div>
-        <div class="carprice" @click.prevent="displayCart">￥{{totalPrices}}</div>
-        <div class="carinfo">购物车是空的</div>
+        <div class="carprice" @click.prevent="displayCart()">￥{{totalPrices}}</div>
+        <div class="carinfo" v-if="cartItemsArray.length<=0">购物车是空的</div>
+        <div class="carinfo" v-else @click.prevent="orderflag=!orderflag">立即下单</div>
     </div>
     <div class="footer">
         Copyright © 2016 Xiaomengsheng Incorporated Company. All rights reserved.
@@ -78,17 +85,17 @@
                 <tr>
                     <td class="labname"><label for="username">用户名：</label></td>
                     <td><input type="text" name="username" placeholder="请输入用户名"
-                               id="username" v-model="user.username"/></td>
+                               id="username" v-model="loginusername"/></td>
                 </tr>
                 <tr>
                     <td class="labname"><label for="pwd">密码：</label></td>
                     <td><input type="password" name="pwd" placeholder="请输入密码"
-                               id="pwd" v-model="user.pwd"/></td>
+                               id="pwd" v-model="loginpwd"/></td>
                 </tr>
                 <tr>
                     <td class="labname"><label for="yzm">验证码：</label></td>
                     <td><input type="text" name="yzm" placeholder="请输入验证码"
-                               id="yzm" v-model="user.yzm"/></td>
+                               id="yzm" v-model="loginyzm"/></td>
                     <td><img :src='yzmUrl'
                              id="yzm_img" @click="changeYZM"/></td>
                 </tr>
@@ -134,10 +141,10 @@
     let vm = new Vue({
         el: "#app",
         data: {
+            isHiden: true,
             orderflag: false,     //送货地址div
             loginflag: false,
             isLoginflag: false,
-            isShown: false,
             pagebean: {
                 pageno: 1,
                 pagesize: 5,
@@ -157,6 +164,9 @@
             dataset: [],
             userSet: [],
             totalPrices: 0,
+            loginusername: '',
+            loginpwd: '',
+            loginyzm: '',
         }, computed: {
             showPage: function (pageno) {
                 axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort).then(res => {
@@ -164,22 +174,27 @@
                 })
             }
         },
+        //页面打开时的操作
         mounted: function () {
-            axios.all([this.showPage(1), this.getLoginedUser, this.addCart]).then(
+            axios.all([this.showPage(1), this.getLoginedUser(),this.getCartInfo()]).then(
                 axios.spread(function (d1, d2, d3) {
                     let jsonModel = d1.data;
+                    this.userSet = d2.data;
+                    var cartModel=d3.data;
                     console.log(jsonModel.code)
                     if (jsonModel.code === 200) {
-                        vm.displayPage(jsonModel)
+                        vm.displayPage(jsonModel);
+                    }
+                    if (this.userSet.code === 200) {
+                        vm.showUser(this.userSet)
+                    }
+                    if(cartModel.code===1){
+                        vm.showCardInfo(cartModel.obj)
                     }
                 })
             )
         },
         methods: {
-            showPage: function (pageno) {
-                return axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort)
-
-            },
             displayPage: function (jsonModel) {
                 if (jsonModel.code === 200) {
                     jsonModel.data.dataset.forEach((item, index) => {
@@ -199,6 +214,7 @@
                 this.dataset.forEach((item, index) => {
                     item.status = (fid === item.fid);
                 });
+                console.log(this.dataset);
             },
             addCart: function (fid, num) {
                 if (this.user.username == null) {
@@ -219,31 +235,35 @@
                     if (jsonModel.code === 500) {
                         alert("添加失败");
                         return;
-                        ;
+
                     }
-                    this.showCardInfo(jsonModel.obj)
+                    this.showCartInfo(jsonModel.obj)
                 })
             },
             isLogin: function () {
                 let _this = this;
                 var params = new URLSearchParams()
-                params.append("username", _this.user.username);
-                params.append("pwd", _this.user.pwd);
-                params.append("yzm", _this.user.yzm);
+                params.append("username", _this.loginusername);
+                params.append("pwd", _this.loginpwd);
+                params.append("yzm", _this.loginyzm);
                 axios.post("resuser/login", params).then(res => {
                     this.userSet = res.data;
                     if (this.userSet.code !== 200) {
                         alert(this.userSet.msg)
+                        this.changeYZM();
                     } else {
-                        this.user.uid = this.userSet.msg.userid;
-                        this.user.username = this.userSet.msg.username;
-                        this.user.email = this.userSet.msg.email;
-                        alert("欢迎您:" + this.user.username)
-                        this.loginflag = false;
-                        this.isLoginflag = true;
+                        this.showUser(this.userSet)
                     }
                 });
 
+            },
+            showUser:function (userSet){
+                this.user.uid =userSet.user.userid;
+                this.user.username = userSet.user.username;
+                this.user.email = userSet.user.email;
+                alert("欢迎您:" + userSet.user.username)
+                this.loginflag = false;
+                this.isLoginflag = true;
             },
             loginOut: function () {
                 var _this = this;
@@ -264,36 +284,51 @@
                 axios.get("resOrder/clearAll").then(res => {
                     var jsonModel = res.data;
                     if (jsonModel.code === 1) {
-                        this.showCardInfo(jsonModel);
+                        this.showCartInfo(jsonModel);
+                    }
+                })
+
+            },
+            showCartInfo: function () {
+                axios.get("resOrder/getCartInfo").then(res => {
+                    var jsonModel = res.data;
+                    if (jsonModel.code === 1) {
+                        this.showCardInfo(jsonModel.obj);
                     } else {
                         this.cartItemsArray = [];
                         this.totalPrices = 0;
                         this.isHide = false;
                     }
                 })
-
             },
             displayCart: function () {
-                this.isHide = !this.isHide;
+                this.isHiden = !this.isHiden;
             },
+
             hideCart: function () {
                 this.orderflag = false;
 
 
             },
-            showCardInfo: function () {
-                //TODO
-                alert("ast")
-            },
-            getLoginedUser: function (){
-                var result;
-                axios.get("resuser/lsLogin").then(res=>{
-                    result=res.data;
-                    if(result.code===200){
-                        this.user.username=result.username;
-                    }
+            showCardInfo: function (cartItemsArray) {
+                this.cartItemsArray = cartItemsArray;
+                this.totalPrices=0;
+                this.cartItemsArray.forEach((item, index) => {
+                    this.totalPrices += item.smallCount;
                 })
-            }
+            },
+            //以下三个是打开时实行的js代码
+            showPage: function (pageno) {
+                return axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort)
+
+            },
+            getLoginedUser: function () {
+                return axios.get("resuser/isLogin");
+            },
+            getCartInfo: function () {
+                return axios.get("resOrder/getCartInfo");
+            },
+
 
         }
     })

@@ -50,28 +50,45 @@ public class ResOrderController {
             map.put("code", 404);
             map.put("msg", "查无数据");
         }
-        Map<Integer, CartItem> cartltemMap = new HashMap<>();
-        if (session.getAttribute("cart") == null) {
-            session.setAttribute("cart", cartltemMap);
+        Map<Integer, CartItem> cartItemMap=new HashMap<>();
+        if(session.getAttribute("cart")!=null) {
+            cartItemMap=(Map<Integer, CartItem>) session.getAttribute("cart");
         }
         CartItem cartltem = new CartItem();
         cartltem.setResFood(resFood);
         cartltem.setNum(num);
         assert resFood != null;
-        cartltem.setSmallCount(resFood.getRealprice()*num);
-        if (cartltemMap.containsKey(fid)) {
-            cartltem = cartltemMap.get(fid);
+        cartltem.setSmallCount(resFood.getRealprice() * num);
+        if (cartItemMap.containsKey(fid)) {
+            cartltem = cartItemMap.get(fid);
             cartltem.setNum(cartltem.getNum() + num);
-            cartltemMap.put(fid, cartltem);
+            cartItemMap.put(fid, cartltem);
         } else {
             cartltem.setNum(num);
-            cartltemMap.put(fid, cartltem);
+            cartItemMap.put(fid, cartltem);
         }
-        if (cartltem.getNum()<=0){
-            cartltemMap.remove(fid);
+        if (cartltem.getNum() <= 0) {
+            cartItemMap.remove(fid);
         }
-        map.put("code",1);
-        map.put("obj",cartltemMap);
+        session.setAttribute("cart", cartItemMap);
+        map.put("code", 1);
+        map.put("obj", cartItemMap);
         return map;
+    }
+
+    @RequestMapping("getCartInfo")
+    @ApiOperation("获取购物车")
+    public Map<String, Object> getCartInfo(HttpSession session) {
+        Map<String, Object> map = new HashMap<>();
+        Map<Integer, CartItem> cartItemMap = (Map<Integer, CartItem>) session.getAttribute("cart");
+        if (session.getAttribute("cart") == null || cartItemMap.size() <= 0) {
+            map.put("code", 0);
+            map.put("obj", null);
+            return map;
+        } else {
+            map.put("code", 1);
+            map.put("obj", cartItemMap.values());
+            return map;
+        }
     }
 }

@@ -40,6 +40,13 @@ public class ResUserController {
         Map<String,Object> map=new HashMap<>();
         String verify= (String) session.getAttribute("code");
         String yzm=request.getParameter("yzm");
+        log.info("yzm:"+yzm);
+        log.info("verify:"+verify);
+        if (yzm==null){
+            map.put("code",-1);
+            map.put("msg","验证码错误");
+            return map;
+        }
         if(!verify.equals(yzm)){
             map.put("code",-1);
             map.put("msg","验证码错误");
@@ -66,7 +73,7 @@ public class ResUserController {
             map.put("msg","没有找到相关的数据");
         }else {
             map.put("code",200);
-            map.put("msg", resUser);
+            map.put("user", resUser);
             resUser.setPwd("");
             log.info(resUser.getUserid()+"");
             session.setAttribute("username",resUser.getUserid());
@@ -93,9 +100,11 @@ public class ResUserController {
     }
 
 
+
     @RequestMapping("logout")
-        public Map<String,Object>lodinout(){
-        return null;
+    @ApiOperation(value = "清除登录记录")
+        public void logout(HttpSession session){
+        session.removeAttribute("username");
         }
 
 

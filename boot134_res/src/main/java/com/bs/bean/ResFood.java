@@ -22,4 +22,7 @@ public class ResFood implements Serializable {
     private double realprice;
     private String detail;
     private String fphoto;
+
+    @TableField(exist = false)
+    private Long detail_count;
 }
