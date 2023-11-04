@@ -54,13 +54,16 @@ public class ResOrderController {
         if (session.getAttribute("cart") == null) {
             session.setAttribute("cart", cartltemMap);
         }
-        CartItem cartltem;
+        CartItem cartltem = new CartItem();
+        cartltem.setResFood(resFood);
+        cartltem.setNum(num);
+        assert resFood != null;
+        cartltem.setSmallCount(resFood.getRealprice()*num);
         if (cartltemMap.containsKey(fid)) {
             cartltem = cartltemMap.get(fid);
             cartltem.setNum(cartltem.getNum() + num);
             cartltemMap.put(fid, cartltem);
         } else {
-            cartltem = new CartItem();
             cartltem.setNum(num);
             cartltemMap.put(fid, cartltem);
         }

@@ -7,6 +7,7 @@ public class CartItem implements Serializable {
     private ResFood resFood;
     private Integer num;
     private Double smallCount;
+    private static final long serialVersionUID =-141093992802872751L;
     public Double getSmallCount(){
         if(resFood!=null){
             smallCount=resFood.getRealprice()*num;
@@ -28,5 +29,9 @@ public class CartItem implements Serializable {
 
     public void setNum(Integer num) {
         this.num = num;
+    }
+
+    public void setSmallCount(Double smallCount) {
+        this.smallCount = smallCount;
     }
 }

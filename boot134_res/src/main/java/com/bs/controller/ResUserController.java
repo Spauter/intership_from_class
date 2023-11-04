@@ -68,19 +68,24 @@ public class ResUserController {
             map.put("code",200);
             map.put("msg", resUser);
             resUser.setPwd("");
-            session.setAttribute("username",username);
+            log.info(resUser.getUserid()+"");
+            session.setAttribute("username",resUser.getUserid());
         }
         return map;
     }
-    @RequestMapping("lsLogin")
+
+    @ApiOperation(value = "获取已经登录的用户（除非退出）")
+    @RequestMapping("isLogin")
     public Map<String,Object> isLogin(HttpSession session){
         Map<String,Object>map=new HashMap<>();
-        if (session.getAttribute("resuser")==null){
+        if (session.getAttribute("username")==null){
             map.put("code",404);
         }else {
             map.put("code",200);
-            String username= (String) session.getAttribute("username");
-            map.put("data",username);
+            Integer userid= (Integer) session.getAttribute("username");
+            ResUser resUser= resUserBizImpl.findByUID(userid);
+            resUser.setPwd("");
+            map.put("user",resUser);
 
         }
 
