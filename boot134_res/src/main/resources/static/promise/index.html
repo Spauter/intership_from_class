@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    var a =new Promise(function (resolve,reject){
+        var jsonModel={'name': 'zy','age': 30};
+        resolve(jsonModel);
+    }).then(function (value){
+        console.log(value);//1
+        return value;
+    }).then(function (value){//2
+        console.log(value.age)
+    }).then(function (value) {
+        console.log(value);
+    }).catch(function (value){
+        console.error('异常');
+    });
+</script>
+</html>

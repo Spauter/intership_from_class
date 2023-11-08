@@ -2,8 +2,11 @@ package com.bs.controller;
 
 import com.bs.bean.CartItem;
 import com.bs.bean.ResFood;
+import com.bs.bean.ResOrder;
+import com.bs.bean.ResUser;
 import com.bs.biz.ResFoodBiz;
 import com.bs.biz.ResOrderBiz;
+import com.bs.biz.ResUserBiz;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("resOrder")
@@ -27,6 +34,8 @@ public class ResOrderController {
     private ResOrderBiz resOrderBiz;
     @Autowired
     private ResFoodBiz resFoodBiz;
+    @Autowired
+    private ResUserBiz resUserBiz;
 
     @RequestMapping("clearAll")
     @ApiOperation("清空购物车")
@@ -71,6 +80,7 @@ public class ResOrderController {
             cartItemMap.remove(fid);
         }
         session.setAttribute("cart", cartItemMap);
+
         map.put("code", 1);
         map.put("obj", cartItemMap);
         return map;
@@ -90,5 +100,46 @@ public class ResOrderController {
             map.put("obj", cartItemMap.values());
             return map;
         }
+    }
+
+    @RequestMapping("confirmOrder")
+    @ApiOperation("提交订单")
+    public Map<String,Object>conrimOrder(ResOrder resOrder, HttpSession session){
+        Map<String,Object>map=new HashMap<>();
+        Map<Integer,CartItem>cartItemMap= (Map<Integer, CartItem>) session.getAttribute("cart");
+        if(cartItemMap==null|| cartItemMap.isEmpty()){
+            map.put("code",-1);
+            map.put("msg","暂无商品");
+            return map;
+        }
+        if(session.getAttribute("username")==null){
+            map.put("code",-2);
+            map.put("msg","找不到登录用户");
+            return map;
+        }
+        ResUser resUser= resUserBiz.findByUID((Integer) session.getAttribute("username"));
+        resOrder.setUserid(resUser.getUserid());
+        LocalDateTime now=LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        resOrder.setOrdertime(dateTimeFormatter.format(now));
+        if(resOrder.getDelivertime() == null){
+            LocalDateTime localDateTime=now.plusHours(1);
+            resOrder.setDelivertime(dateTimeFormatter.format(localDateTime));
+        }
+        resOrder.setStatus(0);
+        try {
+            resOrderBiz.Order(resOrder, new HashSet<>( cartItemMap.values()), resUser);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            map.put("code",500);
+            map.put("msg",e.getCause());
+            return map;
+
+        }
+        map.put("code",200);
+        map.put("obj",cartItemMap.values());
+
+        return map;
     }
 }

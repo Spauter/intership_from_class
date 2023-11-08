@@ -33,7 +33,6 @@ public class ResOrderBizImpl implements ResOrderBiz {
     @Override
     public int Order(ResOrder resOrder, Set<CartItem> cartltemSet, ResUser resUser){
         resOrder.setUserid(resUser.getUserid());
-        this.resOrderMapper.insertOrder(resOrder);
         for (CartItem c:cartltemSet){
             ResOrderItem resOrderItem=new ResOrderItem();
             resOrderItem.setRoid(resOrder.getRoid());

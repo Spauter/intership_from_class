@@ -111,24 +111,24 @@
             <table>
                 <tr>
                     <td class="labname"><label for="address">送货地址:</label></td>
-                    <td><input name="address" type="text" placeholder="请输入送货地址" id="address"/></td>
+                    <td><input name="address" type="text" placeholder="请输入送货地址" id="address" v-model="orderInfo.address"/></td>
                 </tr>
                 <tr>
                     <td class="labname"><label for="tel">联系电话:</label></td>
-                    <td><input type="text" id="tel" placeholder="请输入联系电话" name="tel"/></td>
+                    <td><input type="text" id="tel" placeholder="请输入联系电话" name="tel" v-model="orderInfo.tel"/></td>
                 </tr>
                 <tr>
                     <td class="labname"><label for="deliverytime">送货时间:</label></td>
                     <td><input type="text" name="deliverytime" id="deliverytime"
-                               placeholder="请输入送货时间（默认马上发货）"/></td>
+                               placeholder="请输入送货时间（默认马上发货）" v-model="orderInfo.deliverytime"/></td>
                 </tr>
                 <tr>
                     <td class="labname"><label for="ps">附言:</label></td>
-                    <td><input type="text" id="ps" placeholder="请输入附言" name="ps"/></td>
+                    <td><input type="text" id="ps" placeholder="请输入附言" name="ps" v-model="orderInfo.ps"/></td>
                 </tr>
             </table>
         </form>
-        <input type="button" value="提交" class="btn" id="submit">
+        <input type="button" value="提交" class="btn" @click="confirmOrder" id="submit">
     </div>
 
 </div>
@@ -141,7 +141,7 @@
     let vm = new Vue({
         el: "#app",
         data: {
-            isHiden: true,
+            isHiden: false,
             orderflag: false,     //送货地址div
             loginflag: false,
             isLoginflag: false,
@@ -167,6 +167,12 @@
             loginusername: '',
             loginpwd: '',
             loginyzm: '',
+            orderInfo:{
+                address:'Ququark',
+                tel:'12345678901',
+                deliverytime:'2023-11-02 11:45:14',
+                ps: '快快'
+            }
         }, computed: {
             showPage: function (pageno) {
                 axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort).then(res => {
@@ -195,6 +201,18 @@
             )
         },
         methods: {
+            confirmOrder: function (){
+                var params=new URLSearchParams(this.orderInfo);
+                axios.post("resOrder/confirmOrder").then(res=>{
+                    var jsonMOdel=res.data;
+                    if(jsonMOdel.code===200){
+                        this.cartItemsArray=[];
+                        this.totalPrices=0;
+                        this.isHide=false;
+                    }
+                })
+
+            },
             displayPage: function (jsonModel) {
                 if (jsonModel.code === 200) {
                     jsonModel.data.dataset.forEach((item, index) => {
