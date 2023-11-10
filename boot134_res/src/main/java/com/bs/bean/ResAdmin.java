@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class ResAdmin implements Serializable {
     @TableId(value = "raid",type = IdType.AUTO)
     private Integer raid;
-    private String ranema;
+    private String raname;
     private String rapwd;
     //对于 private boolean isXXX MyBatisPlus 会转成 XXXX 需要 @TableField("isXXX") 指定
     //如果表属性是关键字比如order,则需要如下注释 @TableField("'order'")

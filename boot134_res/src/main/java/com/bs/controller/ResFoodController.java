@@ -3,6 +3,7 @@ package com.bs.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bs.bean.ResFood;
+import com.bs.biz.FastDFSBiz;
 import com.bs.biz.ResFoodBiz;
 import com.bs.biz.impl.ResFoodBizImpl;
 import com.bs.mapper.ResFoodMapper;
@@ -16,6 +17,7 @@ import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.Map;
 public class ResFoodController {
     @Autowired
     private ResFoodBiz resFoodBiz;
+    @Autowired
+    private FastDFSBiz fastDFSBiz;
 
 
     @GetMapping("findById/{fid}")
@@ -112,6 +116,28 @@ public class ResFoodController {
             return map;
         }
         return null;
+    }
+
+
+    @RequestMapping("addNewFood")
+    @ApiOperation(value = "菜谱上架")
+    public Map<String,Object>addNewFood(HttpServletRequest request){
+        Map<String,Object>map=new HashMap<>();
+        String fname=request.getParameter("fname");
+        String normprice=request.getParameter("normprices");
+        String realprice=request.getParameter("realprices");
+//        String path=t
+        try{
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            map.put("code",500);
+            map.put("msg",e.getCause());
+            return map;
+        }
+
+        return map;
     }
 
 
