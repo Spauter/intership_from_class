@@ -119,26 +119,7 @@ public class ResFoodController {
     }
 
 
-    @RequestMapping("addNewFood")
-    @ApiOperation(value = "菜谱上架")
-    public Map<String,Object>addNewFood(HttpServletRequest request){
-        Map<String,Object>map=new HashMap<>();
-        String fname=request.getParameter("fname");
-        String normprice=request.getParameter("normprices");
-        String realprice=request.getParameter("realprices");
-//        String path=t
-        try{
 
-        }catch (Exception e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            map.put("code",500);
-            map.put("msg",e.getCause());
-            return map;
-        }
-
-        return map;
-    }
 
 
 

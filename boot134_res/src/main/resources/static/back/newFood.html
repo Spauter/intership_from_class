@@ -1,0 +1,136 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/dashboard.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap-theme.css">
+    <title></title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <label>
+                    <input type="text" class="form-control" placeholder="Search...">
+                </label>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid" id="app">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                <li><a href="adminBoarg.html">管理首页</a></li>
+                <li><a href="newFood.html">新菜管理</a></li>
+                <li><a href="../adminiLogin.html">返回登录</a></li>
+            </ul>
+
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">新菜上架</h1>
+            <div class="row placeholders">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="fname">菜品名</label>
+                        <input type="text" class="form-control" id="fname" placeholder="新菜品名" v-model="fname">
+                    </div>
+                    <div class="form-group">
+                        <label for="normprices">原价</label>
+                        <input type="text" class="form-control" id="normprices" placeholder="新菜品名" v-model="normprices">
+                    </div>
+                    <div class="form-group">
+                        <label for="realprices">现价</label>
+                        <input type="text" class="form-control" id="realprices" placeholder="新菜品名" v-model="realprices">
+                    </div>
+                    <div class="form-group">
+                        <label for="fphoto">菜品图</label>
+                        <input type="file" class="form-control" id="fphoto" placeholder="新菜品名">
+                    </div>
+                    <div class="form-group">127
+                        <label for="detail">描述</label>
+                        <textarea type="text" class="form-control" id="detail" placeholder="新菜品名" v-model="detail"></textarea>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+
+<script src="../js/jquery-1.9.1.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/axios.js"></script>
+<script type="text/javascript">
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            fname: '新菜品',
+            normprices: 20.0,
+            realprices: 18.0,
+            detail: '营养美味',
+        }, computed: {
+            //计算属性
+        },
+        //页面打开时的操作
+        mounted: function () {
+
+
+        },
+        methods: {
+            addNewFood: function () {
+                // 提交方式必须为post,指定Content-type：multipart/form-data
+                var fphoto = document.querySelector("#fphoto").files[0];
+
+                var formdata = new FormData();
+                formdata.append("fname", this.fname)
+                formdata.append("normprices", this.normprices)
+                formdata.append("realprices", this.realprices)
+                const config={
+                    headers:{"Content-Type":"multipart/from-data"}
+                };
+                axios:({
+                    url:"",
+                    method:"post",
+                    data:formdata,
+                    headers:config.headers
+                }).then(res=>{
+                    var jsonModel=res.data;
+                    if(jsonModel.code===200){
+                        alert("上传成功")
+                    }
+                })
+            }
+
+        }
+    })
+</script>
+</body>
+</html>

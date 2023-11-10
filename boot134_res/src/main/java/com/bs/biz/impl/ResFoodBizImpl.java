@@ -57,7 +57,7 @@ public class ResFoodBizImpl implements ResFoodBiz {
             noRollbackFor = RuntimeException.class
     )
     @Override
-    public int AddFood(ResFood resFood) {
+    public int addFood(ResFood resFood) {
        this.resFoodMapper.insert(resFood);
        return resFood.getFid();
     }
