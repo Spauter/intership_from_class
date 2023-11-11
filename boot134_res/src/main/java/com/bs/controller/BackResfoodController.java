@@ -3,20 +3,23 @@ package com.bs.controller;
 import com.bs.bean.ResFood;
 import com.bs.biz.FastDFSBiz;
 import com.bs.biz.ResFoodBiz;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("backresfood")
-@Controller
+@RestController
+@RequestMapping("backResfood")
 @Slf4j
+@Api(tags = "菜品上架管理")
 public class BackResfoodController {
     @Autowired
     private FastDFSBiz fastDFSBiz;

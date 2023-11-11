@@ -93,6 +93,7 @@ public class ResFoodController {
             map.put("msg", e.getCause());
             return map;
         }
+        page.getRecords();
         MypageBean mypageBean = new MypageBean();
         mypageBean.setPageno(pageno);
         mypageBean.setPagesize(pagesize);

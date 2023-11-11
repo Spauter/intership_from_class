@@ -7,10 +7,13 @@ import com.bs.biz.ResFoodBiz;
 import com.bs.mapper.ResFoodMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 @Service
@@ -20,6 +23,13 @@ import java.util.List;
 public class ResFoodBizImpl implements ResFoodBiz {
     @Autowired
     private ResFoodMapper resFoodMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Value("nginx.address")
+    private String nginxAddress;
+
     @Override
     public List<ResFood> findAll() {
         return resFoodMapper.selectAll();
@@ -42,6 +52,20 @@ public class ResFoodBizImpl implements ResFoodBiz {
        }
        Page<ResFood>page=new Page<>(pageno,pagesize);
        Page<ResFood>page1=this.resFoodMapper.selectPage(page,wrapper);
+//       List<ResFood>list=page1.getRecords();
+       /*
+       List<String>keys=new ArrayList<>();
+       for(ResFood f:list){
+           keys.add(RedisKeys.RESFOOD_DETAIL_COUNT_FID+resFood.getFid)
+       }
+        List allFoodDetailCOuntValues=redisTemplate.opsForValue().multiGet(keys);
+        for(int i=0;i<list.size();i++){
+            assert allFoodDetailCOuntValues != null;
+            list.get(i).setDetail_count((Long) allFoodDetailCOuntValues.get(i));
+            list.get(i).setFphono("http://localhost:8000/"+list.get(i).getFphono)
+        }
+        */
+
        log.info(String.valueOf(page1.getSize()));
        log.info("总记录="+page1.getTotal());
        log.info("总页数="+page1.getPages());
