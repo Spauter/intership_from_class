@@ -11,6 +11,8 @@ public interface ResFoodBiz {
     ResFood findById(Integer fid);
     Page<ResFood> findByPage(int pageno,int pagesize,String sortBy,String sort);
 
+
+
     int addFood(ResFood resFood);
 
 

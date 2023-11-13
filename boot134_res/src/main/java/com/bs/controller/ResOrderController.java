@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -104,7 +105,7 @@ public class ResOrderController {
 
     @RequestMapping("confirmOrder")
     @ApiOperation("提交订单")
-    public Map<String,Object>conrimOrder(ResOrder resOrder, HttpSession session){
+    public Map<String,Object>conrimOrder(ResOrder resOrder, HttpSession session, HttpServletRequest request){
         Map<String,Object>map=new HashMap<>();
         Map<Integer,CartItem>cartItemMap= (Map<Integer, CartItem>) session.getAttribute("cart");
         if(cartItemMap==null|| cartItemMap.isEmpty()){
@@ -119,6 +120,8 @@ public class ResOrderController {
         }
         ResUser resUser= resUserBiz.findByUID((Integer) session.getAttribute("username"));
         resOrder.setUserid(resUser.getUserid());
+        resOrder.setAddress(request.getParameter("address"));
+        resOrder.setPs(request.getParameter("ps"));
         LocalDateTime now=LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         resOrder.setOrdertime(dateTimeFormatter.format(now));
@@ -139,7 +142,9 @@ public class ResOrderController {
         }
         map.put("code",200);
         map.put("obj",cartItemMap.values());
-
+        //下单成功后清楚购物车（session里面的)
+        session.setAttribute("cart",null);
         return map;
     }
+
 }

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>异步</title>
+
+</head>
+
+<body>
+</body>
+
+
+<script>
+
+    var a = new Promise(function (resolve, reject) {
+        resolve(1);
+    }).then(function (value) {
+        console.log(value);
+        return value;
+    }).then(function (value) {
+        console.log(value * 2);
+    }).then(function (value) {
+        console.log(value);
+    })
+
+
+    /*function* fun() {
+        console.log("start");
+        var x = yield '2';
+        console.log(x);
+        var y = yield '3';
+        console.log(y);
+        console.log((x + y));
+    }*/
+</script>
+
+</html>

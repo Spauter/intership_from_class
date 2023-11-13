@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,20 +26,24 @@ public class BackResfoodController {
     private FastDFSBiz fastDFSBiz;
     @Autowired
     private ResFoodBiz resFoodBiz;
-    @RequestMapping("addNewFood")
+    @RequestMapping(value = "addNewFood")
     @ApiOperation(value = "菜谱上架")
-    public Map<String,Object> addNewFood(HttpServletRequest request, MultipartFile multipartFile){
+    public Map<String,Object> addNewFood(String fname,
+                                         Double normprice,
+                                         Double realprice,
+                                         String detail,
+                                         MultipartFile fphoto){
         Map<String,Object>map=new HashMap<>();
-        String fname=request.getParameter("fname");
-        String normprice=request.getParameter("normprices");
-        String realprice=request.getParameter("realprices");
-        String detail=request.getParameter("detail");
-        String path=fastDFSBiz.upload(multipartFile);
+        String path=this.fastDFSBiz.upload(fphoto);
         ResFood resFood=new ResFood();
         try{
+            log.info("fname:"+fname);
             resFood.setFname(fname);
-            resFood.setRealprice(Double.parseDouble(realprice));
-            resFood.setMormprice(Double.parseDouble(normprice));
+            log.info("real:"+realprice);
+            resFood.setRealprice(realprice);
+            log.info("nor:"+normprice);
+            resFood.setMormprice(normprice);
+            log.info("detail:"+detail);
             resFood.setDetail(detail);
             resFood.setFphoto(path);
             resFoodBiz.addFood(resFood);

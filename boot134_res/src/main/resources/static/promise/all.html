@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>all</title>
+
+</head>
+
+<body>
+
+
+</body>
+
+
+<script>
+    var promise1 = new Promise(function (resolve) {
+        setTimeout(function () {
+            resolve(1);
+        }, 5000);
+    });
+    var promise2 = new Promise(function (resolve) {
+        setTimeout(function () {
+            resolve(2);
+        }, 1000);
+    });
+    Promise.all([promise1, promise2]).then(function (value) {
+        console.log(value); // 打印[1,2]
+    });
+
+</script>
+
+</html>

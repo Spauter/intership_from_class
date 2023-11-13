@@ -6,6 +6,7 @@ import com.bs.bean.ResFood;
 import com.bs.biz.FastDFSBiz;
 import com.bs.biz.ResFoodBiz;
 import com.bs.biz.impl.ResFoodBizImpl;
+import com.bs.config.RedisKeys;
 import com.bs.mapper.ResFoodMapper;
 import com.bs.web.mode.MypageBean;
 import io.swagger.annotations.Api;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apiguardian.api.API;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +33,7 @@ public class ResFoodController {
     @Autowired
     private ResFoodBiz resFoodBiz;
     @Autowired
-    private FastDFSBiz fastDFSBiz;
+    private RedisTemplate redisTemplate;
 
 
     @GetMapping("findById/{fid}")
@@ -117,6 +119,20 @@ public class ResFoodController {
             return map;
         }
         return null;
+    }
+    @ApiOperation(value = "查看点击人数")
+    @GetMapping("detailCountAdd")
+    public Map<String, Object> detialCountAdd(Integer fid){
+        Map<String, Object>map=new HashMap<>();
+        Long count=1L;
+        if(redisTemplate.hasKey(RedisKeys.RESFOOD_DETAIL_COUNT_FID+fid)==false){
+            redisTemplate.opsForValue().set(RedisKeys.RESFOOD_DETAIL_COUNT_FID+fid,1);
+        }else {
+            count = redisTemplate.opsForValue().increment(RedisKeys.RESFOOD_DETAIL_COUNT_FID + fid);
+        }
+        map.put("code",200);
+        map.put("data",count);
+        return map;
     }
 
 

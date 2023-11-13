@@ -23,6 +23,7 @@ public class ResOrder implements Serializable {
     private  String address;
     private String tel;
     private String ordertime;
+    @TableField(value = "deliverytime")
     private String delivertime;
     private String ps;
     private Integer status;

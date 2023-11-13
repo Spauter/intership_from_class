@@ -38,7 +38,8 @@ public class ResUserController {
     })
     public Map<String,Object>login(HttpSession session, HttpServletRequest request){
         Map<String,Object> map=new HashMap<>();
-        String verify= (String) session.getAttribute("code");
+        log.info("verify:"+session.getAttribute("code"));
+        String verify=  session.getAttribute("code")+"";
         String yzm=request.getParameter("yzm");
         log.info("yzm:"+yzm);
         log.info("verify:"+verify);
