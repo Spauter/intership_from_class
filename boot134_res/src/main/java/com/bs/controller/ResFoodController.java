@@ -61,7 +61,7 @@ public class ResFoodController {
     @GetMapping("findAll")
     public Map<String, Object> findAll() {
         Map<String, Object> map = new HashMap<>();
-        List<ResFood> list = new ArrayList<>();
+        List<ResFood> list;
         try {
             list = resFoodBiz.findAll();
         } catch (Exception e) {
@@ -69,6 +69,9 @@ public class ResFoodController {
             map.put("code", 500);
             map.put("msg", e.getCause());
             return map;
+        }
+        for (ResFood resFood : list) {
+            resFood.setFphoto("http://localhost:8888/" + resFood.getFphoto());
         }
         map.put("code", 200);
         map.put("msg", list);

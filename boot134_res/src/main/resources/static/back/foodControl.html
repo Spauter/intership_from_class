@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <title></title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            color: #409EFF;
+        }
+
+        #app {
+            height: 100vh;
+        }
+
+        .el-container {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <el-menu
+            class="el-menu-demo"
+            mode="horizontal"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            height="100vh">
+        <el-menu-item index="1"><a href="../index.html">小萌神点菜系统主页</a></el-menu-item>
+        <el-menu-item index="3" disabled>消息中心</el-menu-item>
+        <el-submenu index="2">
+            <template slot="title">个人信息管理</template>
+            <el-menu-item index="2-1">查看个人信息</el-menu-item>
+            <el-menu-item index="2-2">修改密码</el-menu-item>
+            <el-menu-item index="2-3">注销账号</el-menu-item>
+        </el-submenu>
+        <el-menu-item index="4"><a href="../adminiLogin.html">返回登陆</a></el-menu-item>
+    </el-menu>
+    <el-container style="height: 100vh; border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+            <el-menu :default-openeds="['1', '3']">
+                <el-submenu index="1">
+                    <template slot="title"><i class="el-icon-food"></i>菜谱管理</template>
+                    <el-menu-item-group>
+                        <!--            标题可以写在标签里，也可以用 title表示-->
+                        <el-menu-item index="1-1" @click="showAddFlag()">添加菜谱</el-menu-item>
+                        <el-menu-item index="1-2" @click="showPutFlag()">菜谱上架</el-menu-item>
+                    </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="2">
+                    <template slot="title"><i class="el-icon-phone"></i>订单管理</template>
+                    <el-menu-item-group>
+                        <el-menu-item index="2-1">查看当前订单</el-menu-item>
+                        <el-menu-item index="2-2">历史订单记录</el-menu-item>
+                    </el-menu-item-group>
+                </el-submenu>
+                <el-submenu index="3">
+                    <template slot="title"><i class="el-icon-setting"></i>导航三</template>
+                    <el-menu-item-group>
+                        <template slot="title">分组一</template>
+                        <el-menu-item index="3-1">选项1</el-menu-item>
+                        <el-menu-item index="3-2">选项2</el-menu-item>
+                    </el-menu-item-group>
+                    <el-menu-item-group title="分组2">
+                        <el-menu-item index="3-3">选项3</el-menu-item>
+                    </el-menu-item-group>
+                    <el-submenu index="3-4">
+                        <template slot="title">选项4</template>
+                        <el-menu-item index="3-4-1">选项4-1</el-menu-item>
+                    </el-submenu>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+
+        <!--    菜谱信息浏览界面-->
+        <el-container v-show="putAwayFlag">
+            <el-header style="text-align: right; font-size: 12px">
+                <el-dropdown>
+                    <i class="el-icon-setting" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>查看</el-dropdown-item>
+                        <el-dropdown-item>新增</el-dropdown-item>
+                        <el-dropdown-item>删除</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+                <span>王小虎</span>
+            </el-header>
+
+            <el-main>
+                <el-table :data="tableData">
+                    <el-table-column prop="fid" label="编号" width="60">
+                    </el-table-column>
+                    <el-table-column prop="fname" label="菜名" width="120">
+                    </el-table-column>
+                    <el-table-column prop="normprice" label="原价" width="90">
+                    </el-table-column>
+                    <el-table-column prop="realprice" label="现价" width="90">
+                    </el-table-column>
+                    <el-table-column prop="detail" label="描述" width="140">
+                    </el-table-column>
+                </el-table>
+            </el-main>
+        </el-container>
+
+
+        <!--        添加菜谱-->
+        <el-container v-show="addFoodFlag" >
+            <el-form ref="food_rule" :model="food_rule" :rules='rules' label-width="80px">
+                <el-form-item label="新菜名称" prop="name">
+                    <el-input v-model="food_rule.name" placeholder="请输入菜谱名"></el-input>
+                </el-form-item>
+                <el-form-item label="菜谱描述" prop="detail">
+                    <el-input type="textarea" v-model="food_rule.detail" placeholder="请输入菜谱描述"></el-input>
+                </el-form-item>
+                <el-form-item label="原价" prop="normal_price">
+                    <el-input v-model.number="food_rule.normal_price"></el-input>
+                </el-form-item>
+                <el-form-item label="现价" prop="real_price">
+                    <el-input v-model.number="food_rule.real_price"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <label for="fphoto">菜品图</label>
+                    <input type="file" class="form-control" id="fphoto" placeholder="新菜品名">
+                </el-form-item>
+                <el-form-item>
+                <el-button :plain="true" @click="addNewFood">添加</el-button>
+                </el-form-item>
+            </el-form>
+        </el-container>
+    </el-container>
+
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="../js/axios.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tableData: [],
+            food_rule: {
+                name: '',
+                normal_price: 0,
+                real_price: 0,
+                detail: "",
+            },
+            rules: {
+                name: [
+                    {required: true, message: '请输入菜谱名字', trigger: 'blur'},
+                    {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+                ],
+                normal_price: [{required: true, message: '请输入原价', trigger: 'blur'}
+                ],
+                real_price: [{required: true, message: '请输入现价', trigger: 'blur'}],
+                detail: [{required: true, message: '请输入菜谱描述', trigger: 'blur'},
+                    {min: 3, message: '请至少输入3个字符', trigger: 'blur'}
+                ]
+            },
+
+            // 提交规则，用于添加菜谱
+            addFoodFlag: false,
+            putAwayFlag: false,
+        },
+        methods: {
+            onSubmit() {
+                console.log('submit!');
+            },
+            closeAll: function () {
+                this.addFoodFlag = false;
+                this.putAwayFlag = false;
+            },
+            showAddFlag: function () {
+                this.closeAll()
+                this.addFoodFlag = true;
+            },
+            showPutFlag: function () {
+                this.closeAll()
+                this.putAwayFlag = true;
+            },
+            addNewFood: function () {
+                // 提交方式必须为post,指定Content-type：multipart/form-data
+                var fphoto = document.querySelector("#fphoto").files[0];
+                var formdata = new FormData();
+                formdata.append("fname", this.food_rule.name)
+                formdata.append("normprice", this.food_rule.normal_price)
+                formdata.append("realprice", this.food_rule.real_price)
+                formdata.append("detail", this.food_rule.detail);
+                formdata.append("fphoto", fphoto)
+                const config = {
+                    headers: {"Content-Type": "multipart/form-data"}
+                };
+                axios({
+                    url: "../backResfood/addNewFood",
+                    method: "post",
+                    hearders: config.headers,
+                    data: formdata,
+                }).then(res => {
+                    if (res.data.data !== null) {
+                        this.$message({
+                            showClose: true,
+                            message: '上传成功',
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                            showClose: true,
+                            message: '上传失败,请检查后再试',
+                            type: 'error'
+                        });
+                    }
+                }).catch(error=>{
+                    console.error(error);
+                    this.$message({
+                        showClose: true,
+                        message: '上传失败',
+                        type: 'error'
+                    });
+                })
+
+            },
+            showFoods(){
+                axios.get("../resfood/findAll").then(res => {
+                    if (res.data.code === 200) {
+                        this.tableData = res.data.msg;
+                    } else {
+                        // Handle error, show message, etc.
+                        console.error('Error fetching data:', res.data.msg);
+                    }
+                }).catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        },
+        mounted: function () {
+            this.showFoods();
+        }
+    })
+</script>
+</html>

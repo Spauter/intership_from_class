@@ -28,6 +28,7 @@ public class VerifyCodeController {
     //TODO:  spring session+redis
     @GetMapping("/code.action")
     public HttpEntity image(HttpSession session) throws IOException {
+        log.info("code set:"+session.getAttribute("code")+"\t"+session.getId());
         //1.创建对象，在内存中图片（验证码图片对象）
         int width=100;
         int height=50;
@@ -56,11 +57,10 @@ public class VerifyCodeController {
             graphics.drawString(ch+"",width/5*i,height/2);//验证码
         }
         //*********将   验证码存到  ｓｅｓｓｉｏｎ中．　　
-        session.setAttribute("code",  sb.toString());
-
+        session.setAttribute("code",sb);
         //随机数:
 
-//        //2.4画干扰线   ( TODO: 升级: 曲线，　每根线的颜色不一样．　)
+//        //2.4画干扰线
         graphics.setColor(Color.green);
         for (int i = 0; i <5; i++) {
             int x1=random.nextInt(width);
@@ -76,6 +76,7 @@ public class VerifyCodeController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("Pragma", "No-cache");
         httpHeaders.set("Cache-Control", "no-cache");
+        log.info("code set:" + session.getAttribute("code") + "\t" + session.getId());
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .headers(httpHeaders)

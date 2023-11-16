@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.css">
+
     <title>小萌神订餐网</title>
     <!-- 图标 -->
     <link rel="short icon" href="image/eat0.ico"/>
@@ -32,9 +38,9 @@
     <div class="content">
         <ul class="allfoods" id="allfoods">
             <li v-for="(item,index) in dataset">
-                <h3 @click="showFood(item.fid)">{{item.fname}}</h3>
+                <h3 @click="showFood(item.fid)">{{item.fname}} |<span class="badge">{{item.detail_count}}</span></h3>
                 <div class="fooddesc" v-show="item.status">
-                    <img :src=`image/${item.fphoto}` class="foodimg"/>
+                    <img :src=`${item.fphoto}` classhowFoods="foodimg"/>
                     <article class="foodprice">
                         <p>{{item.detail}}</p>
                         <p class="normalprice">{{item.mormprice}}</p>
@@ -102,6 +108,39 @@
             </table>
         </form>
         <input type="button" value="login" class="btn" id="btn" @click="isLogin"/>
+        <div style="background-color: #9acfea">没有账号？<a href="#" @click="showRegister">注册</a></div>
+    </div>
+<!--   注册部分-->
+    <div class="login" id="register" v-if="registerflag">
+        <span  @click="registerflag=false">X</span>
+        <form name="myform">
+            <table>
+                <tr>
+                    <td class="labname"><label for="name">姓名：</label></td>
+                    <td><input type="text" name="name" placeholder="请输入姓名" id="name" v-model="registername"></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="email">邮箱：</label></td>
+                    <td><input type="text" name="email" placeholder="请输入邮箱" id="email" v-model="registeremail"></td>
+                    <td><a href="#" class="yzm_btn" v-bind:class="{disabled: sendBtnDisabled}" @click.prevent="sendEmail">{{sendBtnText}}</a></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="emailcode">验证码：</label></td>
+                    <td><input type="text" name="emailcode" placeholder="请输入验证码" id="emailcode" v-model="emailcode"></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="pwd">密码：</label></td>
+                    <td><input type="password" name="pwd" placeholder="请输入密码" id="password" v-model="registerpwd"></td>
+                </tr>
+                <tr>
+                    <td class="labname"><label for="confirm_pwd">确认密码：</label></td>
+                    <td><input type="password" name="confirm_pwd" placeholder="请再次输入密码" id="confirm_pwd" v-model="confirmPwd"></td>
+                    <td style="font-size: smaller">{{message}}</td>
+                </tr>
+            </table>
+        </form>
+        <input type="button" value="register" class="btn"  @click="isRegister"/>
+        <div style="background-color: #9acfea">已有账号？<a href="#" @click="showLogin">登录</a></div>
     </div>
 
     <!-- 订单信息 -->
@@ -172,7 +211,16 @@
                 tel:'12345678901',
                 deliverytime:'2023-11-02 11:45:14',
                 ps: '快快'
-            }
+            },
+            registerflag: false,
+            sendBtnText: '发送',
+            sendBtnDisabled: false,
+            registername: '',
+            registeremail: '',
+            registerpwd: '',
+            emailcode: '',
+            confirmPwd: '',
+            message: ''
         }, computed: {
             showPage: function (pageno) {
                 axios.get("resfood/findByPage?pageno=" + pageno + "&pagesize=" + this.pagebean.pagesize + "&sortby=" + this.pagebean.sortby + "&sort=" + this.pagebean.sort).then(res => {
@@ -201,14 +249,82 @@
             )
         },
         methods: {
+            // 发送邮件
+            sendEmail() {
+                if (this.sendBtnDisabled) {
+                    return false;
+                }
+                if (this.registeremail === '') {
+                    this.message = '请输入邮箱';
+                    return false;
+                }
+                axios.get("/sendEmail?email="+this.registeremail)
+                this.sendBtnText = '发送中...';
+                this.sendBtnDisabled = true;
+                setTimeout(() => {
+                    this.sendBtnText = '重新发送';
+                    this.sendBtnDisabled = false;
+                }, 60000);
+            },
+
+            // 注册
+            isRegister() {
+                if (this.registername === '') {
+                    this.message = '请输入姓名';
+                    return false;
+                }
+                if (this.registeremail === '') {
+                    this.message = '请输入邮箱';
+                    return false;
+                }
+                if (this.registerpwd === '' || this.confirmPwd === '') {
+                    this.message = '请输入密码和确认密码';
+                    return false;
+                }
+                if (this.registerpwd !== this.confirmPwd) {
+                    this.message = '两次输入的密码不一致';
+                    return false;
+                }
+                var params=new URLSearchParams();
+                params.append("username",this.registername)
+                params.append("pwd",this.registerpwd)
+                params.append("email",this.registeremail);
+                params.append("yzm",this.emailcode)
+                params.append("way","register");
+                axios.post("resuser/login", params).then(res => {
+                    this.userSet = res.data;
+                    if (this.userSet.code !== 200) {
+                        alert(this.userSet.msg)
+                    } else {
+                        this.showUser(this.userSet)
+                        this.registerflag=false;
+                    }
+                });
+
+            },
+
+            // 跳转到登录界面
+            showLogin:function() {
+                this.registerflag = false;
+                this.loginflag = true;
+            },
+            showRegister:function (){
+                this.registerflag = true;
+                this.loginflag = false;
+            },
+
             confirmOrder: function (){
-                var params=new URLSearchParams(this.orderInfo);
+                var params=new URLSearchParams();
+                params.append("address",this.orderInfo.address)
+                params.append("ps",this.ore)
                 axios.post("resOrder/confirmOrder").then(res=>{
                     var jsonMOdel=res.data;
                     if(jsonMOdel.code===200){
                         this.cartItemsArray=[];
                         this.totalPrices=0;
                         this.isHide=false;
+                        alert("提交订单成功")
+                        this.orderflag=false
                     }
                 })
 
@@ -233,6 +349,12 @@
                     item.status = (fid === item.fid);
                 });
                 console.log(this.dataset);
+                axios.get("resfood/detailCountAdd?fid="+fid).then(res=>{
+                    var jsonModel=res.data;
+                    if(jsonModel.code===200){
+                        var count=jsonModel.data;
+                    }
+                })
             },
             addCart: function (fid, num) {
                 if (this.user.username == null) {
@@ -264,6 +386,7 @@
                 params.append("username", _this.loginusername);
                 params.append("pwd", _this.loginpwd);
                 params.append("yzm", _this.loginyzm);
+                params.append("way","login");
                 axios.post("resuser/login", params).then(res => {
                     this.userSet = res.data;
                     if (this.userSet.code !== 200) {

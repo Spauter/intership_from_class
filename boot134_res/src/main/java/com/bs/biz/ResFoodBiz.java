@@ -15,6 +15,8 @@ public interface ResFoodBiz {
 
     int addFood(ResFood resFood);
 
+    List<ResFood>listAllBydesc();
+
 
 
 

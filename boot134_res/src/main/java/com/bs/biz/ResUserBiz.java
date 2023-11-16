@@ -10,6 +10,8 @@ public interface ResUserBiz {
 
     ResUser findByUID(Integer userid);
 
+    int insert(ResUser resUser);
+
 
 
 

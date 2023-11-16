@@ -13,9 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@Transactional(
-        readOnly = true
-)
 @Slf4j
 public class ResUserBizImpl implements ResUserBiz {
     @Autowired
@@ -36,5 +33,10 @@ public class ResUserBizImpl implements ResUserBiz {
         QueryWrapper<ResUser> wrapper = new QueryWrapper<>();
         wrapper.eq("userid", uid);
         return resUserMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public int insert(ResUser resUser) {
+        return resUserMapper.insert(resUser);
     }
 }

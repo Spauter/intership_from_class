@@ -90,4 +90,9 @@ public class ResFoodBizImpl implements ResFoodBiz {
        this.resFoodMapper.insert(resFood);
        return resFood.getFid();
     }
+
+    @Override
+    public List<ResFood> listAllBydesc() {
+        return null;
+    }
 }
