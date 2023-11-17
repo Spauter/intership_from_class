@@ -1,5 +1,6 @@
 package com.bs.biz.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bs.bean.ResOrder;
 import com.bs.bean.ResOrderItem;
 import com.bs.bean.ResUser;
@@ -9,12 +10,12 @@ import com.bs.mapper.ResOrderMapper;
 import com.bs.bean.CartItem;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -46,5 +47,10 @@ public class ResOrderBizImpl implements ResOrderBiz {
         return 0;
     }
 
+    @Override
+    public List<ResOrder> allOrders() {
+        QueryWrapper<ResOrder>queryWrapper=new QueryWrapper<>();
+        return resOrderMapper.selectList(queryWrapper);
+    }
 
 }

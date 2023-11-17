@@ -3,8 +3,8 @@ package com.bs.biz;
 import com.bs.bean.ResOrder;
 import com.bs.bean.ResUser;
 import com.bs.bean.CartItem;
+import java.util.List;
 import java.util.Set;
-
 public interface ResOrderBiz {
      /**
       * 添加订单
@@ -14,6 +14,9 @@ public interface ResOrderBiz {
       * @return
       */
      int Order(ResOrder resOrder, Set<CartItem> cartltemSet, ResUser resUser);
+
+
+     List<ResOrder> allOrders();
 
 
 }

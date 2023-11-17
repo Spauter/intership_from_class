@@ -57,26 +57,7 @@ public class ResFoodController {
         return map;
     }
 
-    @ApiOperation(value = "查看所有菜品")
-    @GetMapping("findAll")
-    public Map<String, Object> findAll() {
-        Map<String, Object> map = new HashMap<>();
-        List<ResFood> list;
-        try {
-            list = resFoodBiz.findAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-            map.put("code", 500);
-            map.put("msg", e.getCause());
-            return map;
-        }
-        for (ResFood resFood : list) {
-            resFood.setFphoto("http://localhost:8888/" + resFood.getFphoto());
-        }
-        map.put("code", 200);
-        map.put("msg", list);
-        return map;
-    }
+
 
     @RequestMapping(value = "findByPage",method = {RequestMethod.GET})
     @ApiOperation(value = "分页查询操作")

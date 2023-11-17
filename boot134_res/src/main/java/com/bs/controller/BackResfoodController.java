@@ -8,13 +8,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,17 +25,39 @@ public class BackResfoodController {
     private FastDFSBiz fastDFSBiz;
     @Autowired
     private ResFoodBiz resFoodBiz;
+
+    @ApiOperation(value = "查看所有菜品")
+    @GetMapping("findAll")
+    public Map<String, Object> findAll() {
+        Map<String, Object> map = new HashMap<>();
+        List<ResFood> list;
+        try {
+            list = resFoodBiz.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("code", 500);
+            map.put("msg", e.getCause());
+            return map;
+        }
+        for (ResFood resFood : list) {
+            resFood.setFphoto("http://localhost:8888/" + resFood.getFphoto());
+        }
+        map.put("code", 200);
+        map.put("msg", list);
+        return map;
+    }
+
     @RequestMapping(value = "addNewFood")
     @ApiOperation(value = "菜谱上架")
-    public Map<String,Object> addNewFood(String fname,
-                                         Double normprice,
-                                         Double realprice,
-                                         String detail,
-                                         MultipartFile fphoto){
+    public Map<String,Object> addNewFood(@RequestParam String fname,
+                                         @RequestParam Double normprice,
+                                         @RequestParam Double realprice,
+                                         @RequestParam String detail,
+                                         @RequestParam MultipartFile fphoto){
         Map<String,Object>map=new HashMap<>();
-        String path=this.fastDFSBiz.upload(fphoto);
         ResFood resFood=new ResFood();
         try{
+            String path=this.fastDFSBiz.upload(fphoto);
             log.info("fname:"+fname);
             resFood.setFname(fname);
             log.info("real:"+realprice);

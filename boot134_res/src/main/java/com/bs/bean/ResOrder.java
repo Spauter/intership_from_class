@@ -18,6 +18,7 @@ import java.util.Date;
 public class ResOrder implements Serializable {
     @TableId(value = "roid",type = IdType.AUTO)
     private Integer roid;
+    @TableField(exist = false)
     private Integer fid;
     private  Integer userid;
     private  String address;
