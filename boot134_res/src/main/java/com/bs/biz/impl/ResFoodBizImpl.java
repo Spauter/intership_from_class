@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@Transactional(readOnly = true)
 @Slf4j
 
 public class ResFoodBizImpl implements ResFoodBiz {
@@ -94,5 +93,10 @@ public class ResFoodBizImpl implements ResFoodBiz {
     @Override
     public List<ResFood> listAllBydesc() {
         return null;
+    }
+
+    @Override
+    public int delete(Integer fid) {
+        return resFoodMapper.deleteById(fid);
     }
 }

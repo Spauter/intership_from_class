@@ -40,7 +40,7 @@ public class ResOrderBizImpl implements ResOrderBiz {
             ResOrderItem resOrderItem=new ResOrderItem();
             resOrderItem.setRoid(resOrder.getRoid());
             resOrderItem.setFid(c.getResFood().getFid());
-            resOrderItem.setDealprice(c.getResFood().getRealprice()*resOrderItem.getNum());
+            resOrderItem.setDealprice(c.getResFood().getRealprice()*c.getNum());
             resOrderItem.setNum(c.getNum());
             this.resOrderItemMapper.insert(resOrderItem);
         }

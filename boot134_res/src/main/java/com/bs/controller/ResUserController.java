@@ -79,7 +79,7 @@ public class ResUserController {
         } catch (Exception e) {
             log.error(e.getMessage());
             map.put("code", 500);
-            map.put("msg", e.getCause());
+            map.put("msg", e.getMessage());
             return map;
         }
         if (resUser == null) {

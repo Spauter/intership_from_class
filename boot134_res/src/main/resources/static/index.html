@@ -318,8 +318,8 @@
                 params.append("address",this.orderInfo.address)
                 params.append("ps",this.orderInfo.ps)
                 params.append("tel",this.orderInfo.tel)
-                params.append("deliverytime",date.now())
-                axios.post("resOrder/confirmOrder").then(res=>{
+                // params.append("deliverytime",this.date.now())
+                axios.post("resOrder/confirmOrder",params).then(res=>{
                     var jsonMOdel=res.data;
                     if(jsonMOdel.code===200){
                         this.cartItemsArray=[];

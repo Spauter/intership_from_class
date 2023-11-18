@@ -105,7 +105,7 @@ public class ResOrderController {
 
     @RequestMapping("confirmOrder")
     @ApiOperation("提交订单")
-    public Map<String,Object>conrimOrder(ResOrder resOrder, HttpSession session, HttpServletRequest request){
+    public Map<String,Object>conrimOrder( HttpSession session, HttpServletRequest request){
         Map<String,Object>map=new HashMap<>();
         Map<Integer,CartItem>cartItemMap= (Map<Integer, CartItem>) session.getAttribute("cart");
         if(cartItemMap==null|| cartItemMap.isEmpty()){
@@ -119,9 +119,16 @@ public class ResOrderController {
             return map;
         }
         ResUser resUser= resUserBiz.findByUID((Integer) session.getAttribute("username"));
+        String address=request.getParameter("address");
+        log.info(address);
+        String tel=request.getParameter("tel");
+        log.info("tel:"+tel);
+        String ps=request.getParameter("ps");
+        ResOrder resOrder=new ResOrder();
         resOrder.setUserid(resUser.getUserid());
-        resOrder.setAddress(request.getParameter("address"));
-        resOrder.setPs(request.getParameter("ps"));
+        resOrder.setAddress(address);
+        resOrder.setPs(ps);
+        resOrder.setTel(tel);
         LocalDateTime now=LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         resOrder.setOrdertime(dateTimeFormatter.format(now));
@@ -131,6 +138,7 @@ public class ResOrderController {
         }
         resOrder.setStatus(0);
         try {
+            log.info(resOrder.toString());
             resOrderBiz.Order(resOrder, new HashSet<>( cartItemMap.values()), resUser);
         }catch (Exception e){
             log.error(e.getMessage());

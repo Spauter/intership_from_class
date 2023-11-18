@@ -17,6 +17,8 @@ public interface ResFoodBiz {
 
     List<ResFood>listAllBydesc();
 
+    int delete(Integer fid);
+
 
 
 

@@ -2,6 +2,7 @@ package com.bs.biz;
 
 
 import com.bs.bean.ResUser;
+import com.bs.excption.BizException;
 
 public interface ResUserBiz {
 
@@ -10,7 +11,7 @@ public interface ResUserBiz {
 
     ResUser findByUID(Integer userid);
 
-    int insert(ResUser resUser);
+    int insert(ResUser resUser) throws BizException;
 
 
 

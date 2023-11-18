@@ -2,8 +2,10 @@ package com.bs.biz.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.bs.bean.ResUser;
 import com.bs.biz.ResUserBiz;
+import com.bs.excption.BizException;
 import com.bs.mapper.ResUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,13 @@ public class ResUserBizImpl implements ResUserBiz {
     }
 
     @Override
-    public int insert(ResUser resUser) {
+    public int insert(ResUser resUser) throws BizException {
+        QueryWrapper<ResUser>queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",resUser.getUsername());
+        ResUser registeredUser= resUserMapper.selectOne(queryWrapper);
+        if(registeredUser!=null){
+            throw new BizException("This user has registered");
+        }
         return resUserMapper.insert(resUser);
     }
 }
