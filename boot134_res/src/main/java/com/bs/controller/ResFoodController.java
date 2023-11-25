@@ -52,6 +52,7 @@ public class ResFoodController {
             map.put("msg", e.getCause());
             return map;
         }
+        resFood.setFphoto("localhost:8888/"+resFood.getFphoto());
         map.put("code", 200);
         map.put("msg", resFood);
         return map;

@@ -116,7 +116,15 @@
                     </el-table-column>
                     <el-table-column prop="detail" label="描述" width="140">
                     </el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column label="操作" width="70">
+                        <template slot-scope="scope">
+                            <el-button
+                                    size="mini"
+                                    @click="showFood(scope.row.fid)">编辑
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="70">
                         <template slot-scope="scope">
                             <el-button
                                     size="mini"
@@ -191,6 +199,48 @@
         </el-container>
 
 
+        <el-drawer
+                title="修改当前菜谱 !"
+                :before-close="handleClose"
+                :visible.sync="dialog"
+                direction="rtl"
+                custom-class="demo-drawer"
+                ref="drawer"
+        >
+            <div class="demo-drawer__content">
+                <el-form ref="formdata" :model="formdata" label-width="80px">
+                    <el-form-item label="新菜名称" prop="name">
+                        <el-input v-model="formdata.fname" placeholder="请输入菜谱名" disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="菜谱描述" prop="detail">
+                        <el-input type="textarea" v-model="formdata.detail" placeholder="请输入菜谱描述"></el-input>
+                    </el-form-item>
+                    <el-form-item label="原价" prop="normal_price" >
+                        <el-input v-model.number="formdata.mormprice" disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="现价" prop="real_price">
+                        <el-input v-model.number="formdata.realprice"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="fphoto">
+                        <el-upload
+                                class="upload-demo"
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :on-preview="handlePreview"
+                                :on-remove="handleRemove"
+                                :file-list= formdata.fphoto
+                                list-type="picture">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                    </el-form-item>
+                </el-form>
+                <div class="demo-drawer__footer">
+                    <el-button @click="cancelForm">取 消</el-button>
+                    <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
+                </div>
+            </div>
+        </el-drawer>
+
     </el-container>
 
 </div>
@@ -205,10 +255,17 @@
         el: '#app',
         data: {
             tableData: [],
+            formdata: {
+                fname: '',
+                mormprice: '',
+                realprice: '',
+                detail: "",
+                fphoto: ""
+            },
             food_rule: {
                 name: '',
-                normal_price: 0,
-                real_price: 0,
+                normal_price: '',
+                real_price: '',
                 detail: "",
             },
             rules: {
@@ -230,8 +287,50 @@
             orderFlag: false,
             orderHistoryFlag: false,
             orderData: [],
+            table: false,
+            dialog: false,
+            loading: false,
+            form: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '80px',
+            timer: null,
         },
         methods: {
+            showFood: function (fid) {
+                axios.get("../resfood/findById/"+fid).then(res => {
+                    this.tableData = res.data.msg.map(item => ({
+                        ...item,
+                        status: false // Initialize 'status' to false for each item
+                    }))
+                })
+            },
+            handleClose(done) {
+                this.$confirm('确定要提交表单吗？')
+                    .then(_ => {
+                        this.loading = true;
+                        this.timer = setTimeout(() => {
+                            done();
+                            // 动画关闭需要一定的时间
+                            setTimeout(() => {
+                                this.loading = false;
+                            }, 400);
+                        }, 2000);
+                    })
+                    .catch(_ => {});
+            },
+            cancelForm() {
+                this.loading = false;
+                this.dialog = false;
+                clearTimeout(this.timer);
+            },
             closeAll: function () {
                 this.addFoodFlag = false;
                 this.putAwayFlag = false;
@@ -348,8 +447,14 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
             }
-        },
+        }
     })
 </script>
 </html>

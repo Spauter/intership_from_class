@@ -79,4 +79,21 @@ public class BackResfoodController {
         map.put("data",resFood);
         return map;
     }
+
+    @RequestMapping("del")
+    @ApiOperation(value = "删除菜谱")
+    public Map<String,Object>delFood(Integer fid){
+        Map<String,Object>map=new HashMap<>();
+        try{
+            resFoodBiz.delete(fid);
+            map.put("code",200);
+            map.put("msg","删除成功");
+        }catch (Exception e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            map.put("code",500);
+            map.put("msg","删除失败");
+        }
+        return map;
+    }
 }
