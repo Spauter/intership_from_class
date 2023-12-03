@@ -1,6 +1,11 @@
-package blo.spau.excel;
+package blo.spau.tool;
+
+import blo.spau.exception.UnsupportedSuffixException;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,15 +25,14 @@ abstract class Tool {
     /**
      * 检查文件后缀名
      * @param file
-     * @param check
      */
-    abstract void Ckeck_suffix(File file, String check);
+    abstract void Ckeck_suffix(File file) throws UnsupportedSuffixException, IOException;
 
     /**
      * 检查文件是否存在
      * @param file
      */
-    abstract void Check_file(File file);
+    abstract void Check_file(File file) throws FileNotFoundException;
 
     /**
      * 打印特殊文字信息
@@ -45,11 +49,6 @@ abstract class Tool {
      */
     abstract void Check_IsDirectory(File file);
 
-    /**
-     *
-     * @param file
-     */
-    abstract void Check_OutputPath(File file);
 
     /**
      * 把list转化二维数组

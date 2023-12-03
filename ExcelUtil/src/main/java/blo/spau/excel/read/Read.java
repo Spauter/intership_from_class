@@ -1,6 +1,9 @@
-package blo.spau.excel;
+package blo.spau.excel.read;
+
 
 import blo.spau.FileReadAndOutPutUtil;
+import blo.spau.exception.UnsupportedSuffixException;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +13,7 @@ import java.util.Map;
 /**
  * @author Bloduc Spauer
  * @version 1.14.514
- * <h1>FileReadAndOutPutUtil</h1>
+ * <h1>blo.spau.excel.FileReadAndOutPutUtil</h1>
  *  <table class="reference notranslate">
  * <tbody><tr><th style="width:30%">头信息</th><th>描述</th></tr>
  * <tr><td>readXlsx</td><td>读取xlsx文档，值<b>String filePath</b>或<b>File</b>是两种常见的值.返回<b>java.util.List</b>。</td></tr>
@@ -19,13 +22,13 @@ import java.util.Map;
  * <tr><td>readLs</td><td>读取xls文档，值<b>filePath</b>或<b>File</b>是两种常见的值. 返回<b>Object[][]</b>。</td></tr>
  * <tr><td>getTitle</td><td>获取表头（标题）。值<b>excel/xlsx</b>或<b>excel/xls</b>是两种常见的值.返回<b>Object[][]</b><p>。不输入任何值则返回当前读取表格的表头(标题）</p></td></tr>
  */
-interface Read extends FileReadAndOutPutUtil {
+public interface Read extends FileReadAndOutPutUtil {
     /**
      * 返回一个包含当前读取表格的表头的数组
      * @return
      * @throws IOException
      */
-    public String[] getTitle() throws IOException;
+    public String[] getTitle() throws IOException, UnsupportedSuffixException;
 
     /**
      * 返回一个包含需要读取文件路径的表头的数组
@@ -33,7 +36,7 @@ interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    public String[] getTitle(String Path) throws IOException;
+    public String[] getTitle(String Path) throws IOException, UnsupportedSuffixException;
 
     /**
      * 返回一个包含需要读取文件的表头的数组
@@ -41,7 +44,7 @@ interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    public String[] getTitle(File file) throws IOException;
+    public String[] getTitle(File file) throws IOException, UnsupportedSuffixException;
 
     /**
      * 返回Map集合里键值，用于获取标题
@@ -61,5 +64,7 @@ interface Read extends FileReadAndOutPutUtil {
      * @return
      */
     public int getMaxCols();
+
+
 
 }
