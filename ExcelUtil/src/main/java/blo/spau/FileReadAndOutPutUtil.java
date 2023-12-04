@@ -13,5 +13,6 @@ package blo.spau;
 public interface FileReadAndOutPutUtil {
     String suffix1 = "xlsx";
     String suffix2 = "xls";
+    String sheetName="Sheet1";
 
 }

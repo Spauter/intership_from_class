@@ -47,7 +47,7 @@ abstract class Tool {
      * 检查文件是否为目录
      * @param file
      */
-    abstract void Check_IsDirectory(File file);
+    abstract void Check_IsDirectory(File file) throws IOException;
 
 
     /**

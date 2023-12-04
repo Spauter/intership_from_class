@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -40,10 +41,6 @@ public class ExcelUtil implements Read, Output {
                     this.titles.put(rol, titleInfo);
                 }
                 Cell info = sheet.getRow(row).getCell(rol);
-                if (titleInfo.isEmpty() || String.valueOf(info).isEmpty()) {
-                    String infos = fileValidation.PrintInfo("WARRING: 存在合并单元格或者空单元格", 31, 0);
-                    System.out.println(infos);
-                }
                 map.put(titleInfo, getCellValue(info));
             }
             list.add(map);
@@ -73,6 +70,7 @@ public class ExcelUtil implements Read, Output {
     }
 
     /**
+     * 处理表格里面的数据
      *
      * @param cell
      * @return
@@ -86,13 +84,13 @@ public class ExcelUtil implements Read, Output {
             case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) { // 处理日期格式、时间格式
                     SimpleDateFormat sdf = null;
-                    if ( DateUtil.isADateFormat(-1,cell.getCellStyle().getDataFormat()+"")){
+                    if (DateUtil.isADateFormat(-1, cell.getCellStyle().getDataFormat() + "")) {
                         sdf = new SimpleDateFormat("yyyy-MM-dd");
                     } else {
                         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     }
                     cellValue = sdf.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
-                } else if("@".equals(cell.getCellStyle().getDataFormatString())) {
+                } else if ("@".equals(cell.getCellStyle().getDataFormatString())) {
                     DecimalFormat df = new DecimalFormat("#");//转换成整型
                     cellValue = df.format(cell.getNumericCellValue());
                 } else {
@@ -122,7 +120,7 @@ public class ExcelUtil implements Read, Output {
         String[] title;
         if (file == null && list != null) {
             if (list.isEmpty()) {
-                String infos = fileValidation.PrintInfo("WARRING: 未成功获取标题信息", 31, 0);
+                String infos = fileValidation.PrintInfo("WARRING: Failed to get title", 31, 0);
                 System.out.println(infos);
             }
             title = new String[titles.size()];
@@ -134,7 +132,7 @@ public class ExcelUtil implements Read, Output {
         assert file != null;
         list = readImpl(file.getAbsolutePath());
         if (list == null || list.isEmpty()) {
-            String infos = fileValidation.PrintInfo("WARRING: 未成功获取标题信息", 31, 0);
+            String infos = fileValidation.PrintInfo("WARRING: Failed to get title", 31, 0);
             System.out.println(infos);
         }
         title = new String[titles.size()];
@@ -148,11 +146,10 @@ public class ExcelUtil implements Read, Output {
         fileValidation.Ckeck_suffix(file);
         fileValidation.conformity(obj, title);
         Workbook wb;
-        if (file.getName().endsWith(".xls")) {
+        if (file.getName().endsWith(suffix2)) {
             wb = new HSSFWorkbook();
         } else {
             wb = new XSSFWorkbook();
-
         }
         Sheet sheet = wb.createSheet(sheetName);
         Row row = sheet.createRow(0);
@@ -171,15 +168,15 @@ public class ExcelUtil implements Read, Output {
         try {
             fileOut = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("无效路径.");
+            throw new FileNotFoundException("Invalid path.");
         }
         try {
             wb.write(fileOut);
             fileOut.close();
         } catch (IOException e) {
-            throw new IOException("导出失败.");
+            throw new IOException("File export failure.");
         }
-        System.out.println("文件导出成功，已保存到" + file.getAbsolutePath());
+        System.out.println("The file is successfully exported and saved to:" + file.getAbsolutePath());
     }
 
     @Override
@@ -200,23 +197,32 @@ public class ExcelUtil implements Read, Output {
         return title;
     }
 
+    @Override
+    public Map<Integer, String> titleMap() {
+       return titles;
+    }
 
-    public List<Map<String, Object>> readToList(String path) throws IOException, UnsupportedSuffixException {
+
+
+    @Override
+    public List<Map<String, Object>> readToList(String path) throws UnsupportedSuffixException, IOException {
         return readImpl(path);
     }
 
 
+    @Override
     public List<Map<String, Object>> readToList(File file) throws IOException, UnsupportedSuffixException {
         return readImpl(file.getAbsolutePath());
     }
 
 
+    @Override
     public Object[][] readToArray(File file) throws IOException, UnsupportedSuffixException {
         list = readImpl(file.getAbsolutePath());
         return fileValidation.conformity(list, titles);
     }
 
-
+    @Override
     public Object[][] readToArray(String Path) throws IOException, UnsupportedSuffixException {
         File file = fileValidation.conformity(Path);
         return readToArray(file);
@@ -228,20 +234,23 @@ public class ExcelUtil implements Read, Output {
         return getTitleImpl(file);
     }
 
-
+    @Override
     public String[] getTitle(String Path) throws IOException, UnsupportedSuffixException {
         File file = fileValidation.conformity(Path);
         return getTitleImpl(file);
     }
 
+    @Override
     public String[] getTitle() throws IOException, UnsupportedSuffixException {
         return getTitleImpl(null);
     }
 
+    @Override
     public int getMaxRows() {
         return maxRow;
     }
 
+    @Override
     public int getMaxCols() {
         return maxCol;
     }
@@ -279,25 +288,25 @@ public class ExcelUtil implements Read, Output {
         File file = fileValidation.conformity(Path);
         String[] title = getTitle(list);
         Object[][] obj = fileValidation.conformity(list, titles);
-        outPutImpl("Sheet1", obj, title, file);
+        outPutImpl(sheetName, obj, title, file);
     }
 
     @Override
     public void outPut(List<Map<String, Object>> list, File file) throws IOException, UnsupportedSuffixException {
         String[] title = getTitle(list);
         Object[][] obj = fileValidation.conformity(list, titles);
-        outPutImpl("Sheet1", obj, title, file);
+        outPutImpl(sheetName, obj, title, file);
     }
 
     @Override
     public void outPut(Object[][] obj, String[] title, String Path) throws IOException, UnsupportedSuffixException {
         File file = fileValidation.conformity(Path);
-        outPutImpl("Sheet1", obj, title, file);
+        outPutImpl(sheetName, obj, title, file);
     }
 
     @Override
     public void outPut(Object[][] obj, String[] title, File file) throws IOException, UnsupportedSuffixException {
-        outPutImpl("Sheet1", obj, title, file);
+        outPutImpl(sheetName, obj, title, file);
 
     }
 }

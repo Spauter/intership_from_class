@@ -3,12 +3,9 @@ package blo.spau.tool;
 
 import blo.spau.FileReadAndOutPutUtil;
 import blo.spau.exception.UnsupportedSuffixException;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,9 +36,9 @@ public class ToolImpl extends Tool implements FileReadAndOutPutUtil {
     }
 
     @Override
-    public void Check_IsDirectory(File file) {
+    public void Check_IsDirectory(File file) throws IOException {
         if (file.isDirectory()) {
-            throw new IllegalArgumentException("The folder cannot be read or written.");
+            throw new IOException("The folder cannot be read or written.");
         }
     }
 
@@ -77,12 +74,12 @@ public class ToolImpl extends Tool implements FileReadAndOutPutUtil {
     @Override
     public List<Map<String, Object>> conformity(Object[][] obj, String[] title) throws IndexOutOfBoundsException, NullPointerException {
         if (obj == null || obj.length == 0 || title == null || title.length == 0) {
-            throw new NullPointerException("无法载入空数据");
+            throw new NullPointerException("Unable to invoke an empty data");
         }
         int lenx = obj[0].length;
         int leny = obj.length;
         if (title.length < lenx) {
-            throw new IndexOutOfBoundsException("标题长度与内容不匹配");
+            throw new IndexOutOfBoundsException("Title length of title does not match the content");
         }
         for (int i = 0; i < leny; i++) {
             Map<String, Object> map = new HashMap<>();
@@ -90,7 +87,7 @@ public class ToolImpl extends Tool implements FileReadAndOutPutUtil {
                 if (j < obj[0].length) {
                     map.put(title[j], obj[i][j]);
                 } else {
-                    System.out.println(PrintInfo("WARRING: 第" + (i + 1) + "行 " + "第" + (j + 1) + "列 数据为空，将用空字符代替", 31, 0));
+                    System.out.println(PrintInfo("WARRING:The data is null and will be replaced with a null character: Row " + (i + 1) + " " + "column " + (j + 1) , 31, 0));
                     map.put(title[j], "");
                 }
             }

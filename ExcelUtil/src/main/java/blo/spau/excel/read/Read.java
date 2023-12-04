@@ -28,7 +28,7 @@ public interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    public String[] getTitle() throws IOException, UnsupportedSuffixException;
+    String[] getTitle() throws IOException, UnsupportedSuffixException;
 
     /**
      * 返回一个包含需要读取文件路径的表头的数组
@@ -36,7 +36,7 @@ public interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    public String[] getTitle(String Path) throws IOException, UnsupportedSuffixException;
+    String[] getTitle(String Path) throws IOException, UnsupportedSuffixException;
 
     /**
      * 返回一个包含需要读取文件的表头的数组
@@ -44,27 +44,42 @@ public interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    public String[] getTitle(File file) throws IOException, UnsupportedSuffixException;
+    String[] getTitle(File file) throws IOException, UnsupportedSuffixException;
 
     /**
      * 返回Map集合里键值，用于获取标题
      * @param list
      * @return
      */
-    public String[] getTitle(List<Map<String, Object>> list);
+    String[] getTitle(List<Map<String, Object>> list);
+
+
+    Map<Integer,String>titleMap();
 
     /**
      * 返回总行数
      * @return
      */
-    public int getMaxRows();
+    int getMaxRows();
 
     /**
      * 返回总列数
      * @return
      */
-    public int getMaxCols();
+    int getMaxCols();
+
+    /**
+     * 返回List
+     * @param path
+     * @return
+     * @throws UnsupportedSuffixException
+     * @throws IOException
+     */
+    List<Map<String,Object>>readToList(String path) throws UnsupportedSuffixException, IOException;
 
 
+    List<Map<String,Object>>readToList(File file) throws UnsupportedSuffixException, IOException;
 
+    Object[][]  readToArray(String path) throws UnsupportedSuffixException, IOException;
+    Object[][]  readToArray(File file) throws UnsupportedSuffixException, IOException;
 }
