@@ -1,7 +1,5 @@
 package blo.spau.tool;
 
-import blo.spau.exception.UnsupportedSuffixException;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +24,7 @@ abstract class Tool {
      * 检查文件后缀名
      * @param file
      */
-    abstract void Ckeck_suffix(File file) throws UnsupportedSuffixException, IOException;
+    abstract void Ckeck_suffix(File file) throws IOException;
 
     /**
      * 检查文件是否存在

@@ -1,8 +1,7 @@
 package blo.spau.tool;
 
 
-import blo.spau.FileReadAndOutPutUtil;
-import blo.spau.exception.UnsupportedSuffixException;
+import blo.spau.FileReadAndOutPutUtil;;
 
 
 import java.io.File;
@@ -20,10 +19,10 @@ public class ToolImpl extends Tool implements FileReadAndOutPutUtil {
     private final List<Map<String, Object>> list = new ArrayList<>();
 
 
-    public void Ckeck_suffix(File file) throws UnsupportedSuffixException, IOException {
+    public void Ckeck_suffix(File file) throws  IOException {
         String suffix = file.getName().split("\\.")[1];
         if (!(suffix.equals(suffix1) || (suffix.equals(suffix2)))) {
-            throw new UnsupportedSuffixException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a '" + suffix + "' file");
+            throw new IllegalArgumentException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a '" + suffix + "' file");
         }
 
     }
