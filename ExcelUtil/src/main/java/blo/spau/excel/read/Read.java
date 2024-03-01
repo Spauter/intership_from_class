@@ -2,9 +2,6 @@ package blo.spau.excel.read;
 
 
 import blo.spau.FileReadAndOutPutUtil;
-import blo.spau.exception.UnsupportedSuffixException;
-import org.apache.poi.ss.formula.functions.T;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +25,7 @@ public interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    String[] getTitle() throws IOException, UnsupportedSuffixException;
+    String[] getTitle() throws IOException;
 
     /**
      * 返回一个包含需要读取文件路径的表头的数组
@@ -36,7 +33,7 @@ public interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    String[] getTitle(String Path) throws IOException, UnsupportedSuffixException;
+    String[] getTitle(String Path) throws IOException;
 
     /**
      * 返回一个包含需要读取文件的表头的数组
@@ -44,7 +41,7 @@ public interface Read extends FileReadAndOutPutUtil {
      * @return
      * @throws IOException
      */
-    String[] getTitle(File file) throws IOException, UnsupportedSuffixException;
+    String[] getTitle(File file) throws IOException;
 
     /**
      * 返回Map集合里键值，用于获取标题
@@ -72,14 +69,14 @@ public interface Read extends FileReadAndOutPutUtil {
      * 返回List
      * @param path
      * @return
-     * @throws UnsupportedSuffixException
+     * @throws
      * @throws IOException
      */
-    List<Map<String,Object>>readToList(String path) throws UnsupportedSuffixException, IOException;
+    List<Map<String,Object>>readToList(String path) throws IOException;
 
 
-    List<Map<String,Object>>readToList(File file) throws UnsupportedSuffixException, IOException;
+    List<Map<String,Object>>readToList(File file) throws IOException;
 
-    Object[][]  readToArray(String path) throws UnsupportedSuffixException, IOException;
-    Object[][]  readToArray(File file) throws UnsupportedSuffixException, IOException;
+    Object[][]  readToArray(String path) throws  IOException;
+    Object[][]  readToArray(File file) throws  IOException;
 }
