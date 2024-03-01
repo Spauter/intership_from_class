@@ -1,7 +1,6 @@
 package blo.spau.excel;
 
 import blo.spau.excel.read.Read;
-import blo.spau.exception.UnsupportedSuffixException;
 import blo.spau.tool.ToolImpl;
 import blo.spau.excel.output.Output;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,7 +26,7 @@ public class ExcelUtil implements Read, Output {
     private int maxRow = 0;
     private int maxCol = 0;
 
-    private List<Map<String, Object>> readImpl(String file) throws IOException, UnsupportedSuffixException {
+    private List<Map<String, Object>> readImpl(String file) throws IOException {
         Sheet sheet = getSheet(file);
         // 获取最后一行的num，即总行数。此处从0开始
         this.maxRow = sheet.getLastRowNum();
@@ -52,7 +51,7 @@ public class ExcelUtil implements Read, Output {
         return list;
     }
 
-    private static Sheet getSheet(String file) throws IOException, UnsupportedSuffixException {
+    private static Sheet getSheet(String file) throws IOException {
         String suffix = file.split("\\.")[1];
         Workbook workbook;
         Sheet sheet;
@@ -61,7 +60,7 @@ public class ExcelUtil implements Read, Output {
         } else if (suffix.equals(suffix2)) {
             workbook = new HSSFWorkbook(new FileInputStream(file));
         } else {
-            throw new UnsupportedSuffixException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a '" + suffix + "' file");
+            throw new IllegalArgumentException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a '" + suffix + "' file");
         }
         // 创建工作簿对象
         // 获取工作簿下sheet的个数
@@ -116,7 +115,7 @@ public class ExcelUtil implements Read, Output {
     }
 
 
-    private String[] getTitleImpl(File file) throws IOException, UnsupportedSuffixException {
+    private String[] getTitleImpl(File file) throws IOException {
         String[] title;
         if (file == null && list != null) {
             if (list.isEmpty()) {
@@ -142,7 +141,7 @@ public class ExcelUtil implements Read, Output {
         return title;
     }
 
-    private void outPutImpl(String sheetName, Object[][] obj, String[] title, File file) throws IOException, UnsupportedSuffixException {
+    private void outPutImpl(String sheetName, Object[][] obj, String[] title, File file) throws IOException {
         fileValidation.Ckeck_suffix(file);
         fileValidation.conformity(obj, title);
         Workbook wb;
@@ -161,7 +160,11 @@ public class ExcelUtil implements Read, Output {
         for (int i = 0; i < obj.length; i++) {
             row = sheet.createRow(i + 1);
             for (int j = 0; j < obj[i].length; j++) {
-                row.createCell(j).setCellValue(obj[i][j].toString());
+                if (obj[i][j]==null){
+                    row.createCell(j).setCellValue("");
+                }else {
+                    row.createCell(j).setCellValue(obj[i][j].toString());
+                }
             }
         }
         FileOutputStream fileOut;
@@ -205,43 +208,43 @@ public class ExcelUtil implements Read, Output {
 
 
     @Override
-    public List<Map<String, Object>> readToList(String path) throws UnsupportedSuffixException, IOException {
+    public List<Map<String, Object>> readToList(String path) throws  IOException {
         return readImpl(path);
     }
 
 
     @Override
-    public List<Map<String, Object>> readToList(File file) throws IOException, UnsupportedSuffixException {
+    public List<Map<String, Object>> readToList(File file) throws IOException {
         return readImpl(file.getAbsolutePath());
     }
 
 
     @Override
-    public Object[][] readToArray(File file) throws IOException, UnsupportedSuffixException {
+    public Object[][] readToArray(File file) throws IOException {
         list = readImpl(file.getAbsolutePath());
         return fileValidation.conformity(list, titles);
     }
 
     @Override
-    public Object[][] readToArray(String Path) throws IOException, UnsupportedSuffixException {
+    public Object[][] readToArray(String Path) throws IOException {
         File file = fileValidation.conformity(Path);
         return readToArray(file);
     }
 
 
     @Override
-    public String[] getTitle(File file) throws IOException, UnsupportedSuffixException {
+    public String[] getTitle(File file) throws IOException {
         return getTitleImpl(file);
     }
 
     @Override
-    public String[] getTitle(String Path) throws IOException, UnsupportedSuffixException {
+    public String[] getTitle(String Path) throws IOException {
         File file = fileValidation.conformity(Path);
         return getTitleImpl(file);
     }
 
     @Override
-    public String[] getTitle() throws IOException, UnsupportedSuffixException {
+    public String[] getTitle() throws IOException {
         return getTitleImpl(null);
     }
 
@@ -257,34 +260,19 @@ public class ExcelUtil implements Read, Output {
 
 
     @Override
-    public void outPut(String sheetName, Object[][] obj, String[] title, File file) throws IOException, UnsupportedSuffixException {
+    public void outPut(String sheetName, Object[][] obj, String[] title, File file) throws IOException {
         outPutImpl(sheetName, obj, title, file);
     }
 
     @Override
-    public void outPut(String sheetName, Object[][] obj, String[] title, String Path) throws IOException, UnsupportedSuffixException {
+    public void outPut(String sheetName, Object[][] obj, String[] title, String Path) throws IOException {
         File file = fileValidation.conformity(Path);
         outPutImpl(sheetName, obj, title, file);
     }
 
 
     @Override
-    public void outPut(String sheetName, List<Map<String, Object>> list, String Path) throws IOException, UnsupportedSuffixException {
-        File file = fileValidation.conformity(Path);
-        String[] title = getTitle(list);
-        Object[][] obj = fileValidation.conformity(list, titles);
-        outPutImpl(sheetName, obj, title, file);
-    }
-
-    @Override
-    public void outPut(String sheetName, List<Map<String, Object>> list, File file) throws IOException, UnsupportedSuffixException {
-        String[] title = getTitle(list);
-        Object[][] obj = fileValidation.conformity(list, titles);
-        outPutImpl(sheetName, obj, title, file);
-    }
-
-    @Override
-    public void outPut(List<Map<String, Object>> list, String Path) throws IOException, UnsupportedSuffixException {
+    public void outPut(String sheetName, List<Map<String, Object>> list, String Path) throws IOException {
         File file = fileValidation.conformity(Path);
         String[] title = getTitle(list);
         Object[][] obj = fileValidation.conformity(list, titles);
@@ -292,20 +280,35 @@ public class ExcelUtil implements Read, Output {
     }
 
     @Override
-    public void outPut(List<Map<String, Object>> list, File file) throws IOException, UnsupportedSuffixException {
+    public void outPut(String sheetName, List<Map<String, Object>> list, File file) throws IOException {
         String[] title = getTitle(list);
         Object[][] obj = fileValidation.conformity(list, titles);
         outPutImpl(sheetName, obj, title, file);
     }
 
     @Override
-    public void outPut(Object[][] obj, String[] title, String Path) throws IOException, UnsupportedSuffixException {
+    public void outPut(List<Map<String, Object>> list, String Path) throws IOException {
+        File file = fileValidation.conformity(Path);
+        String[] title = getTitle(list);
+        Object[][] obj = fileValidation.conformity(list, titles);
+        outPutImpl(sheetName, obj, title, file);
+    }
+
+    @Override
+    public void outPut(List<Map<String, Object>> list, File file) throws IOException {
+        String[] title = getTitle(list);
+        Object[][] obj = fileValidation.conformity(list, titles);
+        outPutImpl(sheetName, obj, title, file);
+    }
+
+    @Override
+    public void outPut(Object[][] obj, String[] title, String Path) throws IOException {
         File file = fileValidation.conformity(Path);
         outPutImpl(sheetName, obj, title, file);
     }
 
     @Override
-    public void outPut(Object[][] obj, String[] title, File file) throws IOException, UnsupportedSuffixException {
+    public void outPut(Object[][] obj, String[] title, File file) throws IOException {
         outPutImpl(sheetName, obj, title, file);
 
     }

@@ -3,7 +3,6 @@ package blo.spau.excel.output;
 
 
 import blo.spau.FileReadAndOutPutUtil;
-import blo.spau.exception.UnsupportedSuffixException;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param Path
      * @throws IOException
      */
-    void outPut(String sheetName, Object[][] obj, String[] title, String Path) throws IOException, UnsupportedSuffixException;
+    void outPut(String sheetName, Object[][] obj, String[] title, String Path) throws IOException;
 
 
     /**
@@ -39,7 +38,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param file
      * @throws IOException
      */
-    void outPut(String sheetName, Object[][] obj, String[] title, File file) throws IOException, UnsupportedSuffixException;
+    void outPut(String sheetName, Object[][] obj, String[] title, File file) throws IOException;
 
     /**
      *
@@ -48,7 +47,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param Path
      * @throws IOException
      */
-    void outPut(String sheetName, List<Map<String, Object>> list, String Path) throws IOException, UnsupportedSuffixException;
+    void outPut(String sheetName, List<Map<String, Object>> list, String Path) throws IOException;
 
     /**
      *
@@ -57,7 +56,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param file
      * @throws IOException
      */
-    void outPut(String sheetName, List<Map<String, Object>> list, File file) throws IOException, UnsupportedSuffixException;
+    void outPut(String sheetName, List<Map<String, Object>> list, File file) throws IOException;
 
     /**
      *
@@ -65,7 +64,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param Path
      * @throws IOException
      */
-    void outPut(List<Map<String, Object>> list, String Path) throws IOException, UnsupportedSuffixException;
+    void outPut(List<Map<String, Object>> list, String Path) throws IOException;
 
     /**
      *
@@ -73,7 +72,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param file
      * @throws IOException
      */
-    void outPut(List<Map<String, Object>> list, File file) throws IOException, UnsupportedSuffixException;
+    void outPut(List<Map<String, Object>> list, File file) throws IOException;
 
     /**
      *
@@ -82,7 +81,7 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param Path
      * @throws IOException
      */
-    void outPut(Object[][] obj, String[] title, String Path) throws IOException, UnsupportedSuffixException;
+    void outPut(Object[][] obj, String[] title, String Path) throws IOException;
 
     /**
      *
@@ -91,5 +90,5 @@ public interface Output extends FileReadAndOutPutUtil {
      * @param file
      * @throws IOException
      */
-    void outPut(Object[][] obj, String[] title, File file) throws IOException, UnsupportedSuffixException;
+    void outPut(Object[][] obj, String[] title, File file) throws IOException;
 }
