@@ -1,5 +1,7 @@
 package score.UI;
 
+import score.Check.DataValidation;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -25,7 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import score.Check.*;
+
 
 /**
  * 以下是关于数据结构的代码实现部分，用Ctrl+鼠标左键跳转
@@ -37,7 +39,7 @@ import score.Check.*;
  * <P/>
  * 查找功能
  * <P/>
- * 对分查找{@link #Binary()}，顺序查找{@link #Sequential(String)}.
+ * 对分查找 ，顺序查找{@link #Sequential(String)}.
  * <P/>
  * ctrl+Q返回上次光标位置
  * 
@@ -67,7 +69,7 @@ public class InitialPage extends Students {
 	/**
 	 * 初始菜单 五个功能 分别是文件，编辑，统计，排序，帮助
 	 * <p/>
-	 * 其它窗口 {@link #createAddPageFromFile()},{@link #createAddPageFromThis()}.
+	 * 其它窗口 ,{@link #createAddPageFromThis()}.
 	 * 
 	 * @author Blodc_Spauter
 	 * @return show the functions(void)

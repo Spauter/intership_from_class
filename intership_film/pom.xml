@@ -100,23 +100,19 @@
       <artifactId>poi-ooxml</artifactId>
       <version>3.17</version>
     </dependency>
-
-
-
     <dependency>
       <groupId>com.yc</groupId>
       <artifactId>A</artifactId>
       <version>1.0</version>
       <scope>system</scope>
-      <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ly-common.jar</systemPath>
+      <systemPath>${basedir}/src/main/resources/libs/ly-common.jar</systemPath>
     </dependency>
-
     <dependency>
       <groupId>com.yc</groupId>
       <artifactId>B</artifactId>
       <version>1.0</version>
       <scope>system</scope>
-      <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ly-common-sources.jar</systemPath>
+      <systemPath>${basedir}/src/main/resources/libs/ly-common-sources.jar</systemPath>
     </dependency>
   </dependencies>
 </project>

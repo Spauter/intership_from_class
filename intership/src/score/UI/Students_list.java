@@ -14,7 +14,7 @@ interface Students_list {
 	 * 
 	 * @param node
 	 */
-	public void listadd(Students node);
+	public void listadd(score.UI.Students node);
 
 	/** Print linked list */
 	public void printList();

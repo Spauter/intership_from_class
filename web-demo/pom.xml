@@ -54,15 +54,15 @@
             <artifactId>jdbc</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/lib/jdbc.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/lib/jdbc.jar</systemPath>
         </dependency>
 
         <dependency>
-            <groupId>cblo.spau</groupId>
-            <artifactId>Excel</artifactId>
+            <groupId>com.bloducspauter</groupId>
+            <artifactId>Util</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/lib/ExcelUtil.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/lib/Util-1.145.14.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -70,7 +70,7 @@
             <artifactId>A</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ly-common.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/lib/ly-common.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -78,7 +78,7 @@
             <artifactId>B</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ly-common-sources.jar</systemPath>
+            <systemPath>${basedir}/src/main/resources/lib/ly-common-sources.jar</systemPath>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
