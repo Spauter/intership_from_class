@@ -15,7 +15,7 @@ public class TomcatImpl implements Tomcat {
     public static String webRoot;
 
     public static void main(String[] args) {
-        new TomcatImpl().start(80,"D:\\spouter\\JAVA\\IDEA\\web-demo\\src\\main\\webapp");
+        new TomcatImpl().start(80,"D:\\spouter\\JAVA\\Github\\intership_from_class\\web-demo\\src\\main");
     }
 
     @Override
@@ -29,7 +29,6 @@ public class TomcatImpl implements Tomcat {
                 HttpServletRequest request = buildRequest(socket);
                 final HttpServletResponse response = buildResponse(socket,request);
                 if (isServletRequest(request)) {
-
                     processServletRequest(request, response);
                 }else if (isStaticRequest(request)){
                     processServletRequest(request, response);
@@ -75,7 +74,8 @@ public class TomcatImpl implements Tomcat {
                 LoginServlet.class,
                 SessionServlet.class,
                 LoginoutServlet.class,
-                MyLikeServel.class
+                MyLikeServel.class,
+                ErrorServlet.class
         };
         for (Class aClass : servlets){
             try {
@@ -106,7 +106,6 @@ public class TomcatImpl implements Tomcat {
     @Override
     public void processServletRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         final HttpServlet httpServlet = servletMap.get(request.getRequestURI());
-
         httpServlet.service(request,response);
         response.flushBuffer();
     }

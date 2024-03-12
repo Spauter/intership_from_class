@@ -1,5 +1,6 @@
 package blo.spau.excel;
 
+import blo.spau.excel.bean.Basic;
 import blo.spau.excel.read.Read;
 import blo.spau.tool.ToolImpl;
 import blo.spau.excel.output.Output;
@@ -21,10 +22,11 @@ public class ExcelUtil implements Read, Output {
 
     private final Map<Integer, String> titles = new HashMap<>();
     private List<Map<String, Object>> list = new ArrayList<>();
-    ToolImpl fileValidation = new ToolImpl();
-
+    static ToolImpl fileValidation = new ToolImpl();
+    Basic basic = new Basic();
     private int maxRow = 0;
     private int maxCol = 0;
+
 
     private List<Map<String, Object>> readImpl(String file) throws IOException {
         Sheet sheet = getSheet(file);
@@ -52,15 +54,14 @@ public class ExcelUtil implements Read, Output {
     }
 
     private static Sheet getSheet(String file) throws IOException {
+        fileValidation.Ckeck_suffix(file);
         String suffix = file.split("\\.")[1];
         Workbook workbook;
         Sheet sheet;
         if (suffix.equals(suffix1)) {
             workbook = new XSSFWorkbook(new FileInputStream(file));
-        } else if (suffix.equals(suffix2)) {
-            workbook = new HSSFWorkbook(new FileInputStream(file));
         } else {
-            throw new IllegalArgumentException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a '" + suffix + "' file");
+            workbook = new HSSFWorkbook(new FileInputStream(file));
         }
         // 创建工作簿对象
         // 获取工作簿下sheet的个数
@@ -74,7 +75,7 @@ public class ExcelUtil implements Read, Output {
      * @param cell
      * @return
      */
-    private static String getCellValue(Cell cell) {
+    private String getCellValue(Cell cell) {
         String cellValue = "";
         if (cell == null) {
             return "";
@@ -84,11 +85,11 @@ public class ExcelUtil implements Read, Output {
                 if (DateUtil.isCellDateFormatted(cell)) { // 处理日期格式、时间格式
                     SimpleDateFormat sdf = null;
                     if (DateUtil.isADateFormat(-1, cell.getCellStyle().getDataFormat() + "")) {
-                        sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    } else {
-                        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        sdf = new SimpleDateFormat(basic.getDateformat());
                     }
-                    cellValue = sdf.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
+                    if (sdf != null) {
+                        cellValue = sdf.format(DateUtil.getJavaDate(cell.getNumericCellValue()));
+                    }
                 } else if ("@".equals(cell.getCellStyle().getDataFormatString())) {
                     DecimalFormat df = new DecimalFormat("#");//转换成整型
                     cellValue = df.format(cell.getNumericCellValue());
@@ -160,9 +161,9 @@ public class ExcelUtil implements Read, Output {
         for (int i = 0; i < obj.length; i++) {
             row = sheet.createRow(i + 1);
             for (int j = 0; j < obj[i].length; j++) {
-                if (obj[i][j]==null){
+                if (obj[i][j] == null) {
                     row.createCell(j).setCellValue("");
-                }else {
+                } else {
                     row.createCell(j).setCellValue(obj[i][j].toString());
                 }
             }
@@ -171,7 +172,7 @@ public class ExcelUtil implements Read, Output {
         try {
             fileOut = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("Invalid path.");
+            throw new FileNotFoundException("Invalid path:" + file.getAbsolutePath());
         }
         try {
             wb.write(fileOut);
@@ -202,13 +203,12 @@ public class ExcelUtil implements Read, Output {
 
     @Override
     public Map<Integer, String> titleMap() {
-       return titles;
+        return titles;
     }
 
 
-
     @Override
-    public List<Map<String, Object>> readToList(String path) throws  IOException {
+    public List<Map<String, Object>> readToList(String path) throws IOException {
         return readImpl(path);
     }
 

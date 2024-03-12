@@ -19,14 +19,21 @@ public class ToolImpl extends Tool implements FileReadAndOutPutUtil {
     private final List<Map<String, Object>> list = new ArrayList<>();
 
 
-    public void Ckeck_suffix(File file) throws  IOException {
-        String suffix = file.getName().split("\\.")[1];
+    public void Ckeck_suffix(File file) {
+        String[] fileAndSuffix=file.getName().split("\\.");
+        if (fileAndSuffix.length<2){
+            throw new IllegalArgumentException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a Unknown suffix file");
+        }
+        String suffix = fileAndSuffix[1];
         if (!(suffix.equals(suffix1) || (suffix.equals(suffix2)))) {
             throw new IllegalArgumentException("Unsupported suffix.We need 'xls' or 'xlsx' file,but you provide a '" + suffix + "' file");
         }
 
     }
-
+    public void Ckeck_suffix(String path) {
+    File file=new File(path);
+        Ckeck_suffix(file);
+    }
     @Override
     public void Check_file(File file) throws FileNotFoundException {
         if (!file.exists()) {

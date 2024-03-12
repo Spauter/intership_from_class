@@ -1,7 +1,7 @@
 package com.yc.demo.作业;
 
 
-import blo.spau.excel.ExcelUtil;
+//import blo.spau.excel.ExcelUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -39,9 +39,10 @@ public class SpiderHomework {
         }
         List<Map<String,Object>>list=new ArrayList<>();
         list.addAll(set);
-        ExcelUtil util=new ExcelUtil();
-        File file=new File(System.getenv("TEMP")+"\\1.xlsx");
-        util.outPut(list,file);
+        System.out.println(list.size());
+//        ExcelUtil util=new ExcelUtil();
+//        File file=new File(System.getenv("TEMP")+"\\1.xlsx");
+//        util.outPut(list,file);
 
     }
 

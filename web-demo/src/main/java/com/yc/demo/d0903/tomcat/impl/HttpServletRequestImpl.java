@@ -21,9 +21,9 @@ public class HttpServletRequestImpl implements HttpServletRequest {
     private Socket socket;
     private Map<String, String> parameterMap = new HashMap<>();
 
-    List<Map<String,String>>parameterMaps=new ArrayList<>();
+    List<Map<String, String>> parameterMaps = new ArrayList<>();
 
-    private String characterEncoding="utf-8";
+    private String characterEncoding = "utf-8";
 
     public HttpServletRequestImpl(Socket socket) {
         this.socket = socket;
@@ -37,7 +37,7 @@ public class HttpServletRequestImpl implements HttpServletRequest {
                 System.out.println("-----------" + line);
                 if (k == 0) {
                     final String[] items = line.split(" ");
-                    if(items.length!=3){
+                    if (items.length != 3) {
                         break;
                     }
                     this.method = items[0];
@@ -84,6 +84,10 @@ public class HttpServletRequestImpl implements HttpServletRequest {
 //                    }
 //                }
             }
+
+            if (requestURI == null) {
+                requestURI="error.s";
+            }
             if (requestURI.contains("?")) {
                 final int i = requestURI.indexOf("?");
                 final int j = requestURI.indexOf("#");
@@ -106,7 +110,7 @@ public class HttpServletRequestImpl implements HttpServletRequest {
         char c;
         while (true) {
             c = (char) in.read();
-            if (c>255){
+            if (c > 255) {
                 break;
             }
             if (c == '\r') {
@@ -125,13 +129,13 @@ public class HttpServletRequestImpl implements HttpServletRequest {
 //            重复的关键字会覆盖
 //            如果new 一个 parameterMaps 会重置该值，并影响 getParameter()
 //            就重新定义一个map,并加入到list里面
-            Map<String,String>map=new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             final String[] items = paramStr.split("=");
-             if (items.length > 1) {
+            if (items.length > 1) {
                 parameterMap.put(items[0], items[1]);
-                map.put(items[0],items[1]);
+                map.put(items[0], items[1]);
             }
-             parameterMaps.add(map);
+            parameterMaps.add(map);
         }
     }
 
@@ -227,9 +231,9 @@ public class HttpServletRequestImpl implements HttpServletRequest {
         if (characterEncoding != null) {
             try {
                 value = URLDecoder.decode(value, characterEncoding);
-            } catch (UnsupportedEncodingException e) {
-
-                throw new RuntimeException("参数解码错误!", e);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "error";
             }
         }
         return value;
@@ -237,20 +241,20 @@ public class HttpServletRequestImpl implements HttpServletRequest {
 
     @Override
     public String[] getParameterValues(String name) {
-        String[] values=new String[parameterMaps.size()];
-       for (int index=0;index< parameterMaps.size();index++) {
-          String value=parameterMaps.get(index).get(name);
-           if (characterEncoding != null) {
-               try {
-                   value = URLDecoder.decode(value, characterEncoding);
-               } catch (UnsupportedEncodingException e) {
-                   throw new RuntimeException("参数解码错误!", e);
-               }finally {
-                   values[index]=value;
-               }
-           }
-       }
-       return values;
+        String[] values = new String[parameterMaps.size()];
+        for (int index = 0; index < parameterMaps.size(); index++) {
+            String value = parameterMaps.get(index).get(name);
+            if (characterEncoding != null) {
+                try {
+                    value = URLDecoder.decode(value, characterEncoding);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException("参数解码错误!", e);
+                } finally {
+                    values[index] = value;
+                }
+            }
+        }
+        return values;
     }
 
     @Override
@@ -259,25 +263,25 @@ public class HttpServletRequestImpl implements HttpServletRequest {
     }
 
 
-
     private static Map<String, HttpSession> sessionMap = new ConcurrentHashMap<>();
+
     static {
-        Timer timer=new Timer();
+        Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Iterator<Map.Entry<String,HttpSession>>iterator=sessionMap.entrySet().iterator();
-                while (iterator.hasNext()){
-                    final Map.Entry<String,HttpSession>next=iterator.next();
-                    final HttpSession session=next.getValue();
-                    long time=System.currentTimeMillis()-session.getLastAccessedTime();
-                    if(time>session.getMaxInactiveInterval()*1000*60){
-                        System.out.println("会话自动失效："+next.getKey());
+                Iterator<Map.Entry<String, HttpSession>> iterator = sessionMap.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    final Map.Entry<String, HttpSession> next = iterator.next();
+                    final HttpSession session = next.getValue();
+                    long time = System.currentTimeMillis() - session.getLastAccessedTime();
+                    if (time > session.getMaxInactiveInterval() * 1000 * 60) {
+                        System.out.println("会话自动失效：" + next.getKey());
                         iterator.remove();
                     }
                 }
             }
-        },0,1000);
+        }, 0, 1000);
     }
 
 
