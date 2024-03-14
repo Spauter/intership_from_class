@@ -121,7 +121,7 @@ public class DataValidation extends Check_information {
 	 * This method is only to check whether you input is empty.
 	 */
 	public boolean Check_name(String name) {
-		if (name == null || name.length() == 0) {
+		if (name == null || name.isEmpty()) {
 			return false;
 		}
 		return true;
@@ -133,7 +133,7 @@ public class DataValidation extends Check_information {
 	 * the score is between 0 and 100; so this score must be not out of range.
 	 */
 	public boolean Check_score(String score) {
-		if (score == null || score.length() == 0) {
+		if (score == null || score.isEmpty()) {
 			return false;
 		} else {
 			try {
