@@ -10,6 +10,7 @@ target/
 *.iml
 *.ipr
 /logs
+*.log
 
 
 ### Eclipse ###
@@ -20,7 +21,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
-*/bin
+*.class
 
 ### NetBeans ###
 /nbproject/private/
