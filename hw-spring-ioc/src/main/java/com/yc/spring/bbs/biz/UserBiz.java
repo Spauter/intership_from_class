@@ -11,7 +11,7 @@ public class UserBiz {
 		uDao.insert(user);
 	}
 
-	public void modify(User user) {
+	public void modify(User user) throws InterruptedException {
 		uDao.update(user);
 	}
 

@@ -11,7 +11,7 @@ public interface BaseDao<T> {
 
 	void insert(T t);
 
-	void update(T t);
+	void update(T t) throws InterruptedException;
 
 	void delete(T t);
 	
