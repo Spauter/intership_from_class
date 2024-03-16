@@ -47,7 +47,7 @@ public class MovieBiz {
     }
 
     public static void main(String[] args) throws IOException {
-        new MovieBiz().save("D:\\spouter\\JAVA\\IDEA\\intership_film\\src\\main\\resources\\1.xlsx");
+//        new MovieBiz().save("D:\\spouter\\JAVA\\IDEA\\intership_film\\src\\main\\resources\\1.xlsx");
     }
 
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import java.lang.reflect.Method;
 @Data
 public class BeanDefinition {
+    private String id;
     private String className;
     private boolean primary;
     private boolean lazyInit;
