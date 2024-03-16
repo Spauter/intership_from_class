@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/hw-spring-ioc/pom.xml" />
+        <option value="$PROJECT_DIR$/intership_film/pom.xml" />
+        <option value="$PROJECT_DIR$/mybaties/pom.xml" />
+        <option value="$PROJECT_DIR$/sp_redis_session/pom.xml" />
+        <option value="$PROJECT_DIR$/web-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/boot134_res/pom.xml" />
+        <option value="$PROJECT_DIR$/boot_134/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

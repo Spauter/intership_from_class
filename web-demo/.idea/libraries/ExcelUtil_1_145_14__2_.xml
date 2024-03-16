@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="ExcelUtil-1.145.14 (2)">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/ExcelUtil-1.145.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../ExcelUtil/src/main/java" />
+      <root url="file://$PROJECT_DIR$/../../ExcelUtil/untitled/src/main/java" />
+    </SOURCES>
+  </library>
+</component>

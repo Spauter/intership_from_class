@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--    使用构造方法-->
+    <bean id="user1" class="com.yc.cinema.bean.User">
+        <property name="username" value="张三"/>
+        <property name="id" value="1"/>
+        <property name="password" value="123"/>
+        <property name="email" value="123@qq.com"/>
+        <property name="headImg" value="1.png"/>
+        <property name="phone" value="12345678900"/>
+        <property name="status" value="1"/>
+        <property name="regtime" value="2022/01/23"/>
+    </bean>
+    <!--    使用set方法-->
+    <bean id="user2" class="com.yc.cinema.bean.User">
+        <property name="email" value="234@qq.com"/>
+        <property name="headImg" value="2.png"/>
+        <property name="id" value="2"/>
+        <property name="password" value="234"/>
+        <property name="phone" value="110"/>
+        <property name="regtime" value="2024/03/12"/>
+        <property name="status" value="1"/>
+        <property name="username" value="李四"/>
+    </bean>
+
+    <bean id="user3" class="com.yc.cinema.bean.User">
+        <property name="username" value="张三"/>
+        <property name="id" value="1"/>
+        <property name="password" value="123"/>
+        <property name="email" value="123@qq.com"/>
+        <property name="headImg" value="1.png"/>
+        <property name="phone" value="12345678900"/>
+        <property name="status" value="1"/>
+        <property name="regtime" value="2022/01/23"/>
+    </bean>
+</beans>

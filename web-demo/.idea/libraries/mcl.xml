@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mcl">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/mcl.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

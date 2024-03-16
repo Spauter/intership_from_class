@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Util-1.145.14">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/web-demo/src/main/resources/lib/Util-1.145.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../ExcelUtil/src/main/java" />
+    </SOURCES>
+  </library>
+</component>
