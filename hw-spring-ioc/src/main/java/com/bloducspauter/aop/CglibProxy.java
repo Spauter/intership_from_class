@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 
 // CGLIB 动态字节码 基于继承方式 不要求被代理类实现接口
 public class CglibProxy {
-    public static Object proxy(Object target) {
+    public Object proxy(Object target) {
         Enhancer enhancer = new Enhancer();
 //        设置父类
         enhancer.setSuperclass(target.getClass());
@@ -23,13 +23,11 @@ public class CglibProxy {
              * @param method 方法
              * @param objects 参数
              * @param methodProxy 代理方法
-             * @return
-             * @throws Throwable
              */
             @Override
             public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-                Object object=methodProxy.invoke(target, objects);
-                System.out.println("后置拦截："+object);
+                Object object = methodProxy.invoke(target, objects);
+                System.out.println("后置拦截：" + object);
                 return object;
             }
         });
@@ -39,11 +37,13 @@ public class CglibProxy {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        CglibProxy cglibProxy = new CglibProxy();
         UserDao userDao = new UserDaoImpl();
-        UserDao userDaoProxy = (UserDao) proxy(userDao);
+        cglibProxy.proxy(userDao);
         userDao.update(null);
         UserBiz userBiz = new UserBiz();
-        UserBiz userBizProxy= (UserBiz) proxy(userBiz);
+        UserBiz userBizProxy = (UserBiz) cglibProxy.proxy(userBiz);
+//        Throwing NullPointerException
         userBizProxy.modify(null);
     }
 }

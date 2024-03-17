@@ -64,9 +64,13 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
         proxyMap.forEach((id, bean) -> {
             Class<?>[] interfaces = bean.getClass().getInterfaces();
             if (interfaces.length == 0) {
-                //TODO CGLIB代理
+//                CGLib动态代理
+                CglibProxy cglibProxy=new CglibProxy();
+                cglibProxy.proxy(bean);
             } else {
 //                jdk 动态代理
+                JdkProxy jdkProxy = new JdkProxy();
+                jdkProxy.proxy(bean);
             }
         });
     }

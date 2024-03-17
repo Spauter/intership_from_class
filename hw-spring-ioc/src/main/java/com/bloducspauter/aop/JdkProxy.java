@@ -9,7 +9,7 @@ import java.lang.reflect.Proxy;
 
 //java提供的代理方式,基于接口方法实现，被代理类必须实现接口
 public class JdkProxy {
-    public static Object proxy(Object bean) {
+    public Object proxy(Object bean) {
         Proxy.newProxyInstance(
 //                类加载器
                 bean.getClass().getClassLoader(),
@@ -34,25 +34,22 @@ public class JdkProxy {
                      * appropriate primitive wrapper class, such as
                      * {@code java.lang.Integer} or {@code java.lang.Boolean}.（传入的方法参数）
                      *
-                     * @return
-                     * @throws Throwable
                      */
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                        System.out.println("前置增强,方法签名为:"+method);
+                        System.out.println("前置增强,方法签名为:" + method);
 //                        执行业务方法
-                        Object object = method.invoke(bean, args);
-                        return object;
+                        return method.invoke(bean, args);
                     }
                 }
         );
-
         return bean;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        UserDao userDao=new UserDaoImpl();
-        UserDao proxyBean = (UserDao) proxy(userDao);
+    public static void main(String[] args) {
+        UserDao userDao = new UserDaoImpl();
+        JdkProxy jdkProxy = new JdkProxy();
+        UserDao proxyBean = (UserDao) jdkProxy.proxy(userDao);
         proxyBean.count(null);
     }
 }
