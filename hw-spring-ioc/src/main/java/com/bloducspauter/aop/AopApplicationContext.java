@@ -15,6 +15,7 @@ import java.util.Map;
 public class AopApplicationContext extends MyAnnotationConfigApplicationContext {
     Map<String, Object> aspectMap = new HashMap<>();
     Map<String, List<Method>> pointCutMap = new HashMap<>();
+    Map<String,Object>proxyMap=new HashMap<>();
 //    为什么编译器强制要求我们定义该够着函数
     public AopApplicationContext(Class<?> configClass) {
         super(configClass);
@@ -29,11 +30,12 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
                 if (before != null) {
                     String value=before.value();
                     String pointCut;
-                    if (!value.matches("\\w+\\(\\)")) {
+                    System.out.println("value " +value+" matches is "+value.matches("\\w+\\(\\)"));
+                    if (value.matches("\\w+\\(\\)")) {
                         try {
-                            String $1 = value.replaceAll("\\w+\\(\\)", "$1");
-                            a.getClass().getDeclaredMethod("$1");
-                            Method pointCutMethod = a.getClass().getDeclaredMethod($1);
+                            String replacedValue = value.replaceAll("(\\w+)\\(\\)", "$1");
+                            a.getClass().getDeclaredMethod(replacedValue);
+                            Method pointCutMethod = a.getClass().getDeclaredMethod(replacedValue);
                             Pointcut pointcutAnno = pointCutMethod.getAnnotation(Pointcut.class);
                             pointCut = pointcutAnno.value();
                         } catch (NoSuchMethodException e) {
@@ -47,13 +49,43 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
                 }
             }
         }
+        this.singletonObjects.forEach((id, bean) -> {
+            System.out.println("out->{id:"+id+",bean:"+bean+"}");
+            for (Method m : bean.getClass().getDeclaredMethods()) {
+                for (String point : pointCutMap.keySet()) {
+                    if (isPointCut(point, m)) {
+                        System.out.println("{id:"+id+",bean:"+bean+"}");
+                        proxyMap.put(id, bean);
+                    }
+                }
+            }
+        });
     }
 
+    public boolean isPointCut(String point, Method method) {
+//        只处理execution表达式
+        point = point.replaceAll("execution\\((.+)\\)", "$1");
+        String methodString = method.toString();
+        point = point.replaceAll("\\*|\\.\\.", ".*");
+        point = point.replaceAll("\\(", "\\\\(");
+        point = point.replaceAll("\\)", "\\\\)");
+//        System.out.println("********pointCut=" + point);
+        //        System.out.println("Boolean method being pointcut is "+flag);
+        return methodString.matches(point);
+    }
     public static void main(String[] args) {
+//        String value="myPoint()";
+//        System.out.println("value " +value+" matches is "+value.matches("\\w+\\(\\)"));
+//        String $1 = value.replaceAll("\\w+\\(\\)", "$1");
         AopApplicationContext context = new AopApplicationContext(IocConfig2.class);
-        context.pointCutMap.forEach((pointCut, list) -> {
-            System.out.println(pointCut);
-            System.out.println(list);
+//        context.pointCutMap.forEach((pointCut, list) -> {
+//            System.out.println(pointCut);
+//            System.out.println(list);
+//        });
+//
+        context.proxyMap.forEach((id, bean) -> {
+            System.out.println(id);
+            System.out.println(bean);
         });
     }
 }

@@ -22,22 +22,25 @@ import java.util.Map;
 
 public class MyAnnotationConfigApplicationContext {
 
-    Map<String,BeanDefinition> beanDefinitionMap = new HashMap<>();
-    protected Map<String,Object> singletonObjects = new HashMap<>();
+    Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
+    protected Map<String, Object> singletonObjects = new HashMap<>();
 
 
     public static void main(String[] args) {
         MyAnnotationConfigApplicationContext cxt =
                 new MyAnnotationConfigApplicationContext(IocConfig2.class);
-        User myUser = (User) cxt.getBean("myUser");
-        System.out.println("myUser = " + myUser);
+//        User myUser = (User) cxt.getBean("myUser");
+//        System.out.println("myUser = " + myUser);
 
+        cxt.singletonObjects.forEach((id, bean) -> {
+            System.out.println("{id:"+id+",bean:"+bean+"}");
+        });
     }
 
     public MyAnnotationConfigApplicationContext(Class<?> configClass) {
         // 读取配置
         Annotation configClassAnnotation = configClass.getAnnotation(Configuration.class);
-        if(configClassAnnotation==null){
+        if (configClassAnnotation == null) {
             throw new RuntimeException("不是配置类:" + configClass);
         }
         Object config = null;
@@ -48,7 +51,7 @@ public class MyAnnotationConfigApplicationContext {
         }
         // 1. Bean方法 => BeanDefinition
         for (Method method : configClass.getDeclaredMethods()) {
-            if(method.getAnnotation(Bean.class)!=null){
+            if (method.getAnnotation(Bean.class) != null) {
                 // bean 方法
                 BeanDefinition definition = getBeanDefinition(method, config);
                 beanDefinitionMap.put(definition.getId(), definition);
@@ -57,7 +60,7 @@ public class MyAnnotationConfigApplicationContext {
         }
         // 2. 扫描组件 => BeanDefinition
         ComponentScan componentScan = configClass.getAnnotation(ComponentScan.class);
-        if(componentScan!=null){
+        if (componentScan != null) {
             String[] packagePaths = componentScan.value();
             // 获取工程类根目录
             URL url1 = configClass.getClassLoader().getResource("");
@@ -67,7 +70,7 @@ public class MyAnnotationConfigApplicationContext {
             for (String packagePath : packagePaths) {
                 // 使用类加载器获取类路径结构
                 ClassLoader classLoader = configClass.getClassLoader();
-                URL url = classLoader.getResource(packagePath.replaceAll("\\.","/"));
+                URL url = classLoader.getResource(packagePath.replaceAll("\\.", "/"));
                 String rootPackagePath = url.getPath();
                 rootPackagePath = URLDecoder.decode(rootPackagePath, StandardCharsets.UTF_8);
                 // 扫描根包文件目录对象
@@ -78,15 +81,15 @@ public class MyAnnotationConfigApplicationContext {
             }
             for (File file : list) {
                 String classPath = file.getPath().replace(projectRoot.getPath(), "");
-                classPath = classPath.replace(".class","");
-                classPath = classPath.replaceAll("\\\\",".");
+                classPath = classPath.replace(".class", "");
+                classPath = classPath.replaceAll("\\\\", ".");
                 classPath = classPath.substring(1);
                 try {
                     Class<?> beanClass = Class.forName(classPath);
-                    if(beanClass.getAnnotation(Component.class)!=null
-                            ||beanClass.getAnnotation(Service.class)!=null
-                            ||beanClass.getAnnotation(Repository.class)!=null
-                            ||beanClass.getAnnotation(Controller.class)!=null){
+                    if (beanClass.getAnnotation(Component.class) != null
+                            || beanClass.getAnnotation(Service.class) != null
+                            || beanClass.getAnnotation(Repository.class) != null
+                            || beanClass.getAnnotation(Controller.class) != null) {
                         // 是 讀取 bean 定義信息
                         BeanDefinition definition = getBeanDefinition(beanClass);
                         beanDefinitionMap.put(definition.getId(), definition);
@@ -97,43 +100,43 @@ public class MyAnnotationConfigApplicationContext {
             }
         }
         // 测试打印
-        beanDefinitionMap.forEach((k,v)->System.out.println(k + "  " + v));
+        beanDefinitionMap.forEach((k, v) -> System.out.println(k + "  " + v));
 
         // 创建 bean
-        beanDefinitionMap.forEach((id,beanDefinition)->{
-            if(beanDefinition.getBeanMethodName()==null){
+        beanDefinitionMap.forEach((id, beanDefinition) -> {
+            if (beanDefinition.getBeanMethodName() == null) {
                 // 组件扫描
-                if ( beanDefinition.isLazyInit()
-                        || "prototype".equals(beanDefinition.getScope())){
+                if (beanDefinition.isLazyInit()
+                        || "prototype".equals(beanDefinition.getScope())) {
                     // 延迟加载 和 原型模式 ==> 现在不创建 bean
                 } else {
                     try {
                         Class<?> beanClass = Class.forName(beanDefinition.getClassName());
                         Object bean = beanClass.newInstance();
                         // 加入容器
-                        singletonObjects.put(id,bean);
+                        singletonObjects.put(id, bean);
                     } catch (ClassNotFoundException e) {
-                        throw new RuntimeException("类路径错误!",e);
+                        throw new RuntimeException("类路径错误!", e);
                     } catch (InstantiationException e) {
-                        throw new RuntimeException("创建 bean 失败!",e);
+                        throw new RuntimeException("创建 bean 失败!", e);
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException("类访问错误!",e);
+                        throw new RuntimeException("类访问错误!", e);
                     }
                 }
             } else {
                 // bean 方法
-                if ( beanDefinition.isLazyInit()
-                        || "prototype".equals(beanDefinition.getScope())){
+                if (beanDefinition.isLazyInit()
+                        || "prototype".equals(beanDefinition.getScope())) {
                     // 延迟加载 和 原型模式 ==> 现在不创建 bean
                 } else {
                     try {
                         Object bean = beanDefinition.getBeanMethodName().invoke(beanDefinition.getBeanFactory());
                         // 加入容器
-                        singletonObjects.put(id,bean);
+                        singletonObjects.put(id, bean);
                     } catch (InvocationTargetException e) {
-                        throw new RuntimeException("方法调用错误!",e);
+                        throw new RuntimeException("方法调用错误!", e);
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException("方法访问错误!",e);
+                        throw new RuntimeException("方法访问错误!", e);
                     }
                 }
             }
@@ -146,23 +149,17 @@ public class MyAnnotationConfigApplicationContext {
     private static BeanDefinition getBeanDefinition(Class<?> beanClass) {
         BeanDefinition definition = new BeanDefinition();
         definition.setClassName(beanClass.getName());
-        definition.setLazyInit(beanClass.getAnnotation(Lazy.class)!=null);
-        if (beanClass.getAnnotation(Scope.class)!=null) {
+        definition.setLazyInit(beanClass.getAnnotation(Lazy.class) != null);
+        if (beanClass.getAnnotation(Scope.class) != null) {
             Scope scope = beanClass.getAnnotation(Scope.class);
             definition.setScope(scope.value());
         }
         // 组件命名 => 没有设置 => 名子是类名 + 首字母小写
         //         => 有设置  => 使用该值
         Component component = beanClass.getAnnotation(Component.class);
-        if(component!=null){
-            if (!component.value().isEmpty()) {
-                definition.setId(component.value());
-            } else {
-                String name = beanClass.getSimpleName();
-                name = name.substring(0,1).toLowerCase() + name.substring(1);
-                definition.setId(name);
-            }
-        }
+        String name = beanClass.getSimpleName();
+        name = name.substring(0, 1).toLowerCase() + name.substring(1);
+        definition.setId(component != null && !component.value().isEmpty() ? component.value() : name);
         return definition;
     }
 
@@ -173,14 +170,14 @@ public class MyAnnotationConfigApplicationContext {
         definition.setBeanMethodName(method);
         // 传入 config 对象
         definition.setBeanFactory(config);
-        definition.setLazyInit(method.getAnnotation(Lazy.class)!=null);
-        if (method.getAnnotation(Scope.class)!=null) {
+        definition.setLazyInit(method.getAnnotation(Lazy.class) != null);
+        if (method.getAnnotation(Scope.class) != null) {
             Scope scope = method.getAnnotation(Scope.class);
             definition.setScope(scope.value());
         }
         Bean beanAnno = method.getAnnotation(Bean.class);
         String[] ids = beanAnno.value();
-        if(ids.length==0){
+        if (ids.length == 0) {
             // 没有设置 @Bean 的 id 那么使用方法名作为id
             definition.setId(method.getName());
         } else {
@@ -190,26 +187,26 @@ public class MyAnnotationConfigApplicationContext {
     }
 
     // 递归扫描方法
-    void scanComponent(File path, List<File> list, File projectRoot){
+    void scanComponent(File path, List<File> list, File projectRoot) {
         File[] files = path.listFiles();
         if (files != null) {
             for (File file : files) {
-                if(file.isDirectory()){
+                if (file.isDirectory()) {
                     scanComponent(file, list, projectRoot);
-                } else if(file.isFile() && file.getName().endsWith(".class")){
+                } else if (file.isFile() && file.getName().endsWith(".class")) {
                     // 字节码文件 => 类文件
                     // 判断是否是组件 => 用文件路径还原成一个类路径 => com.yc....User
                     // /com/yc  =>  com.yc.bbs.User
                     String classPath = file.getPath().replace(projectRoot.getPath(), "");
-                    classPath = classPath.replace(".class","");
-                    classPath = classPath.replaceAll("\\\\",".");
+                    classPath = classPath.replace(".class", "");
+                    classPath = classPath.replaceAll("\\\\", ".");
                     classPath = classPath.substring(1);
                     try {
                         Class<?> beanClass = Class.forName(classPath);
-                        if(beanClass.getAnnotation(Component.class)!=null
-                                ||beanClass.getAnnotation(Service.class)!=null
-                                ||beanClass.getAnnotation(Repository.class)!=null
-                                ||beanClass.getAnnotation(Controller.class)!=null){
+                        if (beanClass.getAnnotation(Component.class) != null
+                                || beanClass.getAnnotation(Service.class) != null
+                                || beanClass.getAnnotation(Repository.class) != null
+                                || beanClass.getAnnotation(Controller.class) != null) {
                             // 是 組件
                             list.add(file);
                         }

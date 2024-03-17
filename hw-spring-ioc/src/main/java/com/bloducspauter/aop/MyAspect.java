@@ -67,5 +67,10 @@ public class MyAspect {
         }
         return null;
     }
+
+    @Before(value = "execution(* com.yc..dao.UserDaoImpl.update(..))" )
+    public void afterOfRunningForUpdate(JoinPoint joinPoint) {
+        System.out.println("返回拦截\t" + joinPoint.getSignature());
+    }
 }
 
