@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ExcelUtil-1.145.14">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/hw-spring-ioc/src/main/resources/ExcelUtil-1.145.14.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
