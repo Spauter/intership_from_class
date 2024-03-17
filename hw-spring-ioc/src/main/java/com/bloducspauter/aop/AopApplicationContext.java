@@ -15,22 +15,22 @@ import java.util.Map;
 public class AopApplicationContext extends MyAnnotationConfigApplicationContext {
     Map<String, Object> aspectMap = new HashMap<>();
     Map<String, List<Method>> pointCutMap = new HashMap<>();
-    Map<String,Object>proxyMap=new HashMap<>();
-//    为什么编译器强制要求我们定义该够着函数
+    Map<String, Object> proxyMap = new HashMap<>();
+
+    //    为什么编译器强制要求我们定义该够着函数
     public AopApplicationContext(Class<?> configClass) {
         super(configClass);
         this.singletonObjects.forEach((id, bean) -> {
             if (bean.getClass().getAnnotation(Aspect.class) != null) {
-                aspectMap.put(id,bean);
+                aspectMap.put(id, bean);
             }
         });
         for (Object a : aspectMap.values()) {
             for (Method method : a.getClass().getDeclaredMethods()) {
                 Before before = method.getAnnotation(Before.class);
                 if (before != null) {
-                    String value=before.value();
+                    String value = before.value();
                     String pointCut;
-                    System.out.println("value " +value+" matches is "+value.matches("\\w+\\(\\)"));
                     if (value.matches("\\w+\\(\\)")) {
                         try {
                             String replacedValue = value.replaceAll("(\\w+)\\(\\)", "$1");
@@ -42,22 +42,31 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
                             throw new RuntimeException(e);
                         }
                     } else {
-                        pointCut=value;
+                        pointCut = value;
                     }
                     List<Method> list = pointCutMap.computeIfAbsent(pointCut, k -> new ArrayList<>());
                     list.add(method);
                 }
             }
-        }
+        }//扫描所有组件,查看是否保护被切点拦截的方法
         this.singletonObjects.forEach((id, bean) -> {
-            System.out.println("out->{id:"+id+",bean:"+bean+"}");
+            a:
             for (Method m : bean.getClass().getDeclaredMethods()) {
                 for (String point : pointCutMap.keySet()) {
                     if (isPointCut(point, m)) {
-                        System.out.println("{id:"+id+",bean:"+bean+"}");
                         proxyMap.put(id, bean);
+//                        只要有一个方法被切到,那么就要代理，即可中止循环
+                        break a;
                     }
                 }
+            }
+        });
+        proxyMap.forEach((id, bean) -> {
+            Class<?>[] interfaces = bean.getClass().getInterfaces();
+            if (interfaces.length == 0) {
+                //TODO CGLIB代理
+            } else {
+//                jdk 动态代理
             }
         });
     }
@@ -69,20 +78,15 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
         point = point.replaceAll("\\*|\\.\\.", ".*");
         point = point.replaceAll("\\(", "\\\\(");
         point = point.replaceAll("\\)", "\\\\)");
-//        System.out.println("********pointCut=" + point);
-        //        System.out.println("Boolean method being pointcut is "+flag);
         return methodString.matches(point);
     }
+
     public static void main(String[] args) {
-//        String value="myPoint()";
-//        System.out.println("value " +value+" matches is "+value.matches("\\w+\\(\\)"));
-//        String $1 = value.replaceAll("\\w+\\(\\)", "$1");
         AopApplicationContext context = new AopApplicationContext(IocConfig2.class);
 //        context.pointCutMap.forEach((pointCut, list) -> {
 //            System.out.println(pointCut);
 //            System.out.println(list);
 //        });
-//
         context.proxyMap.forEach((id, bean) -> {
             System.out.println(id);
             System.out.println(bean);

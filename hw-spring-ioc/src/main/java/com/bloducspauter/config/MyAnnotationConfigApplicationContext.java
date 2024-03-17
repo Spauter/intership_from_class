@@ -29,9 +29,6 @@ public class MyAnnotationConfigApplicationContext {
     public static void main(String[] args) {
         MyAnnotationConfigApplicationContext cxt =
                 new MyAnnotationConfigApplicationContext(IocConfig2.class);
-//        User myUser = (User) cxt.getBean("myUser");
-//        System.out.println("myUser = " + myUser);
-
         cxt.singletonObjects.forEach((id, bean) -> {
             System.out.println("{id:"+id+",bean:"+bean+"}");
         });
@@ -101,7 +98,6 @@ public class MyAnnotationConfigApplicationContext {
         }
         // 测试打印
         beanDefinitionMap.forEach((k, v) -> System.out.println(k + "  " + v));
-
         // 创建 bean
         beanDefinitionMap.forEach((id, beanDefinition) -> {
             if (beanDefinition.getBeanMethodName() == null) {
