@@ -5,7 +5,7 @@ import org.springframework.context.annotation.*;
 
 //配置类 类似与bean.xml
 @Configuration
-@ComponentScan("com.bloducspauter")
+@ComponentScan({"com.bloducspauter","com.yc"})
 public class IocConfig2 {
     @Bean("myUser")
 //    相当于primary="true"

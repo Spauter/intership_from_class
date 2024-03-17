@@ -1,14 +1,12 @@
-package com.yc.spring.aop;
+package com.bloducspauter.aop;
 
 import com.yc.spring.bbs.biz.UserBiz;
 import com.yc.spring.bbs.dao.UserDao;
 import com.yc.spring.bbs.dao.UserDaoImpl;
-import org.aopalliance.intercept.Interceptor;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
-import java.io.ObjectOutput;
 import java.lang.reflect.Method;
 
 // CGLIB 动态字节码 基于继承方式 不要求被代理类实现接口

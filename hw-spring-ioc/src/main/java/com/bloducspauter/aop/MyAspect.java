@@ -1,4 +1,4 @@
-package com.yc.spring.aop;
+package com.bloducspauter.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
