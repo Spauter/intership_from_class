@@ -6,7 +6,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +58,7 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
                     if (isPointCut(point, m)) {
                         proxyMap.put(id, bean);
 //                        只要有一个方法被切到,那么就要代理，即可中止循环
-                        break a;
+//                        break a;
                     }
                 }
             }
@@ -85,6 +87,39 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
         return methodString.matches(point);
     }
 
+    private void jdkProxy(String id, Object bean) {
+        Object proxyBean = Proxy.newProxyInstance(
+                bean.getClass().getClassLoader(),
+                bean.getClass().getInterfaces(),
+                (proxy, method, args) -> {
+//                    JDK Stream编程
+                    //                        前置增强
+                    pointCutMap
+//                                双列集合转单列集合,Set<Entry>
+                            .entrySet()
+//                                集合转成 流
+                            .stream()
+//                                过滤切点
+                            .filter(entry -> isPointCut(entry.getKey(), method))
+//                            将Map里面的List元素提取出来
+                            .flatMap(entry -> entry.getValue().stream())
+//                            过滤拦截方法的集合
+                            .filter(adviceMethod -> adviceMethod.getAnnotation(Before.class) != null)
+//                            执行所有前置争抢方法
+                            .forEach(beforeMethod -> {
+                                try {
+                                    beforeMethod.invoke(bean);
+                                } catch (IllegalAccessException | InvocationTargetException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+                    ;
+
+                    return method.invoke(bean, args);
+                }
+        );
+    }
+
     public static void main(String[] args) {
         AopApplicationContext context = new AopApplicationContext(IocConfig2.class);
 //        context.pointCutMap.forEach((pointCut, list) -> {
@@ -96,4 +131,5 @@ public class AopApplicationContext extends MyAnnotationConfigApplicationContext 
             System.out.println(bean);
         });
     }
+
 }
