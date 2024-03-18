@@ -133,7 +133,7 @@ INSERT INTO "SCOTT"."TB_STUDENT" VALUES ('21020140217', '李俊杰', '物联1911
 -- ----------------------------
 -- Table structure for TB_STUDENT_COURSES
 -- ----------------------------
-DROP TABLE "SCOTT"."TB_STUDENT_COURSES";
+DROP TABLE  "SCOTT"."TB_STUDENT_COURSES";
 CREATE TABLE "SCOTT"."TB_STUDENT_COURSES" (
   "S_ID" NUMBER,
   "C_ID" NUMBER NOT NULL,

@@ -27,7 +27,7 @@
                 <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/db_mybatis"/>
                 <property name="username" value="root"/>
-                <property name="password" value="Spauter"/>
+                <property name="password" value="zn2021%117"/>
             </dataSource>
         </environment>
         <environment id="dev_oracle">
@@ -36,7 +36,7 @@
                 <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
                 <property name="url" value="jdbc:oracle:thin:@//127.0.0.1:1521/orcl"/>
                 <property name="username" value="scott"/>
-                <property name="password" value="Spauter"/>
+                <property name="password" value="a"/>
             </dataSource>
         </environment>
     </environments>

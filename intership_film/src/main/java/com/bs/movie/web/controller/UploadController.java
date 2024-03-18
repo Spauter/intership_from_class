@@ -1,6 +1,6 @@
 package com.bs.movie.web.controller;
 
-import com.bs.movie.biz.MovieBiz;
+//import com.bs.movie.biz.MovieBiz;
 import com.google.gson.Gson;
 import com.ly.common.bean.Result;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @WebServlet(name="UploadController",value = "/upload/*")
 public class UploadController extends BaseServlet{
-    MovieBiz biz=new MovieBiz();
+//    MovieBiz biz=new MovieBiz();
 
     /**
      * 长传文件，用于电影上传
@@ -37,7 +37,7 @@ public class UploadController extends BaseServlet{
             send(response,result);
         }else {
             file.write(path);
-            biz.save(path);
+//            biz.save(path);
         }
         final  String json=new Gson().toJson(result);
         response.getWriter().append(json);
