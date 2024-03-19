@@ -25,7 +25,9 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public int update(Account t) {
         String sql = "update bank_account set balance=? where id=?";
-       return jdbcTemplate.update(sql, t.getBalance(), t.getId());
+        int a;
+        a= jdbcTemplate.update(sql, t.getBalance(), t.getId());
+        return  a;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class AccountDaoImpl implements AccountDao {
                 Account result=new Account();
                 result.setId(rs.getString("id"));
                 result.setBalance(rs.getDouble("balance"));
+                result.setName(rs.getString("name"));
                 return result;
             }
         });
