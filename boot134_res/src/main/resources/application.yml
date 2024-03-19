@@ -9,8 +9,8 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/res
-    username: #It is generally referred to root
-    password: #Your password
+    username: root #It is generally referred to root
+    password: zn2021%117 #Your password
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5

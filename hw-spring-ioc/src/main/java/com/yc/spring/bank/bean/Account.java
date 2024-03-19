@@ -1,6 +1,5 @@
 package com.yc.spring.bank.bean;
 
-import org.springframework.stereotype.Component;
 
 /**
  * 银行账户
@@ -9,14 +8,32 @@ import org.springframework.stereotype.Component;
  */
 public class Account {
 	
-	private Integer id;		// 主键
+	private String id;		// 主键
 	private String name;	// 姓名
-	private Double money;	// 余额
-	
-	public Integer getId() {
+	private Double balance;	// 余额
+
+	private String password;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public static Account getSingleAccount() {
+		return singleAccount;
+	}
+
+	public static void setSingleAccount(Account singleAccount) {
+		Account.singleAccount = singleAccount;
+	}
+
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	} 
 	public String getName() {
@@ -25,11 +42,11 @@ public class Account {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Double getMoney() {
-		return money;
+	public Double getBalance() {
+		return balance;
 	}
-	public void setMoney(Double money) {
-		this.money = money;
+	public void setBalance(Double balance) {
+		this.balance = balance;
 	}
 	/**
 	 * 这是一个不完整的单例模式，少了私有的构造方法
@@ -44,7 +61,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [id=" + id + ", name=" + name + ", money=" + money + "]";
+		return "Account [id=" + id + ", name=" + name + ", money=" + balance + "]";
 	}
 
 }
