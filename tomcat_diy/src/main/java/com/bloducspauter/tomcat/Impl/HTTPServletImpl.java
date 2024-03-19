@@ -1,9 +1,11 @@
 package com.bloducspauter.tomcat.Impl;
 
-import com.yc.demo.d0903.tomcat.HttpServlet;
-import com.yc.demo.d0903.tomcat.HttpServletRequest;
-import com.yc.demo.d0903.tomcat.HttpServletResponse;
-import com.yc.demo.d0903.tomcat.ServletException;
+
+
+import com.bloducspauter.tomcat.HttpServlet;
+import com.bloducspauter.tomcat.HttpServletRequest;
+import com.bloducspauter.tomcat.HttpServletResponse;
+import com.bloducspauter.tomcat.ServletException;
 
 import java.io.IOException;
 

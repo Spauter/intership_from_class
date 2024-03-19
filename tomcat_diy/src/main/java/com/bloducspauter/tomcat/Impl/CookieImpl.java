@@ -1,6 +1,7 @@
 package com.bloducspauter.tomcat.Impl;
 
-import com.yc.demo.d0903.tomcat.Cookie;
+
+import com.bloducspauter.tomcat.Cookie;
 
 public class CookieImpl implements Cookie {
 

@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/web-demo/pom.xml" />
         <option value="$PROJECT_DIR$/boot134_res/pom.xml" />
         <option value="$PROJECT_DIR$/boot_134/pom.xml" />
+        <option value="$PROJECT_DIR$/tomcat_diy/pom.xml" />
       </list>
     </option>
   </component>

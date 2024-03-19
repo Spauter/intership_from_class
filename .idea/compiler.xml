@@ -11,6 +11,7 @@
         <module name="hw-spring-ioc" />
         <module name="mybaties" />
         <module name="sp_redis_session" />
+        <module name="tomcat_diy" />
         <module name="intership_film" />
         <module name="boot134_res" />
         <module name="boot_134" />

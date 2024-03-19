@@ -1,8 +1,10 @@
 package com.bloducspauter.tomcat.Impl;
 
-import com.yc.demo.d0903.tomcat.Cookie;
-import com.yc.demo.d0903.tomcat.HttpServletRequest;
-import com.yc.demo.d0903.tomcat.HttpServletResponse;
+
+
+import com.bloducspauter.tomcat.Cookie;
+import com.bloducspauter.tomcat.HttpServletRequest;
+import com.bloducspauter.tomcat.HttpServletResponse;
 
 import java.io.*;
 import java.net.Socket;
