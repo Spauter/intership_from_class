@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = JdbcConfig.class)
 @Component
-@Transactional
 public class BankTest {
 
     @Autowired
@@ -28,6 +27,15 @@ public class BankTest {
     public void test1() {
         int a = accountDao.delete(1234);
         Assert.assertEquals(1, a);
+    }
+
+    //当readOnly设置为true时,不能进行增删改操作,所以此操作不会通过
+    @Transactional(readOnly = true)
+    @Test
+    public void test1_1(){
+        int a = accountDao.delete(1234);
+        Assert.assertEquals(1, a);
+        Assert.fail();
     }
 
     @Test
@@ -57,7 +65,16 @@ public class BankTest {
         Assert.assertEquals(account.getBalance(),newAccount.getBalance(),0.01);
     }
 
+    //由于出现异常,bank_account中balance最终没有修改成114514
+    @Transactional
+    @Test
     public void Transactional() {
+        test4();
+        opus();
+    }
 
+    //用来模拟异常的
+    public void opus(){
+       int a=1/0;
     }
 }
