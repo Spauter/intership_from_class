@@ -29,13 +29,12 @@ public class BankTest {
         Assert.assertEquals(1, a);
     }
 
-    //当readOnly设置为true时,不能进行增删改操作,所以此操作不会通过
+    //当readOnly设置为true时,不能进行增删改操作,所以此测试不会通过
     @Transactional(readOnly = true)
     @Test
     public void test1_1(){
         int a = accountDao.delete(1234);
         Assert.assertEquals(1, a);
-        Assert.fail();
     }
 
     @Test
