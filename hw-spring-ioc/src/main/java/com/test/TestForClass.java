@@ -1,4 +1,4 @@
-package com.yc;
+package com.test;
 
 
 import com.bloducspauter.config.IocConfig2;
