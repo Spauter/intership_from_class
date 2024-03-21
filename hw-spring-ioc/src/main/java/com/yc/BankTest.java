@@ -67,7 +67,7 @@ public class BankTest {
     //由于出现异常,bank_account中balance最终没有修改成114514
     @Transactional
     @Test
-    public void Transactional() {
+    public void transactional() {
         test4();
         opus();
     }

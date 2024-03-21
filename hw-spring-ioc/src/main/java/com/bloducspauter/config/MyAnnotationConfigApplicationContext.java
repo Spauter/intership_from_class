@@ -1,13 +1,10 @@
 package com.bloducspauter.config;
 
-import com.yc.spring.IocConfig;
-import com.yc.spring.bbs.bean.User;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;

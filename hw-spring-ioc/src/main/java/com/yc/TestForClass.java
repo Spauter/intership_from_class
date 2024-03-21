@@ -2,13 +2,13 @@ package com.yc;
 
 
 import com.bloducspauter.config.IocConfig2;
-import com.yc.cinema.bean.User;
+import com.bloducspauter.event.UserRegisteredEvent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import com.yc.spring.bbs.bean.User;
 import java.io.IOException;
 
 public class TestForClass {
@@ -32,6 +32,7 @@ public class TestForClass {
         User user2 = (User) context.getBean("user2");
         System.out.println("user:" + user1.toString());
         System.out.println("user:" + (user2.toString()));
+        context.publishEvent(new UserRegisteredEvent(context));
     }
     @Test
     public void test3() throws IOException {
