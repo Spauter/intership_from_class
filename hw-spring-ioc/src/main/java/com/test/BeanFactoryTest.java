@@ -30,7 +30,11 @@ public class BeanFactoryTest {
             System.out.println(name);
         }
         System.out.println("________________________________________________________");
-        //后处理器也是bean，然后要执行这些后处理器，才能够解析configuration的注解，然后再把注解定义的bean加入到容器中
+        /*
+            后处理器也是bean，然后要执行这些后处理器，才能够解析configuration的注解，然后再把注解定义的bean加入到容器中
+            BeanFactoryPostProcessor提供了修改Bean定义的功能
+            后面还有BeanDefinitionRegistryPostProcessor 会提供新增Bean定义的功能
+        */
         beanFactory.getBeansOfType(BeanFactoryPostProcessor.class).values().forEach(beanFactoryPostProcessor -> {
             //执行Bean工厂处理器
             beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
