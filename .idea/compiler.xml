@@ -18,6 +18,9 @@
         <module name="Web_demo1" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="gradle_kotlin_test" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
