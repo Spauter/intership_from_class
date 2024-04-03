@@ -11,8 +11,8 @@
         <module name="hw-spring-ioc" />
         <module name="mybaties" />
         <module name="sp_redis_session" />
-        <module name="tomcat_diy" />
         <module name="intership_film" />
+        <module name="SpringMVC" />
         <module name="boot134_res" />
         <module name="boot_134" />
         <module name="Web_demo1" />
@@ -20,6 +20,12 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="gradle_kotlin_test" target="11" />
+      <module name="gradle_kotlin_test.main" target="11" />
+      <module name="gradle_kotlin_test.test" target="11" />
+      <module name="springMVC" target="11" />
+      <module name="SpringMVC.main" target="11" />
+      <module name="SpringMVC.test" target="11" />
+      <module name="tomcat_diy" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

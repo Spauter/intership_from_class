@@ -3,6 +3,7 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/gradle_kotlin_test" />
+    <file type="web" url="file://$PROJECT_DIR$/springMVC" />
   </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
@@ -15,7 +16,15 @@
         <option value="$PROJECT_DIR$/boot134_res/pom.xml" />
         <option value="$PROJECT_DIR$/boot_134/pom.xml" />
         <option value="$PROJECT_DIR$/tomcat_diy/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringMVC/pom.xml" />
+        <option value="$PROJECT_DIR$/springMVC/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/springMVC/pom.xml" />
+        <option value="$PROJECT_DIR$/tomcat_diy/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
