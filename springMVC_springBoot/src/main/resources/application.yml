@@ -1,0 +1,36 @@
+spring:
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        max-idle: 5
+        min-idle: 0
+    timeout: 5000
+  session:
+    store-type: redis
+  web:
+    resources:
+      static-locations: [classpath:/static/, classpath:/public, classpath:/resources, classpath:/webapp, file:D:/upload/]
+  freemarker:
+    request-context-attribute: request
+    suffix: .html
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+upload:
+  chunkSize: 2 #单位为M
+  thread:
+    maxSize: 25
+  queue:
+    maxSize: 100
+  root:
+    dir: /upload/uploads
+  window: #window系统指定盘符
+    root: D:/
+server:
+  port: 2345

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B</title>
+</head>
+<body>
+<div id="app">
+    姓名:<input v-model="person.name"><br>
+    年龄:<input v-model="person.age"><br>
+    学生:<input v-model="person.student" type="radio" value="true">是
+        <input v-model="person.student" type="radio" value="false">否<br>
+    父:<input v-model="person.father.name"><br>
+    母:<input v-model="person.mather.name"><br>
+    <button @click="submit1">提交1</button>
+    <button @click="submit2">提交2</button><br>
+    <div>{{res}}</div>
+</div>
+<script src="http://47.106.66.89:8080/js/vue.min.js"></script>
+<script src="http://47.106.66.89:8080/js/axios.min.js"></script>
+<link  href="http://47.106.66.89:8080/js/ele-2.15.7/theme-chalk/index.css" rel="stylesheet">
+<script src="http://47.106.66.89:8080/js/ele-2.15.7/index.js"></script>
+<script>
+    var v = new Vue({
+        el : "#app",
+        data : {
+            person:{
+                name:"", age:0, student: false,
+                mather: {name:"", age:0, student: false},
+                father: {name:"", age:0, student: false},
+                friends:[]
+            },
+            res:""
+        },
+        created() {},
+        methods : {
+            submit1(){
+                var param = new URLSearchParams();
+                param.append("name", this.person.name);
+                param.append("age", this.person.age);
+                param.append("student", this.person.student);
+
+                param.append("father.name", this.person.father.name);
+                param.append("father.age", this.person.father.age);
+                param.append("father.student", this.person.father.student);
+
+                param.append("mather.name", this.person.mather.name);
+                param.append("mather.age", this.person.mather.age);
+                param.append("mather.student", this.person.mather.student);
+
+                param.append("friends[0].name","zhangsan");
+                param.append("friends[0].age", 10);
+                param.append("friends[0].student", false);
+                param.append("friends[1].name","zhangsan");
+                param.append("friends[1].age", 10);
+                param.append("friends[1].student", false);
+                axios.post("person1", param).then(res=>{
+                    this.res = res.data;
+                })
+            },
+            submit2(){
+                this.person.friends.push({
+                    name:"张三", age:10, student: true
+                });
+                this.person.friends.push({
+                    name:"李四", age:20, student: false
+                });
+                // axios 会把 person 转成 json 格式提交
+                axios.post("person2", this.person).then(res=>{
+                    this.res = res.data;
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

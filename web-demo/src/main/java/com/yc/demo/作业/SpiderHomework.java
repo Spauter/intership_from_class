@@ -1,9 +1,9 @@
 package com.yc.demo.作业;
 
 
-import blo.spau.excel.ExcelUtil;
-import blo.spau.excel.output.OutputExcel;
-import blo.spau.excel.read.ReadExcel;
+
+import com.bloducspauter.excel.ExcelUtil;
+import com.bloducspauter.excel.output.OutputExcel;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -44,8 +44,6 @@ public class SpiderHomework {
         OutputExcel output = new ExcelUtil();
         File file = new File(System.getenv("TEMP") + "\\1.xlsx");
         output.outPut(list, file);
-        ReadExcel excel = new ExcelUtil();
-        excel.getTitle();
     }
 
     public static void getInfo(String id) throws IOException {

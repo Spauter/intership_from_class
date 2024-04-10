@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>XXX平台</title>
+    <script src="http://47.106.66.89:8080/js/vue.min.js"></script>
+    <script src="http://47.106.66.89:8080/js/axios.min.js"></script>
+    <link href="http://47.106.66.89:8080/js/ele-2.15.7/theme-chalk/index.css" rel="stylesheet">
+    <script src="http://47.106.66.89:8080/js/ele-2.15.7/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/mui-player.min.css"/>
+    <script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<!--     引入基础脚本 mui-player.min.js-->
+    <script type="text/javascript" src="js/mui-player.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/webuploader.css">
+</head>
+<body>
+<div id="app">
+    <header>
+        <div class="c900 flex">
+            <a href="./"><h1 style="color: #fdfdfd">XXX平台</h1></a>
+            <span class="flex">
+                <a><el-avatar
+                        src="https://avatars.githubusercontent.com/u/138235413?v=4"></el-avatar></a>
+                <a href="1.html">注册</a>
+                <a href="login.html">登录</a>
+            </span>
+        </div>
+    </header>
+    <main class="c900">
+        <fieldset>
+            <legend>登录</legend>
+            <form class="grid2" style="width: 300px; margin: auto"
+                  action="" method="post" enctype="application/x-www-form-urlencoded">
+                <label for="">账号:</label><label>
+                <input type="text" name="username">
+            </label>
+                <label for="">密码:</label><label>
+                <input type="password" name="password">
+            </label>
+                <label for="">邮箱:</label><label>
+                <input type="email" name="email">
+            </label>
+                <label for="">电话:</label><label>
+                <input type="tel" name="tel">
+            </label>
+                <label for="">生日:</label><label>
+                <input type="date" name="tel">
+            </label>
+                <div style="text-align: right"><a href="login.html">登录</a>
+                    <button>注册</button>
+                </div>
+            </form>
+        </fieldset>
+        <fieldset>
+            <legend>文件上传</legend>
+            <div id="uploader" class="wu-example">
+                <!--用来存放文件信息-->
+                <div id="thelist" class="uploader-list"></div>
+                <div class="btns">
+                    <div id="picker">选择大文件</div>
+                    <button id="ctlBtn" class="btn btn-default">开始上传</button>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <div id="mui-player" style="background-color: transparent"></div>
+        </fieldset>
+    </main>
+</div>
+<script type="text/javascript" src="js/webuploader.min.js"></script>
+<script>
+    var v = new Vue({
+        el: "#app",
+        data: {},
+        created() {
+        },
+        methods: {}
+    })
+    var mp = new MuiPlayer({
+        container:'#mui-player',
+        title:'标题',
+        src:'./media.mp4',
+    })
+    var $btn = $('#ctlBtn');
+    var $thelist = $('#thelist');
+    var chunkSize = 5 * 1024 * 1024;
+
+    // HOOK 这个必须要再uploader实例化前面
+    WebUploader.Uploader.register({
+        'before-send-file': 'beforeSendFile',
+        'before-send': 'beforeSend'
+    }, {
+        beforeSendFile: function (file) {
+            console.log("beforeSendFile");
+            // Deferred对象在钩子回掉函数中经常要用到，用来处理需要等待的异步操作。
+            var task = new $.Deferred();
+            // 根据文件内容来查询MD5
+            uploader.md5File(file).progress(function (percentage) {   // 及时显示进度
+                console.log('计算md5进度:', percentage);
+                getProgressBar(file, percentage, "MD5", "MD5");
+            }).then(function (val) { // 完成
+                console.log('md5 result:', val);
+                file.md5 = val;
+                // 模拟用户id
+                // file.uid = new Date().getTime() + "_" + Math.random() * 100;
+                file.uid = WebUploader.Base.guid();
+                // 进行md5判断
+                var xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+                $.post("http://localhost:9090/index/checkFileMd5", {uid: file.uid, md5: file.md5},
+                    function (data) {
+                        console.log(data.status);
+                        var status = data.status.value;
+                        task.resolve();
+                        if (status == 101) {
+                            // 文件不存在，那就正常流程
+                        } else if (status == 100) {
+                            // 忽略上传过程，直接标识上传成功；
+                            uploader.skipFile(file);
+                            file.pass = true;
+                        } else if (status == 102) {
+                            // 部分已经上传到服务器了，但是差几个模块。
+                            file.missChunks = data.data;
+                        }
+                    });
+            });
+            return $.when(task);
+        },
+        beforeSend: function (block) {
+            console.log("block")
+            var task = new $.Deferred();
+            var file = block.file;
+            var missChunks = file.missChunks;
+            var blockChunk = block.chunk;
+            console.log("当前分块：" + blockChunk);
+            console.log("missChunks:" + missChunks);
+            if (missChunks !== null && missChunks !== undefined && missChunks !== '') {
+                var flag = true;
+                for (var i = 0; i < missChunks.length; i++) {
+                    if (blockChunk == missChunks[i]) {
+                        console.log(file.name + ":" + blockChunk + ":还没上传，现在上传去吧。");
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    task.reject();
+                } else {
+                    task.resolve();
+                }
+            } else {
+                task.resolve();
+            }
+            return $.when(task);
+        }
+    });
+
+    // 实例化
+    var uploader = WebUploader.create({
+        pick: {
+            id: '#picker',
+            label: '点击选择文件'
+        },
+        formData: {
+            uid: 0,
+            md5: '',
+            chunkSize: chunkSize
+        },
+        //dnd: '#dndArea',
+        //paste: '#uploader',
+        swf: 'js/Uploader.swf',
+        chunked: true,
+        chunkSize: chunkSize, // 字节 1M分块
+        threads: 3,
+        server: 'http://localhost:9090/index/fileUpload',
+        auto: false,
+
+        // 禁掉全局的拖拽功能。这样不会出现图片拖进页面的时候，把图片打开。
+        disableGlobalDnd: true,
+        fileNumLimit: 1024,
+        fileSizeLimit: 1024 * 1024 * 1024,    // 200 M
+        fileSingleSizeLimit: 1024 * 1024 * 1024    // 50 M
+    });
+
+    // 当有文件被添加进队列的时候
+    uploader.on('fileQueued', function (file) {
+        console.log("fileQueued");
+        $thelist.append('<div id="' + file.id + '" class="item">' +
+            '<h4 class="info">' + file.name + '</h4>' +
+            '<p class="state">等待上传...</p>' +
+            '</div>');
+    });
+
+    //当某个文件的分块在发送前触发，主要用来询问是否要添加附带参数，大文件在开起分片上传的前提下此事件可能会触发多次。
+    uploader.onUploadBeforeSend = function (obj, data) {
+        console.log("onUploadBeforeSend");
+        var file = obj.file;
+        data.md5 = file.md5 || '';
+        data.uid = file.uid;
+    };
+    // 上传中
+    uploader.on('uploadProgress', function (file, percentage) {
+        getProgressBar(file, percentage, "FILE", "上传进度");
+    });
+    // 上传返回结果
+    uploader.on('uploadSuccess', function (file) {
+        var text = '已上传';
+        if (file.pass) {
+            text = "文件妙传功能，文件已上传。"
+        }
+        var playerContainer = document.querySelector('#mui-player');
+        // 修改 src 属性
+        // 替换为您想要的新的视频路径
+        playerContainer.querySelector('video').src = "./uploads/"+file.md5+"/"+file.name;
+        $('#' + file.id).find('p.state').text(text);
+    });
+    uploader.on('uploadError', function (file) {
+        $('#' + file.id).find('p.state').text('上传出错');
+    });
+    uploader.on('uploadComplete', function (file) {
+        // 隐藏进度条
+        // fadeOutProgress(file, 'MD5');
+        // fadeOutProgress(file, 'FILE');
+    });
+    // 文件上传
+    $btn.on('click', function () {
+        console.log("上传...");
+        uploader.upload();
+        console.log("上传成功");
+    });
+
+    /**
+     *  生成进度条封装方法
+     * @param file 文件
+     * @param percentage 进度值
+     * @param id_Prefix id前缀
+     * @param titleName 标题名
+     */
+    function getProgressBar(file, percentage, id_Prefix, titleName) {
+        var $li = $('#' + file.id), $percent = $li.find('#' + id_Prefix + '-progress-bar');
+        // 避免重复创建
+        if (!$percent.length) {
+            $percent = $('<div id="' + id_Prefix + '-progress" class="progress progress-striped active">' +
+                '<div id="' + id_Prefix + '-progress-bar" class="progress-bar" role="progressbar" style="width: 0%">' +
+                '</div>' +
+                '</div>'
+            ).appendTo($li).find('#' + id_Prefix + '-progress-bar');
+        }
+        var progressPercentage = percentage * 100 + '%';
+        $percent.css('width', progressPercentage);
+        $percent.html(titleName + ':' + progressPercentage);
+    }
+
+    /**
+     * 隐藏进度条
+     * @param file 文件对象
+     * @param id_Prefix id前缀
+     */
+    function fadeOutProgress(file, id_Prefix) {
+        $('#' + file.id).find('#' + id_Prefix + '-progress').fadeOut();
+    }
+</script>
+</body>
+</html>

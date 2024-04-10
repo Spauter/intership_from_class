@@ -1,0 +1,72 @@
+html, body, #app {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+}
+
+a {
+    text-decoration: none;
+    color: #666
+}
+
+img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.c900 {
+    width: 900px;
+    margin-inline: auto;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.grid2 {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto;
+}
+
+.grid3 {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.grid4 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+
+header {
+    background-color: #0f9ae0;
+    background-size: cover;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    height: 60px;
+}
+
+header h1 {
+    margin: 10px;
+}
+
+header span > a {
+    margin-left: 20px;
+    color: #fff;
+}
+
+main {
+    background-color: #eee;
+    min-height: calc(100% - 100px);
+    padding: 20px;
+}
