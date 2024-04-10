@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/intership/intership.iml" filepath="$PROJECT_DIR$/intership/intership.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/intership_from_class.iml" filepath="$PROJECT_DIR$/.idea/intership_from_class.iml" />
       <module fileurl="file://$PROJECT_DIR$/intership_students/intership_students.iml" filepath="$PROJECT_DIR$/intership_students/intership_students.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thread_test/thread_test.iml" filepath="$PROJECT_DIR$/thread_test/thread_test.iml" />
     </modules>
   </component>
 </project>
