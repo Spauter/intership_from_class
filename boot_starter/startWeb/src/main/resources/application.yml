@@ -1,0 +1,20 @@
+bs:
+  time:
+    format: yyyy年MM月dd日
+  jdbctemplate:
+    url: jdbc:mysql://localhost:3306/db_mybatis
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #It is generally referred to root
+    username: root
+    #Your password
+    pwd: zn2021%117
+logging:
+  level:
+    root: info
+    org.springframework.web: error
+    org.apache: error
+  logback:
+    rollingpolicy:
+      max-file-size: 1MB
+  file:
+    name: info.log

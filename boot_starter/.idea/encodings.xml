@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/AttributeAotoConfiruration/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/AttributeAotoConfiruration/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/AttributeStarter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/AttributeStarter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JdbcTemplateStarter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JdbcTemplateStarter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JdbctemplateAutoConfiguration/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/JdbctemplateAutoConfiguration/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dateFormatAutoConfiguration/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dateFormatAutoConfiguration/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dateFormatStarter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/dateFormatStarter/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/emailTest/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/emailTest/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/startWeb/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/startWeb/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/timer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/timer/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
