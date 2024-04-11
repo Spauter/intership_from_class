@@ -179,7 +179,7 @@ final class FutureDemo5 {
  */
 
 final class FutureDemo6 {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         testThread();
     }
 
@@ -215,7 +215,7 @@ final class FutureDemo6 {
 
 //        TimeUnit.MICROSECONDS.sleep(4000000);
 
-        //Remember to shut down thread pool, or it will still run
+        /*Remember to shut down thread pool, or the main thread will still run */
         executorService.shutdown();
     }
 }
