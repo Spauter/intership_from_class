@@ -1,8 +1,10 @@
 package com.bloducspauter.futuretest;
+
 import java.util.concurrent.*;
 
 /**
  * CPU:Intel core i5-10210U 1.60GHz
+ *
  * @author Bloduc Spauter
  */
 public class FutureDemo {
@@ -29,7 +31,7 @@ final class FutureDemo2 {
             try {
                 TimeUnit.MICROSECONDS.sleep(1000);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getLocalizedMessage());
             }
             return "task Over";
         });
@@ -39,7 +41,7 @@ final class FutureDemo2 {
             try {
                 TimeUnit.MICROSECONDS.sleep(5000);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getLocalizedMessage());
             }
             return "task Over";
         });
@@ -49,7 +51,7 @@ final class FutureDemo2 {
             try {
                 TimeUnit.MICROSECONDS.sleep(3000);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println(e.getLocalizedMessage());
             }
             return "task Over";
         });
@@ -60,6 +62,7 @@ final class FutureDemo2 {
         System.out.println("----cost time: " + (endTime - startTime) + "ms");
     }
 }
+
 /**
  * Once using the method {@link Future#get()}, it may be blocked.
  * Because its calculating is not finished.
@@ -68,6 +71,7 @@ final class FutureDemo2 {
  * Conclusion: The result of getting is unfriendly in class {@link Future}.
  * Only by blocking or polling can we get it.
  * </p>
+ *
  * @author Bloduc Spauter
  */
 final class FutureDemo3 {
@@ -106,31 +110,34 @@ final class FutureDemo3 {
  * Using method {@link Future#isDone()} may waste CPU resources.
  * <p>
  * To create an asynchronous tasks, we need to combine {@link Future} with the thread poll.
+ *
  * @author Bloduc Spauter
  */
-final class FutureDemo4{
+final class FutureDemo4 {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         /*
         If you don't have a specified Executor way,
         you can use the default thread pool "ForkJoinPool.commonPool",
         and as its thread pool to run this asynchronous code.
          */
-        ExecutorService executorService=Executors.newFixedThreadPool(3);
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
         //Running an asynchronous method, and no a return statement
-        CompletableFuture<Void> completableFuture=CompletableFuture.runAsync(()->{
-            //ForkJoinPool-worker-3
-            System.out.println(Thread.currentThread().getName());
-            try {
-                //sleep 1s
-                TimeUnit.MICROSECONDS.sleep(1000000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-                //The result is "pool-1-thread-1"
-                //Comment this below code;
-                // the first sentence printed will turn "ForkJoinPool-worker-1"
-                ,executorService
+        CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+                    //ForkJoinPool-worker-3
+                    System.out.println(Thread.currentThread().getName());
+                    try {
+                        //sleep 1s
+                        TimeUnit.MICROSECONDS.sleep(1000000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+                /*
+                The result is "pool-1-thread-1"
+                Comment this below code; the first sentence printed will turn "ForkJoinPool-worker-1"
+                */
+                , executorService
         );
         //null.
         executorService.shutdown();
@@ -138,10 +145,10 @@ final class FutureDemo4{
     }
 }
 
-final class FutureDemo5{
+final class FutureDemo5 {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         //It will return a String statement
-        CompletableFuture<String> completableFuture=CompletableFuture.supplyAsync(()->{
+        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
             System.out.println(Thread.currentThread().getName());
             try {
                 //sleep 1s
@@ -153,6 +160,62 @@ final class FutureDemo5{
         });
         //Hello!This is supplyAsync
         System.out.println(completableFuture.get());
+    }
+}
 
+/**
+
+ Because of the daemon thread, before it ran, the main thread had done,
+ which cause this tread pool the class {@link CompletableFuture} using was closed.
+<p>
+ Uncomment this below code {@code "TimeUnit.MICROSECONDS.sleep(4000000)"} to pause main tread four seconds,
+ you will see the result printed,
+ or add this demo thread into your thread pool {@link  Executors#newFixedThreadPool(int)} you defined
+ by uncommenting {@code ",executorService"} you will see the same outputs
+ <p>
+ Uncomment {@code "int i=1/0"} can simulate an exception.
+ Make sure this thread can run before the main thread done
+ @author Bloduc Spauter
+ */
+
+final class FutureDemo6 {
+    public static void main(String[] args) throws InterruptedException {
+        testThread();
+    }
+
+    static void testThread() {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        CompletableFuture.supplyAsync(() -> {
+                    System.out.println(Thread.currentThread().getName() + "-----Come in");
+                    int result = ThreadLocalRandom.current().nextInt(100);
+                    try {
+                        TimeUnit.MICROSECONDS.sleep(2000000);
+                    } catch (Exception e) {
+                        System.out.println(e.getLocalizedMessage());
+                    }
+                    System.out.println("After 3 seconds, the result is " + result);
+
+                    // int i=1/0;
+                    return result;
+                }
+//                ,executorService
+                )
+                //When thread finished
+                .whenComplete((v, e) -> {
+                    if (e == null) {
+                        System.out.println("Done!" + v);
+                    }
+                })
+                //When finished with exception
+                .exceptionally(e -> {
+                    System.out.println("Exception thread in main: " + e.getClass().getSimpleName() + ":" + e.getMessage());
+                    return null;
+                });
+        System.out.println(Thread.currentThread().getName() + " is busy");
+
+//        TimeUnit.MICROSECONDS.sleep(4000000);
+
+        //Remember to shut down thread pool, or it will still run
+        executorService.shutdown();
     }
 }
