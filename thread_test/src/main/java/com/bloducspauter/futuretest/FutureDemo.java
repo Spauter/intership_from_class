@@ -58,7 +58,7 @@ final class FutureDemo2 {
         service.submit(futureTask3);
         service.shutdown();
         long endTime = System.currentTimeMillis();
-        //about 3ms
+        //about 6ms
         System.out.println("----cost time: " + (endTime - startTime) + "ms");
     }
 }
