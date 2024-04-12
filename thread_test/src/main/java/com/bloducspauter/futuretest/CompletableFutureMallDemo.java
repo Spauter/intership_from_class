@@ -81,18 +81,18 @@ final class NetMallTest {
         netMalls.add(new NetMall("NetMall2"));
         netMalls.add(new NetMall("NetMall3"));
         long startTime = System.currentTimeMillis();
-        //Insert your code
         List<String> list = getPrice(netMalls, "mysql");
         list.forEach(System.out::println);
         long endTime = System.currentTimeMillis();
+        //about 3s
         System.out.println("----cost time: " + (endTime - startTime) + "ms");
         //Method two
         System.out.println("--------------------------");
         long startTime1 = System.currentTimeMillis();
-        //Insert your code
         List<String> list2 = getPriceByCompletableFuture(netMalls, "oracle");
         list2.forEach(System.out::println);
         long endTime1 = System.currentTimeMillis();
+        //about 1s
         System.out.println("----cost time: " + (endTime1 - startTime1) + "ms");
     }
 
