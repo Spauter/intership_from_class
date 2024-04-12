@@ -1,7 +1,6 @@
 package com.bloducspauter.futuretest;
 
 import java.util.concurrent.*;
-import java.util.function.Supplier;
 
 /**
  * CPU:Intel core i5-10210U 1.60GHz
