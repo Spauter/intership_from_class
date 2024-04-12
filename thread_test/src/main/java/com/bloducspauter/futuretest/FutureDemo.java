@@ -1,6 +1,7 @@
 package com.bloducspauter.futuretest;
 
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 /**
  * CPU:Intel core i5-10210U 1.60GHz
@@ -145,6 +146,7 @@ final class FutureDemo4 {
     }
 }
 
+
 final class FutureDemo5 {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         //It will return a String statement
@@ -164,7 +166,6 @@ final class FutureDemo5 {
 }
 
 /**
-
  Because of the daemon thread, before it ran, the main thread had done,
  which cause this tread pool the class {@link CompletableFuture} using was closed.
 <p>
