@@ -85,8 +85,8 @@ final class FutureDemo3 {
         Thread thread = new Thread(futureTask, "t1");
         thread.start();
         long startTime = System.currentTimeMillis();
-        /*  Uncomment this below code, The following loop statement needs to wait the thread done*/
-        //System.out.println(futureTask.get());
+        /*  Uncomment this below code, The following loop statement needs to wait the thread done and no loop statement print */
+//        System.out.println(futureTask.get());
         System.out.println(Thread.currentThread().getName() + "------Busy for other task");
         long endTime = System.currentTimeMillis();
         System.out.println("----cost time: " + (endTime - startTime) + "ms");

@@ -127,7 +127,7 @@ final class NetMallTest {
                 )
                 .collect(Collectors.toList())
                 .stream()
-                .map(stringCompletableFuture -> stringCompletableFuture.join())
+                .map(CompletableFuture::join)
                 .collect(Collectors.toList());
     }
 }
