@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.concurrent.*;
 
 /**
- * This class is uses to handle calculate result
+ * This class is uses to handle a calculated result
  * @author Bloduc Spauter
  */
 public class CompletableFutureDemoTest {
@@ -85,7 +85,7 @@ public class CompletableFutureDemoTest {
     @Test
     public void test5() {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
-        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture.supplyAsync(() -> {
                     try {
                         TimeUnit.MICROSECONDS.sleep(1000000);
                     } catch (InterruptedException e) {
@@ -151,13 +151,13 @@ public class CompletableFutureDemoTest {
      * When you run the test method {@link #test5()}, JUnit starts a new thread to execute the test method,
      * but it doesn't wait for asynchronous tasks to complete before considering the test method complete.
      * This means that JUnit may terminate the test before the asynchronous tasks are finished, leading to incomplete output.
-     * On the other hand, when you run the code in the main method {@link #main(String[])},
+     * On the other hand, when you run the code in the main method,
      * the main thread is not terminated until all other threads (including the ones spawned by CompletableFuture) have completed.
      * Therefore, you see the complete output when running the code in the main method.
      *
      * <p>
      * To ensure that the asynchronous tasks are complete before the test method finishes, you can use mechanisms provided by JUnit,
-     * such as {@link CompletableFuture#join()} to wait for completion explicitly
+     * such as {@link CompletableFuture<String>#join()} to wait for completion explicitly
      * or use JUnit's support for asynchronous testing using CompletableFuture or other means, depending on your testing requirements.
      * <p>
      */
