@@ -202,7 +202,7 @@ final class LockTest5 {
 }
 
 /**
- * To test two static synchronized methods with two phones
+ * To test two static synchronized methods within two phones
  */
 final class LockTest6 {
     public static void main(String[] args) throws InterruptedException {
@@ -215,6 +215,9 @@ final class LockTest6 {
     }
 }
 
+/**
+ * To test the normal method and static method within one phone
+ */
 final class LockTest7 {
     public static void main(String[] args) {
         Phone phone1 = new Phone();
@@ -223,11 +226,14 @@ final class LockTest7 {
     }
 }
 
+/**
+ * To test the normal method and static method within two phones
+ */
 final class LockTest8 {
     public static void main(String[] args) {
         Phone phone1 = new Phone();
         Phone phone2 = new Phone();
         new Thread(() -> phone1.callSteve(), "A").start();
-        new Thread(() -> phone2.hello(), "B").start();
+        new Thread(phone2::hello, "B").start();
     }
 }
