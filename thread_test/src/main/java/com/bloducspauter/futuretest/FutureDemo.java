@@ -110,7 +110,22 @@ final class FutureDemo3 {
  * Using method {@link Future#isDone()} may waste CPU resources.
  * <p>
  * To create an asynchronous tasks, we need to combine {@link Future} with the thread poll.
- *
+ * The default thread pool {@link ForkJoinPool} is used instead of a custom thread pool.
+ * <h4>Passed in a custom thread pool</h4>
+ * If you pass in a custom thread pool when you perform the first task:
+ * when the thenRun method is called to execute the second task,
+ * the second task and the first task thread the same thread pool.
+ * When you call {@link CompletableFuture#thenRunAsync(Runnable)} to perform the second task,
+ * the first task uses the thread pool passed in by you,
+ * and the second task uses the ForkJoin thread pool
+ * <h4>Remarks</h4>
+ * It is possible to process too fast, system optimization switching principle,
+ * directly using the main thread processing
+ * Other examples are: thenAccept and thenAcceptAsync, thenApply and thenApplyAsync, etc.,
+ * and the difference between them is the same
+ * @see CompletableFuture#thenRun(Runnable)
+ * @see CompletableFuture#thenRunAsync(Runnable)
+ * @version jdk 1.8,jdk 11
  * @author Bloduc Spauter
  */
 final class FutureDemo4 {

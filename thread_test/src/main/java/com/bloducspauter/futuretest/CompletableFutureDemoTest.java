@@ -3,6 +3,8 @@ package com.bloducspauter.futuretest;
 import org.junit.Test;
 
 import java.util.concurrent.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * This class is uses to handle a calculated result
@@ -108,7 +110,7 @@ public class CompletableFutureDemoTest {
                     try {
                         TimeUnit.MICROSECONDS.sleep(1000000);
                         /*
-                        To simulate an exception， Uncomment it, this thread will be interrupted.
+                        To simulate an exception, uncomment it, this thread will be interrupted.
                         Please run it in the main method.
 
                          */
@@ -154,7 +156,6 @@ public class CompletableFutureDemoTest {
      * On the other hand, when you run the code in the main method,
      * the main thread is not terminated until all other threads (including the ones spawned by CompletableFuture) have completed.
      * Therefore, you see the complete output when running the code in the main method.
-     *
      * <p>
      * To ensure that the asynchronous tasks are complete before the test method finishes, you can use mechanisms provided by JUnit,
      * such as {@link CompletableFuture<String>#join()} to wait for completion explicitly
@@ -167,9 +168,31 @@ public class CompletableFutureDemoTest {
 
 }
 
+/**
+ * {@link CompletableFuture#thenRun(Runnable)} : After Task A completed, go to Task B,
+ * and B don't need A's return result.
+ * <p>
+ * {@link CompletableFuture#thenAccept(Consumer)} :After Task A completed,
+ * go to Task B,
+ * and B needs A's return result, but B don't have a return statement.
+ * <p>
+ * {@link CompletableFuture#thenApply(Function)} After Task A completed,
+ * go to Task B。Not only does B needs A's result, but have a return value
+ */
 class CompletableFutureDemoTest2 {
     public static void main(String[] args) {
-
+        //null
+        System.out.println(CompletableFuture.supplyAsync(() -> "one")
+                .thenRun(() -> {})
+                .join());
+        //Two/n null
+        System.out.println(CompletableFuture.supplyAsync(() -> "Two")
+                .thenAccept(r -> System.out.println(r))
+                .join());
+        //Three/t Four
+        System.out.println(CompletableFuture.supplyAsync(() -> "Three")
+                .thenApply(r -> r + "\t Four")
+                .join());
     }
 }
 
