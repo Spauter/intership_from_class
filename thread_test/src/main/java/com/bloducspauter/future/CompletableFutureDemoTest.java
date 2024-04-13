@@ -265,52 +265,62 @@ class CompletableFutureDemoTest4 {
 }
 
 class CompletableFutureDemoTest5 {
+    /**
+     * The actual time taken by the code is 4 seconds, not 10 seconds.
+     * The reason it might seem like it would take 10 seconds is because each task has a simulated dela
+     * <p>
+     * When combining these delays, it might expect the total time to be 2 + 3 + 1 + 4 = 10 seconds.
+     * However, since these tasks are executed concurrently using CompletableFuture,
+     * they don't have to wait for each other to finish. Instead, they execute concurrently,
+     * and the total time taken is determined by the longest-running task, which is 4 seconds in this case.
+     * </p>
+     */
     public static void main(String[] args) {
         CompletableFuture<Integer> allThreads = CompletableFuture.supplyAsync(() -> {
-            try {
-                TimeUnit.MICROSECONDS.sleep(2000000);
-            } catch (InterruptedException e) {
-                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
-            }
-            System.out.println("The first thread is " + Thread.currentThread().getName() + ".Please wait for 2S");
-            return 2;
-        }).thenCombine(CompletableFuture.supplyAsync(() -> {
-            try {
-                TimeUnit.MICROSECONDS.sleep(3000000);
-            } catch (InterruptedException e) {
-                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
-            }
-            System.out.println("The second thread is " + Thread.currentThread().getName() + ".Please wait for 1S");
-            return 1;
-        }), Integer::sum).thenCombine(CompletableFuture.supplyAsync(()->{
-            try {
-                TimeUnit.MICROSECONDS.sleep(1000000);
-            } catch (InterruptedException e) {
-                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
-            }
-            System.out.println("The third thread is " + Thread.currentThread().getName() + ".Please wait for 3S");
-            return 3;
-        }),Integer::sum).thenCombine(CompletableFuture.supplyAsync(()->{
+                    try {
+                        TimeUnit.MICROSECONDS.sleep(2000000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+                    }
+                    System.out.println("The first thread is " + Thread.currentThread().getName() + ".Please wait for 2S");
+                    return 2;
+                }).thenCombine(CompletableFuture.supplyAsync(() -> {
+                    try {
+                        TimeUnit.MICROSECONDS.sleep(3000000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+                    }
+                    System.out.println("The second thread is " + Thread.currentThread().getName() + ".Please wait for 1S");
+                    return 1;
+                }), Integer::sum).thenCombine(CompletableFuture.supplyAsync(() -> {
+                    try {
+                        TimeUnit.MICROSECONDS.sleep(1000000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+                    }
+                    System.out.println("The third thread is " + Thread.currentThread().getName() + ".Please wait for 3S");
+                    return 3;
+                }), Integer::sum).thenCombine(CompletableFuture.supplyAsync(() -> {
                     try {
                         TimeUnit.MICROSECONDS.sleep(4000000);
                     } catch (InterruptedException e) {
                         System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
                     }
-                    System.out.println("The fourth thread is "+Thread.currentThread().getName()+".Please wait for 4S");
+                    System.out.println("The fourth thread is " + Thread.currentThread().getName() + ".Please wait for 4S");
                     return 4;
-                }),Integer::sum)
+                }), Integer::sum)
                 .whenComplete((v, e) -> {
                     if (e == null) {
-                        System.out.println("All threads done, cost: "+v+"S");
+                        System.out.println("All threads done,expect cost: " + v + "S");
                     }
-                }).exceptionally(e->{
+                }).exceptionally(e -> {
                     System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
                     return -1;
                 });
         long startTime = System.currentTimeMillis();
         //about 4s
-        System.out.println("All threads done, cost: "+allThreads.join()+"S");
+        System.out.println("All threads done,expect cost: " + allThreads.join() + "S");
         long endTime = System.currentTimeMillis();
-        System.out.println("----cost time: " + (endTime - startTime) + "ms");
+        System.out.println("----actual cost time: " + (endTime - startTime) + "ms");
     }
 }
