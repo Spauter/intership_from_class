@@ -1,4 +1,4 @@
-package com.bloducspauter.futuretest;
+package com.bloducspauter.future;
 
 
 import lombok.Data;
@@ -64,6 +64,7 @@ class NetMall {
         } catch (InterruptedException e) {
             System.out.printf("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
         }
+        //Seminal to Radon.nextDouble()
         return ThreadLocalRandom.current().nextDouble() * 2 + productName.charAt(0);
     }
 

@@ -1,4 +1,4 @@
-package com.bloducspauter.futuretest;
+package com.bloducspauter.future;
 
 import java.util.concurrent.*;
 

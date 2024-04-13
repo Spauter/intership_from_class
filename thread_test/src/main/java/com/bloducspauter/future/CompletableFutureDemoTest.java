@@ -1,13 +1,15 @@
-package com.bloducspauter.futuretest;
+package com.bloducspauter.future;
 
 import org.junit.Test;
 
 import java.util.concurrent.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * This class is uses to handle a calculated result
+ *
  * @author Bloduc Spauter
  */
 public class CompletableFutureDemoTest {
@@ -177,17 +179,18 @@ public class CompletableFutureDemoTest {
  * and B needs A's return result, but B don't have a return statement.
  * <p>
  * {@link CompletableFuture#thenApply(Function)} After Task A completed,
- * go to Task B。Not only does B needs A's result, but have a return value
+ * go to Task B。Not only B needs A's result, but have a return value
  */
 class CompletableFutureDemoTest2 {
     public static void main(String[] args) {
         //null
         System.out.println(CompletableFuture.supplyAsync(() -> "one")
-                .thenRun(() -> {})
+                .thenRun(() -> {
+                })
                 .join());
         //Two/n null
         System.out.println(CompletableFuture.supplyAsync(() -> "Two")
-                .thenAccept(r -> System.out.println(r))
+                .thenAccept(System.out::println)
                 .join());
         //Three/t Four
         System.out.println(CompletableFuture.supplyAsync(() -> "Three")
@@ -196,3 +199,118 @@ class CompletableFutureDemoTest2 {
     }
 }
 
+/**
+ * Simulating the result:Who is the winner
+ * {@link CompletableFuture#applyToEither(CompletionStage, Function)}: to select the faster choice
+ */
+class CompletableFutureDemoTest3 {
+    public static void main(String[] args) {
+        CompletableFuture<String> playerA = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.MICROSECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("Player A come in");
+            return "player A";
+        });
+
+        CompletableFuture<String> playerB = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.MICROSECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("Player B come in");
+            return "player B";
+        });
+        //If you set the same sleep time, the winner is playerA
+        CompletableFuture<String> result = playerA.applyToEither(playerB, f -> f + " is winner");
+        System.out.println(Thread.currentThread().getName() + "---" + result.join());
+    }
+}
+
+/**
+ * {@link CompletableFuture#thenCombine(CompletionStage, BiFunction)} will wait all threads done and combine then.
+ */
+class CompletableFutureDemoTest4 {
+    public static void main(String[] args) {
+        CompletableFuture<Integer> playerA = CompletableFuture.supplyAsync(() -> {
+            int score = ThreadLocalRandom.current().nextInt(10);
+            try {
+                TimeUnit.MICROSECONDS.sleep(score * 1000000);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("Player A's score is:" + score);
+            return score;
+        });
+        CompletableFuture<Integer> playerB = CompletableFuture.supplyAsync(() -> {
+            int score = ThreadLocalRandom.current().nextInt(10);
+            try {
+                //waiting for 1 to 10 seconds
+                TimeUnit.MICROSECONDS.sleep(score * 1000000);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("Player B's score is:" + score);
+            return score;
+        });
+        CompletableFuture<Integer> result = playerA.thenCombine(playerB, (x, y) -> {
+            System.out.println("Player A and B are combined:" + (x + y));
+            return x + y;
+        });
+        System.out.println("Player A and B are combined:" + result.join());
+    }
+}
+
+class CompletableFutureDemoTest5 {
+    public static void main(String[] args) {
+        CompletableFuture<Integer> allThreads = CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.MICROSECONDS.sleep(2000000);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("The first thread is " + Thread.currentThread().getName() + ".Please wait for 2S");
+            return 2;
+        }).thenCombine(CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.MICROSECONDS.sleep(3000000);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("The second thread is " + Thread.currentThread().getName() + ".Please wait for 1S");
+            return 1;
+        }), Integer::sum).thenCombine(CompletableFuture.supplyAsync(()->{
+            try {
+                TimeUnit.MICROSECONDS.sleep(1000000);
+            } catch (InterruptedException e) {
+                System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+            }
+            System.out.println("The third thread is " + Thread.currentThread().getName() + ".Please wait for 3S");
+            return 3;
+        }),Integer::sum).thenCombine(CompletableFuture.supplyAsync(()->{
+                    try {
+                        TimeUnit.MICROSECONDS.sleep(4000000);
+                    } catch (InterruptedException e) {
+                        System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+                    }
+                    System.out.println("The fourth thread is "+Thread.currentThread().getName()+".Please wait for 4S");
+                    return 4;
+                }),Integer::sum)
+                .whenComplete((v, e) -> {
+                    if (e == null) {
+                        System.out.println("All threads done, cost: "+v+"S");
+                    }
+                }).exceptionally(e->{
+                    System.out.println("Exception thread in main:" + e.getClass().getName() + ":" + e.getMessage());
+                    return -1;
+                });
+        long startTime = System.currentTimeMillis();
+        //about 4s
+        System.out.println("All threads done, cost: "+allThreads.join()+"S");
+        long endTime = System.currentTimeMillis();
+        System.out.println("----cost time: " + (endTime - startTime) + "ms");
+    }
+}

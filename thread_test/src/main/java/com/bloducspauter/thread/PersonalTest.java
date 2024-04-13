@@ -1,4 +1,4 @@
-package com.bloducspauter.threadtest;
+package com.bloducspauter.thread;
 
 import org.junit.Test;
 
@@ -34,13 +34,10 @@ public class PersonalTest {
     public void test2() throws InterruptedException {
         Thread t3=new Thread(new TestRunnable());
         t3.start();
-        //Without this method,it will fewer than 2,000 numbers were printed
+        //Without this method, it will fewer than 2,000 numbers were printed
         t3.join();
     }
 
-    public void test4(){
-
-    }
 }
 
 /**
