@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 /**
  * This class is uses to handle a calculated result
- *
+ * @see #main(String[]) 
  * @author Bloduc Spauter
  */
 public class CompletableFutureDemoTest {
