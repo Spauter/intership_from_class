@@ -1,13 +1,11 @@
 package com.bs;
 
 import io.minio.*;
-import io.minio.errors.MinioException;
 import org.apache.commons.compress.utils.IOUtils;
 import org.junit.Test;
 import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+
 
 /**
  * @description 测试MinIO

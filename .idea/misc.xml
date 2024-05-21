@@ -24,6 +24,7 @@
         <option value="$PROJECT_DIR$/SpringMVC/pom.xml" />
         <option value="$PROJECT_DIR$/springMVC/pom.xml" />
         <option value="$PROJECT_DIR$/thread_test/pom.xml" />
+        <option value="$PROJECT_DIR$/minio_test/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

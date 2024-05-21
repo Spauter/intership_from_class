@@ -5,6 +5,11 @@ import io.minio.errors.MinioException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+/**
+ * Minio测试
+ * @author Bloduc Spauter
+ *
+ */
 public class FileUploader {
   public static void main(String[] args)throws IOException, NoSuchAlgorithmException, InvalidKeyException {
     try {
